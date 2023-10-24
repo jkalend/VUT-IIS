@@ -4,13 +4,17 @@
 export default function Register() {
 
     const sendForm = async() => {
-        let res = await fetch("/api/posts", {
-            method: "POST",
-            body: JSON.stringify({
-                name: "text",
-                surname:"text",
-            }),
-        });
+        const res = await fetch(
+            "/api/posts",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    username: "xyz",
+                    password: "123123",
+                    email: "idk@idk.com",
+                }),
+            }
+        )
         console.log(res);
     }
 
