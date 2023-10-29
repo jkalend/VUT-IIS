@@ -11,19 +11,60 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  userId    Int     @id @default(autoincrement())
-  email String  @unique
-  username String @unique
-  password String
-  createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+model Parameter {
+  name  String    @id @unique
+  valuesFrom Float
+  valuesTo Float
+  precision Int @default(2)
+  type  String
+  deviceTypes DeviceType[]
+  @@index([type])
+}
+
+model DeviceType {
+  name  String    @id @unique
+  parameters Parameter[]
+  devices Device[]
 }
 
 model Device {
-  sensorId    Int     @id @default(autoincrement())
-  deviceName String @unique
-  deviceType String
-  createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  deviceId    Int     @id @default(autoincrement())
+  description String?
+  alias       String
+  recentValue Float
+  type        String
+  deviceType  DeviceType @relation(fields: [type], references: [name])
+  @@index([type])
+  userId      Int
+  user        User    @relation("UserDevice", fields: [userId], references: [userId])
+  @@index([userId])
+  systemId      Int?    // A device can be in zero or one system
+  system        System? @relation(fields: [systemId], references: [systemId])
+  @@index([systemId])
+  brokerId    Int
+  broker      User  @relation("Broker", fields: [brokerId], references: [userId])
+  @@index([brokerId])
+}
+
+model User {
+  userId    Int     @id @default(autoincrement())
+  username  String  @unique
+  password  String
+  devices   Device[] @relation("UserDevice")
+  systems   System[]
+  adminId   Int @default(0)
+  device Device[] @relation("Broker")
+  admin User @relation("Admin", fields: [adminId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
+  managedUsers User[] @relation("Admin")
+  @@index([adminId])
+}
+
+model System{
+  systemId   Int     @id @default(autoincrement())
+  name       String
+  description String?
+  devices    Device[]
+  userId     Int
+  users      User   @relation(fields: [userId], references: [userId])
+  @@index([userId])
 }
