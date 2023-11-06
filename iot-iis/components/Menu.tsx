@@ -13,10 +13,10 @@ async function createData() {
     }
 }
 
-async function removeData() {
+async function removeData(username: string) {
     try {
-        const res = await fetch("/api/posts", {
-            method: "DELETE"
+        const res = await fetch(`/api/user/${username}/delete`, {
+            method: "DELETE",
         })
         if (res.ok) {
             console.log("OK")
@@ -40,7 +40,7 @@ export default function Menu() {
             <button className={'bg-gray-600 rounded rounded-full mx-10 my-3 px-5 py-3 hover:bg-red-950'}
                     type={'button'}
                     onClick={() => {
-                        removeData()
+                        removeData('ttt')
                     }}
             >
                 Remove Item
