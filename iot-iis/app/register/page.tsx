@@ -14,13 +14,12 @@ export default function Register() {
 
     const sendForm = async() => {
         const res = await fetch(
-            "/api/posts",
+            "/api/user/register",
             {
                 method: "POST",
                 body: JSON.stringify({
                     username: username,
                     password: password,
-                    email: email,
                 }),
             }
         )

@@ -44,6 +44,17 @@ model Device {
   brokerId    Int
   broker      User  @relation("Broker", fields: [brokerId], references: [userId])
   @@index([brokerId])
+  kpi Kpi[]
+}
+
+model Kpi{
+  kpiId       Int     @id @default(autoincrement())
+  relation    String
+  threshold   Float
+  result      String
+  deviceId    Int
+  device      Device  @relation(fields: [deviceId], references: [deviceId])
+  @@index([deviceId])
 }
 
 model User {
