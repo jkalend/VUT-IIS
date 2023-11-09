@@ -14,13 +14,13 @@ export default function Navbar() {
                     </div>
                     <div className={'flex flex-row justify-between space-x-5'}>
                         <Link
-                            href={'/login'}
+                            href={'/profile/login'}
                             className={'navbar_button'}
                         >
                             Sign In
                         </Link>
                         <Link
-                            href={'/register'}
+                            href={'/profile/register'}
                             className={'navbar_button'}
                         >
                             Sign Up

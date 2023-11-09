@@ -1,5 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider     = "postgresql"
@@ -7,75 +8,85 @@ datasource db {
   relationMode = "prisma"
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Parameter {
-  name  String    @id @unique
-  valuesFrom Float
-  valuesTo Float
-  precision Int @default(2)
-  type  String
+  name        String       @id @unique
+  valuesFrom  Float
+  valuesTo    Float
+  precision   Int          @default(2)
+  type        String
   deviceTypes DeviceType[]
+
   @@index([type])
 }
 
 model DeviceType {
-  name  String    @id @unique
+  name       String      @id @unique
   parameters Parameter[]
-  devices Device[]
+  devices    Device[]
 }
 
 model Device {
-  deviceId    Int     @id @default(autoincrement())
-  description String?
   alias       String
-  recentValue Float
-  type        String
-  deviceType  DeviceType @relation(fields: [type], references: [name])
-  @@index([type])
-  userId      Int
-  user        User    @relation("UserDevice", fields: [userId], references: [userId])
-  @@index([userId])
-  systemId      Int?    // A device can be in zero or one system
-  system        System? @relation(fields: [systemId], references: [systemId])
-  @@index([systemId])
   brokerId    Int
-  broker      User  @relation("Broker", fields: [brokerId], references: [userId])
+  description String?
+  deviceId    Int        @id @default(autoincrement())
+  recentValue Float
+  systemId    Int?
+  type        String
+  userId      Int
+  deviceType  DeviceType @relation(fields: [type], references: [name])
+  user        User       @relation("UserDevice", fields: [userId], references: [userId])
+  system      System?    @relation(fields: [systemId], references: [systemId])
+  broker      User       @relation("Broker", fields: [brokerId], references: [userId])
+  kpi         Kpi[]
+
+  @@index([type])
+  @@index([userId])
+  @@index([systemId])
   @@index([brokerId])
-  kpi Kpi[]
 }
 
-model Kpi{
-  kpiId       Int     @id @default(autoincrement())
-  relation    String
-  threshold   Float
-  result      String
-  deviceId    Int
-  device      Device  @relation(fields: [deviceId], references: [deviceId])
+model Kpi {
+  kpiId     Int    @id @default(autoincrement())
+  relation  String
+  threshold Float
+  result    String
+  deviceId  Int
+  device    Device @relation(fields: [deviceId], references: [deviceId])
+
   @@index([deviceId])
 }
 
 model User {
-  userId    Int     @id @default(autoincrement())
-  username  String  @unique
-  password  String
-  devices   Device[] @relation("UserDevice")
-  systems   System[]
-  adminId   Int @default(0)
-  device Device[] @relation("Broker")
-  admin User @relation("Admin", fields: [adminId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
-  managedUsers User[] @relation("Admin")
+  userId       Int      @id @default(autoincrement())
+  username     String   @unique
+  password     String
+  adminId      Int      @default(0)
+  devices      Device[] @relation("UserDevice")
+  systems      System[]
+  device       Device[] @relation("Broker")
+  admin        User     @relation("Admin", fields: [adminId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
+  managedUsers User[]   @relation("Admin")
+
   @@index([adminId])
 }
 
-model System{
-  systemId   Int     @id @default(autoincrement())
-  name       String
+model System {
+  systemId    Int      @id @default(autoincrement())
+  name        String
   description String?
-  devices    Device[]
-  userId     Int
-  users      User   @relation(fields: [userId], references: [userId])
+  userId      Int
+  devices     Device[]
+  users       User     @relation(fields: [userId], references: [userId])
+
   @@index([userId])
+}
+
+model DeviceTypeToParameter {
+  A String
+  B String
+
+  @@unique([A, B], map: "_DeviceTypeToParameter_AB_unique")
+  @@index([B], map: "_DeviceTypeToParameter_B_index")
+  @@map("_DeviceTypeToParameter")
 }

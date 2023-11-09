@@ -12,19 +12,29 @@ export default function Register() {
     const [password, setPassword] = useState('');
 
 
-    const sendForm = async() => {
-        const res = await fetch(
-            "/api/user/register",
-            {
-                method: "POST",
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                }),
-            }
-        )
-        console.log(res);
-        router.push("/")
+    const sendForm = async(e:any) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(
+                "/api/profile/register",
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                    }),
+                }
+            )
+            if (!res.ok) throw new Error("Login failed");
+            const { token, user } = await res.json();
+            document.cookie = `token=${token}; path=/`;
+
+            router.push(`/profile/${user.username}`)
+        }
+        catch (error) {
+            console.log ("Failed to create user")
+        }
+        
     }
 
     const handleUsername = (event: any) => {
