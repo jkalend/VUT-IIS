@@ -36,7 +36,11 @@ function ProtectedPage() {
   }, [router]);
 
   return (
-  <div>Logged in {loggedIn ? "true":"false"}</div>
+      <>
+    <div className={"flex relative"}>
+      Logged in {loggedIn ? "true":"false"}
+    </div><br/>
+      </>
   );
 }
 
