@@ -1,7 +1,6 @@
 import prisma from '@/app/db'
 import {NextRequest, NextResponse} from "next/server";
 import bcrypt from 'bcrypt'
-import jwt from "jsonwebtoken";
 
 export const POST = async (request: NextRequest) => {
     const {username, password} = await request.json();
@@ -24,10 +23,7 @@ export const POST = async (request: NextRequest) => {
             },
         })
         console.log ("userid:", user.userId);
-        const token = await jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {
-                    expiresIn: 31556926,
-            });
-        return NextResponse.json({ token, user });
+        return NextResponse.json(user);
     } catch (err) {
         return new Response("Could not create new user", {status: 500})
     }

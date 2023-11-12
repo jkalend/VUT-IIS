@@ -2,6 +2,7 @@
 
 import {useState} from 'react';
 import {useRouter} from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Register() {
 
@@ -26,9 +27,8 @@ export default function Register() {
                 }
             )
             if (!res.ok) throw new Error("Login failed");
-            const { token, user } = await res.json();
-            document.cookie = `token=${token}; path=/`;
-
+            const user  = await res.json();
+            console.log (user);
             router.push(`/profile/${user.username}`)
         }
         catch (error) {
