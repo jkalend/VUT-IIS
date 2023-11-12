@@ -1,12 +1,47 @@
-import Image from 'next/image'
-import Menu from '../components/Menu'
-import Navbar from '../components/Navbar'
+"use client";
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+function ProtectedPage() {
+  const router = useRouter();
+  const [loggedIn, setLoggedIn] = useState (false);
+  useEffect(() => {
+    const token = Cookies.get("token");
+
+    if (!token) {
+      // router.replace("/"); // If no token is found, redirect to login page
+      // return;
+    }
+
+    // Validate the token by making an API call
+    const validateToken = async () => {
+      try {
+        const res = await fetch("/api/profile/validateToken", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Token validation failed");
+        setLoggedIn (true);
+      } catch (error) {
+        console.error(error);
+        //router.replace("/profile/login"); // Redirect to login if token validation fails
+      }
+    };
+
+    validateToken();
+  }, [router]);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <p className={"text-2xl font-bold text-center"}>Please delete the item after adding it and not doing anything with it or you or anyone else really will get an error in your lovely terminal</p>
-        <Menu></Menu>
-    </main>
-  )
+      <>
+    <div className={"flex relative"}>
+      Logged in {loggedIn ? "true":"false"}
+    </div><br/>
+      </>
+  );
 }
+
+export default ProtectedPage;

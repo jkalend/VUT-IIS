@@ -10,12 +10,20 @@
   },
   "dependencies": {
     "@prisma/client": "^5.4.2",
+    "bcrypt": "^5.1.1",
+    "cookie": "^0.6.0",
+    "dotenv": "^16.3.1",
+    "iron-session": "^6.3.1",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
     "next": "13.5.4",
     "next-auth": "^4.23.2",
+    "next-iron-session": "^4.2.0",
     "nextjs": "^0.0.3",
-    "prisma": "^5.4.2",
+    "prisma": "^5.5.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
