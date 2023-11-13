@@ -2,6 +2,7 @@ import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from 'bcrypt'
 import prisma from '@/app/db'
+import { useRouter } from "next/router"
 
 const handler = NextAuth({
   providers: [
@@ -27,11 +28,11 @@ const handler = NextAuth({
             })
             if (!user)
                 return null
-            // let valid = await bcrypt.compare (pwd, user.password)
-            // if (!valid)
-            //     return null;
+            let valid = bcrypt.compare (pwd, user[0].password)
+            if (!valid)
+                return null
 
-            return user
+            return user[0]
         }
         catch (err) {
             return null;
@@ -44,10 +45,20 @@ const handler = NextAuth({
     signIn: '/profile/login',
   },
   callbacks: {
-
-    async jwt({ token, user, account }) {
-      if (account && user) {
-        token.userId = account.userId
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) {
+        return `${baseUrl}:3000${url}`
+      }
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
+    },
+    async jwt({ token, user }) {
+      
+      if (user) {
+        token.userId = user.userId
+        token.username = user.username
         return {
           ...token,
           accessToken: user.token,
@@ -63,7 +74,7 @@ const handler = NextAuth({
       session.user.refreshToken = token.refreshToken;
       session.user.accessTokenExpires = token.accessTokenExpires;
       session.user.userId = token.userId
-
+      session.user.username = token.username
       return session;
     },
   }

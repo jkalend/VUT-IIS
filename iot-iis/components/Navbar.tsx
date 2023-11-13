@@ -56,7 +56,7 @@ export default function Navbar() {
                     <Link href={`/profile/${"username smt smt here"}`} className={'text-center justify-center items-center flex bg-black rounded-xl border-amber-50 hover:bg-orange-900 whitespace-nowrap px-3 my-[0.4rem]'} onClick={() => setOpenDropdown(false)}>
                         My Profile
                     </Link>
-                    <button className={'text-center justify-center items-center flex bg-black rounded-xl border-amber-50 hover:bg-orange-900 whitespace-nowrap px-3 my-[0.4rem]'} onClick={() => {signOut()}}>
+                    <button className={'text-center justify-center items-center flex bg-black rounded-xl border-amber-50 hover:bg-orange-900 whitespace-nowrap px-3 my-[0.4rem]'} onClick={() => {signOut({callbackUrl: "/"})}}>
                         Logout
                     </button>
                 </div>

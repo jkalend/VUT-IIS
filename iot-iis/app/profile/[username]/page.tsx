@@ -4,10 +4,10 @@ import { useSession } from 'next-auth/react'
 
 const UserProfile = ({params}) => {
   const { data: session } = useSession()
-  if (session) {
+  if (session && (session.user?.username == params.username)) {
     return (
       <div>
-      <h1 className={"text-xl text-cyan-50 justify-center w-full"}>{params.userId}</h1>
+      <h1 className={"text-xl text-cyan-50 justify-center w-full"}>{session.user?.username}</h1>
 
       </div>
     )

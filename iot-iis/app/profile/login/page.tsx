@@ -11,7 +11,7 @@ export default function Login() {
         e.preventDefault();
         try {
             const res = await signIn("credentials", {
-                redirect: false,
+                redirect: true,
                 username: formValues.username,
                 password: formValues.password,
                 callbackUrl:`/profile/${formValues.username}`

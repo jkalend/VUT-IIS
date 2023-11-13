@@ -1,15 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 function ProtectedPage() {
   const router = useRouter();
-  const [loggedIn, setLoggedIn] = useState (false);
-
+  const { data: session } = useSession()
   return (
       <>
     <div className={"flex relative"}>
-      Logged in {loggedIn ? "true":"false"}
+      Logged in {session ? "true":"false"}
     </div><br/>
       </>
   );
