@@ -12,7 +12,6 @@ export const POST = async (request: NextRequest) => {
             }
         })
         if (allUsers.length != 0) { /* user already exists */
-            console.log ("all users length =", allUsers.length)
             return new Response("User already exists", {status: 400});
         }
 
@@ -22,8 +21,7 @@ export const POST = async (request: NextRequest) => {
                 password: pwd as string,
             },
         })
-        console.log ("userid:", user.userId);
-        return NextResponse.json(user);
+        return new Response(JSON.stringify (user), {status: 200})
     } catch (err) {
         return new Response("Could not create new user", {status: 500})
     }

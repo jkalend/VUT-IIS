@@ -1,28 +1,23 @@
-/* 
-GET - fetch all systems with given userId from db
-POST - create new system in db
-*/
 import prisma from "@/app/db";
 import { NextRequest } from "next/server"
 
+// GET - all systems with given userId
 export const GET = async (request: NextRequest, { params }) => {
-    // userId = params.userId
     try {
-
         const allSystems = await prisma.system.findMany({
             where: {
                 userId: params.userId
             }
         })
-
+        return new Response(JSON.stringify(allSystems), {status: 200});
     }
     catch (err) {
-
+        return new Response("Could not fetch devices", {status: 500});
     }
 }
 
+// POST - create new system in db
 export const POST = async (request: NextRequest, { params }) => {
-    // userId = params.userId
     const {name, description} = await request.json();
     try {
 
@@ -33,9 +28,9 @@ export const POST = async (request: NextRequest, { params }) => {
                 description: description
             }
         })
-
+        return new Response(JSON.stringify(system), {status: 200});
     }
     catch (err) {
-
+        return new Response("Could not create new system", {status: 500});
     }
 }
