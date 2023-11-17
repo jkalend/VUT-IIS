@@ -36,10 +36,10 @@ export const PUT = async (request: NextRequest, { params }) => {
                 deviceId: params.deviceId
             },
             data: {
-                alias: alias | device.alias,
-                type: { connect: { name: typeName } },
-                systemId: systemId !== undefined ? systemId : (device && device.systemId),
-                description: description
+                alias: alias !== "" ? alias : (device && device.alias),
+                type: deviceTypeName !== "" ? deviceTypeName : (device && device.type),
+                deviceType: { connect: { name: deviceTypeName } },
+                description: description !== "" ? description : (device && device.description),
             }
         })
         return new Response(JSON.stringify(updatedDevice), {status: 200});
