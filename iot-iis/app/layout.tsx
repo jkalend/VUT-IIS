@@ -19,14 +19,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={"bg-gray-950 min-h-screen min-w-screen absolute"}>
+      <body className={"bg-gray-950 h-full w-full overflow-hidden absolute"}>
+      <Provider>
       <Navbar/>
       <Sidebar/>
-      <main className={"flex h-full w-full relative overflow-hidden ml-64 mt-16"}>
-         <Provider>
+      <main className={"flex h-full relative ml-64 mt-16"}>
           {children}
-         </Provider>
       </main>
+      </Provider>
       </body>
     </html>
   )

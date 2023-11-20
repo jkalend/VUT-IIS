@@ -1,6 +1,9 @@
+"use client";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function Sidebar() {
+    const { data: session } = useSession()
     const textStyle = {
         transition: 'color 0.3s ease, font-size 0.3s ease, line-height 0.3s ease', // Adjust the transition duration as needed
     }
@@ -13,8 +16,8 @@ export default function Sidebar() {
                     >
                         <ul className="mt-16 fixed">
                             <li className="mb-4 "><Link href="/" className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Overview</Link></li>
-                            <li className="mb-4"><Link href="/" className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Systems</Link></li>
-                            <li className="mb-4"><Link href="/" className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Add a System</Link></li>
+                            {session && <li className="mb-4"><Link href={`/profile/${session?.user?.username}/systems`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Systems</Link></li>}
+                            {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/devices`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Devices</Link></li>}
                             <li className="mb-4"><Link href="/" className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Settings</Link></li>
                         </ul>
                     </nav>

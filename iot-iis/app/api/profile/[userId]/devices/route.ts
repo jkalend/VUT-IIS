@@ -4,14 +4,21 @@ import { NextRequest, NextResponse } from "next/server";
 // GET - get all devices with given userId
 export const GET = async (request: NextRequest, { params }) => {
 	try {
-		const devices = await prisma.device.findMany({
+		// const devices = await prisma.device.findMany({
+		// 	where: {
+		// 		userId: Number(params.userId),
+		// 	},
+		// });
+		const user = await prisma.user.findUnique({
 			where: {
-				userId: params.userId,
+				userId: Number(params.userId),
 			},
-		});
-		return new Response(JSON.stringify(devices), { status: 200 });
+		}).devices();
+		// console.log("devices: ", user)
+		return NextResponse.json(user, { status: 200 });
 	} catch (err) {
-		return new Response("Could not fetch devices", { status: 500 });
+		console.log("err: ", err)
+		return NextResponse.json(err, { status: 500 });
 	}
 };
 
@@ -19,22 +26,25 @@ export const GET = async (request: NextRequest, { params }) => {
 export const POST = async (request: NextRequest, { params }) => {
 	const { alias, deviceTypeName, description } = await request.json();
 	try {
-		const device = await prisma.device.create({
+		console.log("params: ", params)
+		console.log("alias: ", alias)
+		console.log("deviceTypeName: ", deviceTypeName)
+		console.log("description: ", description)
+		let device = await prisma.device.create({
 			data: {
 				alias: alias,
-				type: deviceTypeName,
-				deviceType: { connect: { name: deviceTypeName } },
+				typus: deviceTypeName,
 				// systemId: systemId,
 				description: description,
-				userId: params.userId,
-				user: { connect: { userId: params.userId } },
-				broker: { connect: { userId: 1 } },
-				recentValue: 0.0,
+				userId: Number(params.userId),
 				/// systemId: systemId !== undefined ? systemId : null, ----- toto bude vzdy null podla mna ked vytvaras device
 			},
 		});
-		return new Response(JSON.stringify(device), { status: 200 });
+		// console.log("device: ", device)
+		// console.log("user: ", user)
+		return NextResponse.json(device, { status: 200 });
 	} catch (err) {
-		return new Response("Could not create new device", { status: 500 });
+		console.log("err: ", err)
+		return NextResponse.json(err, { status: 500 });
 	}
 };
