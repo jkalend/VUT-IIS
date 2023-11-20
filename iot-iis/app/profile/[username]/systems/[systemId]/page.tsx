@@ -33,7 +33,10 @@ const SystemPage = () => {
         });
         //if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
-        return data;
+
+        //filter for null systemId
+        const filteredData = data.filter((device: any) => device.systemId === null)
+        return filteredData;
     }
 
     useEffect(() => {

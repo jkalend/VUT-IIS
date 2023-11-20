@@ -10,13 +10,15 @@ datasource db {
 
 model Parameter {
   name        String       @id @unique
+  typeName    String
   valuesFrom  Float
   valuesTo    Float
   precision   Int          @default(2)
   type        String
-  deviceTypes DeviceType[]
+  deviceTypes DeviceType   @relation(fields: [typeName], references: [name])
 
   @@index([type])
+  @@index([typeName])
 }
 
 model DeviceType {
@@ -27,20 +29,19 @@ model DeviceType {
 
 model Device {
   alias       String
-  brokerId    Int
+  brokerId    Int         @default(1)
   description String?
-  deviceId    Int        @id @default(autoincrement())
-  recentValue Float
+  deviceId    Int         @id @default(autoincrement())
+  recentValue Float       @default(0.0)
   systemId    Int?
-  type        String
   userId      Int
-  deviceType  DeviceType @relation(fields: [type], references: [name])
-  user        User       @relation("UserDevice", fields: [userId], references: [userId])
-  system      System?    @relation(fields: [systemId], references: [systemId])
-  broker      User       @relation("Broker", fields: [brokerId], references: [userId])
-  kpi         Kpi[]
+  typus       String
+  deviceType  DeviceType  @relation(fields: [typus], references: [name])
+  user        User        @relation("UserDevice", fields: [userId], references: [userId])
+  system      System?     @relation(fields: [systemId], references: [systemId])
+  broker      User        @relation("Broker", fields: [brokerId], references: [userId])
 
-  @@index([type])
+  @@index([typus])
   @@index([userId])
   @@index([systemId])
   @@index([brokerId])
@@ -50,9 +51,8 @@ model Kpi {
   kpiId     Int    @id @default(autoincrement())
   relation  String
   threshold Float
-  result    String
+  result    String //result is an error or OK
   deviceId  Int
-  device    Device @relation(fields: [deviceId], references: [deviceId])
 
   @@index([deviceId])
 }

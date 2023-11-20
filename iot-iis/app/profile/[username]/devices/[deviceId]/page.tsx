@@ -3,6 +3,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {ChangeEvent, useEffect, useState} from "react";
 // import {useRouter} from "next/router";
+import Link from "next/link";
 
 const DeviceDetailsPage = () => {
     const params = useParams();
@@ -126,6 +127,7 @@ const DeviceDetailsPage = () => {
                             </div>
                             <button onClick={handleEdit} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Edit</button>
                             <button onClick={deleteDevice} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Delete</button>
+                            <Link href={`/profile/${session?.user?.username}/devices/${params.deviceId}/kpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add KPI</Link>
                         </div>
                     )}
                 </div>

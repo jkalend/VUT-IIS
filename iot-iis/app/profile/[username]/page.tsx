@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import Link from "next/link";
 
 const UserProfile = ({params}) => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [devices, setDevices] = useState([]);
 
   const [formValues, setFormValues] = useState({
@@ -33,21 +33,28 @@ const UserProfile = ({params}) => {
   };
 
   const fetchData = async () => {
-    if (!session) return;
-    const res = await fetch(`/api/profile/${session.user?.userId}/devices`, {
+    console.log(session);
+    // if (!session) return;
+    const res = await fetch(`/api/profile/${session.user?.userId}/admin`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
     //if (!res.ok) throw new Error("Failed to fetch devices");
     const data = await res.json();
-    setDevices(data);
+    console.log(data);
+    // setDevices(data);
+    return data;
     //console.log(data);
   }
 
   useEffect(() => {
-    fetchData().then(r => {});
-  }, [])
+    console.log(status);
+    if (status === "authenticated")
+    fetchData().then(r => {setDevices(r)});
+  }, [status])
 
+  if (status === "loading")
+    return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
   if (session && (session.user?.username == params.username)) {
     return (
@@ -77,29 +84,29 @@ const UserProfile = ({params}) => {
     )
   }
   else {
-    redirect("/profile/login")
+    // redirect("/profile/login")
     return (
         <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
           <h1 className={"font-bold text-2xl"}>
             User {params.username} devices
           </h1>
-          <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
-            {devices.map((device: any) => (
-                <Link key={device.id} href={`/profile/${session?.user?.username}/devices/${device.deviceId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+          <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-y-auto mb-16"}>
+            {session && devices.map((device: any) => (
+                <div key={device.id} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                   <div className={"flex flex-col"}>
                     <div className={"font-bold text-xl"}>
-                      {device.alias}
+                      {device.username}
                     </div>
                     <h1 className={"text-gray-500"}>
-                      {device.typus}
+                      {device.userId}
                     </h1>
                   </div>
                   <div className={"flex flex-col"}>
                     <h1 className={"font-bold text-xl"}>
-                      {device.recentValue}
+                      {device.password}
                     </h1>
                   </div>
-                </Link>
+                </div>
             ), [])}
           </div>
         </div>

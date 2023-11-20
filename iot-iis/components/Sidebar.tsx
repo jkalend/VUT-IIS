@@ -18,7 +18,7 @@ export default function Sidebar() {
                             <li className="mb-4 "><Link href="/" className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Overview</Link></li>
                             {session && <li className="mb-4"><Link href={`/profile/${session?.user?.username}/systems`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Systems</Link></li>}
                             {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/devices`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Devices</Link></li>}
-                            <li className="mb-4"><Link href="/" className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Settings</Link></li>
+                            {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/devicetype`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Add Device Type</Link></li>}
                         </ul>
                     </nav>
                 </div>
