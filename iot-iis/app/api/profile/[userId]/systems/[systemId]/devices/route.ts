@@ -47,11 +47,6 @@ export const DELETE = async (request: NextRequest, { params }) => {
 
 export const GET = async (request: NextRequest, { params }) => {
 	try {
-		// const devices = await prisma.device.findMany({
-		// 	where: {
-		// 		userId: Number(params.userId),
-		// 	},
-		// });
 		const devices = await prisma.system.findUnique({
 			where: {
 				systemId: Number(params.systemId),
