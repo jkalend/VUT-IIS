@@ -36,3 +36,5 @@ next-env.d.ts
 
 /prisma
 /prisma/schema.prisma
+/prisma/.env
+/prisma/migrations

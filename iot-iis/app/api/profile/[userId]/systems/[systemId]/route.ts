@@ -59,8 +59,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 export const POST = async (request: NextRequest, { params }) => {
 	const { deviceId, relation, threshold, result } = await request.json();
 	try {
-		const kpi = null; // add query
-		const newKpi = await prisma.kpi.create({
+		const kpi = await prisma.kpi.create({
 			data: {
 				deviceId: deviceId,
 				relation: relation,
