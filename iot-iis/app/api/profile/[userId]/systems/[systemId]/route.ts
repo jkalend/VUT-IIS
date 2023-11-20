@@ -10,7 +10,7 @@ DELETE - delete system from db
 */
 
 import prisma from "@/app/db";
-import { NextRequest } from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 
 // PUT - change system info
 export const PUT = async (request: NextRequest, { params }) => {
@@ -18,13 +18,13 @@ export const PUT = async (request: NextRequest, { params }) => {
 	try {
 		const system = await prisma.system.findUnique({
 			where: {
-				systemId: params.systemId,
+				systemId: Number(params.systemId),
 			},
 		});
 
 		const updatedSystem = await prisma.system.update({
 			where: {
-				systemId: params.systemId,
+				systemId: Number(params.systemId),
 			},
 			data: {
 				name: sysName !== "" ? sysName : system?.name,
@@ -32,9 +32,9 @@ export const PUT = async (request: NextRequest, { params }) => {
 					description !== "" ? description : system?.description,
 			},
 		});
-		return new Response(JSON.stringify(updatedSystem), { status: 200 });
+		return NextResponse.json(updatedSystem, { status: 200 });
 	} catch (err) {
-		return new Response("Could not update system info", { status: 500 });
+		return NextResponse.json("Could not update system info", { status: 500 });
 	}
 };
 
@@ -43,15 +43,15 @@ export const DELETE = async (request: NextRequest, { params }) => {
 	try {
 		const deletedSystem = await prisma.system.delete({
 			where: {
-				systemId: params.systemId,
+				systemId: Number(params.systemId),
 			},
 		});
-		return new Response(
+		return NextResponse.json(
 			`Successfuly deleted device ${deletedSystem.systemId}`,
 			{ status: 200 }
 		);
 	} catch (err) {
-		return new Response("Could not delete system", { status: 500 });
+		return NextResponse.json("Could not delete system", { status: 500 });
 	}
 };
 
@@ -61,14 +61,14 @@ export const POST = async (request: NextRequest, { params }) => {
 	try {
 		const kpi = await prisma.kpi.create({
 			data: {
-				deviceId: deviceId,
+				deviceId: Number(deviceId),
 				relation: relation,
 				threshold: threshold,
 				result: result,
 			},
 		});
-		return new Response(JSON.stringify(kpi), { status: 200 });
+		return NextResponse.json(kpi, { status: 200 });
 	} catch (err) {
-		return new Response("Could not add KPI to system", { status: 500 });
+		return NextResponse.json("Could not add KPI to system", { status: 500 });
 	}
 };

@@ -1,5 +1,5 @@
 import prisma from "@/app/db";
-import { NextRequest } from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 
 // POST - add device to system
 export const POST = async (request: NextRequest, { params }) => {
@@ -7,16 +7,17 @@ export const POST = async (request: NextRequest, { params }) => {
 	try {
 		const addedDevice = await prisma.device.update({
 			where: {
-				deviceId: deviceId,
+				deviceId: Number(deviceId),
 			},
 			data: {
-				systemId: params.systemId,
-				system: { connect: { systemId: params.systemId } },
+				//systemId: Number(params.systemId),
+				system: { connect: { systemId: Number(params.systemId) } },
 			},
 		});
-		return new Response(JSON.stringify(addedDevice), { status: 200 });
+		return NextResponse.json(addedDevice, { status: 200 });
 	} catch (err) {
-		return new Response("Could not add device to system", { status: 500 });
+		console.log("err: ", err)
+		return NextResponse.json("Could not add device to system", { status: 500 });
 	}
 };
 
@@ -26,19 +27,40 @@ export const DELETE = async (request: NextRequest, { params }) => {
 	try {
 		const deletedDevice = await prisma.device.update({
 			where: {
-				deviceId: deviceId,
+				deviceId: Number(deviceId),
 			},
 			data: {
-				systemId: null,
+				//systemId: null,
+				system: { disconnect: { systemId: Number(params.systemId) } },
 			},
 		});
-		return new Response(
+		return NextResponse.json(
 			`Successfuly deleted device ${deletedDevice.deviceId}`,
 			{ status: 200 }
 		);
 	} catch (err) {
-		return new Response("Could not delete device from system", {
+		return NextResponse.json("Could not delete device from system", {
 			status: 500,
 		});
+	}
+};
+
+export const GET = async (request: NextRequest, { params }) => {
+	try {
+		// const devices = await prisma.device.findMany({
+		// 	where: {
+		// 		userId: Number(params.userId),
+		// 	},
+		// });
+		const devices = await prisma.system.findUnique({
+			where: {
+				systemId: Number(params.systemId),
+			},
+		}).devices();
+		// console.log("devices: ", user)
+		return NextResponse.json(devices, { status: 200 });
+	} catch (err) {
+		console.log("err: ", err)
+		return NextResponse.json(err, { status: 500 });
 	}
 };

@@ -37,11 +37,11 @@ export default function Register() {
                 callbackUrl:`/profile/${user.username}`
             });
             } catch (err) {
-                // do something
+                console.log ("Failed to signin: " + err);
             }
         }
         catch (error) {
-            console.log ("Failed to create user")
+            console.log ("Failed to create user: " + error);
         }
         
     }
@@ -49,24 +49,23 @@ export default function Register() {
     const handleUsername = (event: any) => {
         setUsername(event.target.value);
 
-        console.log('value is:', event.target.value);
+        //console.log('value is:', event.target.value);
     };
 
     const handleEmail = (event: any) => {
         setEmail(event.target.value);
 
-        console.log('value is:', event.target.value);
+        //console.log('value is:', event.target.value);
     };
 
     const handlePassword = (event: any) => {
         setPassword(event.target.value);
 
-        console.log('value is:', event.target.value);
+        //console.log('value is:', event.target.value);
     };
 
     return(
-        <section>
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
                 <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white">
@@ -90,6 +89,5 @@ export default function Register() {
                     </div>
                 </div>
             </div>
-        </section>
     )
 }

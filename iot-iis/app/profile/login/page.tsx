@@ -9,15 +9,17 @@ export default function Login() {
     });
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log(formValues);
+        await new Promise(r => setTimeout(r, 2000));
         try {
             const res = await signIn("credentials", {
                 redirect: true,
                 username: formValues.username,
                 password: formValues.password,
-                callbackUrl:`/profile/${formValues.username}`
+                //callbackUrl:`/`
             });
         } catch (err) {
-
+            console.log(err);
         }
     }
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,8 +28,7 @@ export default function Login() {
     };
         
     return (
-        <section>
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
                 <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                     <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -45,7 +46,7 @@ export default function Login() {
                             <div className="flex items-center justify-between">
                                 <div className="flex items-start">
                                     <div className="flex items-center h-5">
-                                        <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required/>
+                                        <input id="remember" aria-describedby="remember" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"/>
                                     </div>
                                     <div className="ml-3 text-sm">
                                         <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
@@ -61,6 +62,5 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-        </section>
     )
 }
