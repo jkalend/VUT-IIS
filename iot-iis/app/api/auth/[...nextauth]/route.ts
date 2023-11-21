@@ -1,10 +1,11 @@
-import NextAuth from "next-auth/next"
+import NextAuth from "next-auth"
+import type { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from 'bcrypt'
 import prisma from '@/app/db'
 import { useRouter } from "next/router"
 
-const handler = NextAuth({
+export const authOptions: AuthOptions ={
   providers: [
     CredentialsProvider({
       name: 'iis-iot',
@@ -69,6 +70,7 @@ const handler = NextAuth({
       return session;
     },
   }
-});
+};
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

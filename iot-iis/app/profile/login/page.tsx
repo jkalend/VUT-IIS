@@ -16,7 +16,7 @@ export default function Login() {
                 redirect: true,
                 username: formValues.username,
                 password: formValues.password,
-                //callbackUrl:`/`
+                callbackUrl:`/`
             });
         } catch (err) {
             console.log(err);
