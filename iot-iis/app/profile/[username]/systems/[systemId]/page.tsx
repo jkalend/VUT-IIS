@@ -158,9 +158,6 @@ const SystemPage = () => {
                             </form>
                         </div>
                     }
-                    <Link href={`/profile/${session?.user?.username}/systems/${params.systemId}`} className={"p-2 rounded-2xl bg-green-950"}>
-                        Add KPI
-                    </Link>
                 </div>
             </div>
             <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>

@@ -63,3 +63,21 @@ export const DELETE = async (request: NextRequest, { params }) => {
         return NextResponse.json(JSON.stringify("Could not fetch device"), {status: 500})
     }
 }
+
+// POST - create new KPI for device
+export const POST = async (request: NextRequest, { params }) => {
+    const { relation, threshold, result } = await request.json();
+    try {
+        const kpi = await prisma.kpi.create({
+            data: {
+                deviceId: Number(params.deviceId),
+                relation: relation,
+                threshold: threshold,
+                result: result,
+            },
+        });
+        return NextResponse.json(kpi, { status: 200 });
+    } catch (err) {
+        return NextResponse.json("Could not add KPI to system", { status: 500 });
+    }
+};

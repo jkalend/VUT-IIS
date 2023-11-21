@@ -86,9 +86,14 @@ const DeviceDetailsPage = () => {
         <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white">
-                        Device details
-                    </h1>
+                    <div className={"flex flex-row gap-2 w-full justify-between"}>
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white">
+                            Device details
+                        </h1>
+                        <h1 className={"mr-8 text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white"}>
+                            KPI: {""}
+                        </h1>
+                    </div>
                     {edit ? (
                         <form className="space-y-4 md:space-y-6" onSubmit={editDevice}>
                             <div>
@@ -127,7 +132,9 @@ const DeviceDetailsPage = () => {
                             </div>
                             <button onClick={handleEdit} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Edit</button>
                             <button onClick={deleteDevice} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Delete</button>
-                            <Link href={`/profile/${session?.user?.username}/devices/${params.deviceId}/kpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add KPI</Link>
+                            <div className={"flex flex-row gap-2"}>
+                                <Link href={`/profile/${session?.user?.username}/devices/${params.deviceId}/kpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add KPI</Link>
+                            </div>
                         </div>
                     )}
                 </div>
