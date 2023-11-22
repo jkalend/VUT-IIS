@@ -35,7 +35,7 @@ const UserProfile = ({params}) => {
   const fetchData = async () => {
     console.log(session);
     // if (!session) return;
-    const res = await fetch(`/api/profile/${session.user?.userId}/admin`, {
+    const res = await fetch(`/api/profile/${session.user?.username}/admin`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });

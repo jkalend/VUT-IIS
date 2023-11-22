@@ -15,7 +15,7 @@ const CreateSystemPage = ({params} : {params: any}) => {
         e.preventDefault();
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/systems`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/systems`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

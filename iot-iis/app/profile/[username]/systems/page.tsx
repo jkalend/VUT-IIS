@@ -11,7 +11,7 @@ const SystemPage = () => {
 
     const fetchData = async () => {
         if (!session) return;
-        const res = await fetch(`/api/profile/${session.user?.userId}/systems`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/systems`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });

@@ -20,7 +20,7 @@ const DeviceDetailsPage = () => {
     const getDevice = async () => {
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/devices/${params.deviceId}`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/devices/${params.deviceId}`, {
             method: "Get",
             headers: { "Content-Type": "application/json" },
         });
@@ -33,7 +33,7 @@ const DeviceDetailsPage = () => {
     const editDevice = async () => {
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/devices/${params.deviceId}`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/devices/${params.deviceId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formValues),
@@ -48,7 +48,7 @@ const DeviceDetailsPage = () => {
         e.preventDefault()
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/devices/${params.deviceId}`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/devices/${params.deviceId}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
         });

@@ -11,7 +11,7 @@ export const GET = async (request: NextRequest, { params }) => {
 		// });
 		const user = await prisma.user.findUnique({
 			where: {
-				userId: Number(params.userId),
+				username: params.username,
 			},
 		}).devices();
 		// console.log("devices: ", user)
@@ -30,13 +30,14 @@ export const POST = async (request: NextRequest, { params }) => {
 		console.log("alias: ", alias)
 		console.log("deviceTypeName: ", deviceTypeName)
 		console.log("description: ", description)
+		/* TODO: update db for username FK */
 		let device = await prisma.device.create({
 			data: {
 				alias: alias,
 				typus: deviceTypeName,
 				// systemId: systemId,
 				description: description,
-				userId: Number(params.userId),
+				username: params.username,
 				/// systemId: systemId !== undefined ? systemId : null, ----- toto bude vzdy null podla mna ked vytvaras device
 			},
 		});

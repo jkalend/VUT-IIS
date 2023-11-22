@@ -49,7 +49,7 @@ export const authOptions: AuthOptions ={
     async jwt({ token, user }) {
       
       if (user) {
-        token.userId = user.userId
+        token.is_admin = user.admin_flag
         token.username = user.username
         return {
           ...token,
@@ -62,11 +62,11 @@ export const authOptions: AuthOptions ={
     },
 
     async session({ session, token }) {
-      session.user.accessToken = token.accessToken;
-      session.user.refreshToken = token.refreshToken;
-      session.user.accessTokenExpires = token.accessTokenExpires;
-      session.user.userId = token.userId
+      session.user.accessToken = token.accessToken
+      session.user.refreshToken = token.refreshToken
+      session.user.accessTokenExpires = token.accessTokenExpires
       session.user.username = token.username
+      session.is_admin = token.is_admin
       return session;
     },
   }

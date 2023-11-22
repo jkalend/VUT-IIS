@@ -17,7 +17,7 @@ const KpiPage = () => {
         if (!session) return;
         // @ts-ignore
         const formData = new FormData(e.currentTarget)
-        const res = await fetch(`/api/profile/${session.user?.userId}/devices/${params.deviceId}`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/devices/${params.deviceId}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({

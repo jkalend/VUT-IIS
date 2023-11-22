@@ -10,7 +10,15 @@ export const GET = async (request: NextRequest, { params }) => {
                 deviceId: Number(params.deviceId)
             }
         })
-        return NextResponse.json(device, {status: 200});
+        const kpi = await prisma.kpi.findMany({
+            where: {
+                deviceId: Number(params.deviceId)
+            }
+        })
+        if (kpi) {
+            /* check value against recent value of device */
+        }
+        return NextResponse.json({"device":device, "kpi_status":true}, {status: 200});
     }
     catch (err) {
         return NextResponse.json(err, {status: 500});
@@ -49,7 +57,7 @@ export const PUT = async (request: NextRequest, { params }) => {
     }
 }
 
-//DELETE - delete device with given user id
+//DELETE - delete device with given device id
 export const DELETE = async (request: NextRequest, { params }) => {
     try {
         const deletedDevice = await prisma.device.delete({

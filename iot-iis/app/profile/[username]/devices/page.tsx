@@ -13,7 +13,7 @@ const DevicesPage = () => {
 
     const fetchData = async () => {
         if (!session) return;
-        const res = await fetch(`/api/profile/${session.user?.userId}/devices`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/devices`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });

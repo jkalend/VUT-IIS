@@ -15,7 +15,7 @@ const CreateDevicePage = ({params} : {params: any}) => {
         e.preventDefault();
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/devices`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/devices`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -27,7 +27,7 @@ const SystemPage = () => {
 
     const fetchDevices = async () => {
         if (!session) return;
-        const res = await fetch(`/api/profile/${session.user?.userId}/devices`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/devices`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
@@ -55,7 +55,7 @@ const SystemPage = () => {
         // @ts-ignore
         const formData = new FormData(e.currentTarget)
         console.log(formData)
-        const res = await fetch(`/api/profile/${session.user?.userId}/systems/${params.systemId}/devices`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/systems/${params.systemId}/devices`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -74,7 +74,7 @@ const SystemPage = () => {
     const getDevices = async () => {
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/systems/${params.systemId}/devices`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/systems/${params.systemId}/devices`, {
             method: "Get",
             headers: { "Content-Type": "application/json" },
         });
@@ -87,7 +87,7 @@ const SystemPage = () => {
     const editSystem = async () => {
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/systems/${params.systemID}`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/systems/${params.systemID}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(editValues),
@@ -102,7 +102,7 @@ const SystemPage = () => {
         e.preventDefault()
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}/systems/${params.systemId}`, {
+        const res = await fetch(`/api/profile/${session.user?.username}/systems/${params.systemId}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
         });
