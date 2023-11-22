@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth/next"
 
 export const GET = async (request: NextRequest, response: NextResponse) => {
     const session = await getServerSession(authOptions)
-    if (session && session.user?.username == 'admin') {
+    if (session && session.user?.is_admin == 1) {
         try {
             const users = await prisma.user.findMany();
             return NextResponse.json(users, {status: 200});
