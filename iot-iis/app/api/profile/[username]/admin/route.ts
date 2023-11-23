@@ -5,6 +5,7 @@ import {NextRequest, NextResponse} from "next/server"
 import { authOptions } from "@/app/api/auth/\[...nextauth\]/route"
 import { getServerSession } from "next-auth/next"
 
+// GET - all user in system
 export const GET = async (request: NextRequest, response: NextResponse) => {
     const session = await getServerSession(authOptions)
     if (session && session.user?.is_admin == 1) {
@@ -17,7 +18,6 @@ export const GET = async (request: NextRequest, response: NextResponse) => {
         }
     }
     else {
-        return NextResponse.json("FUCK OFF LOSER", {status: 400});
+        return NextResponse.json("Unauthorized", {status: 400});
     }
-    
 }
