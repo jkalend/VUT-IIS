@@ -12,8 +12,15 @@ export const POST = async (request: NextRequest) => {
         if (!authenticated)
             return NextResponse.json("Could not authenticate broker", { status: 400 })
 
-        // TODO: set recent value of device with deviceId from request to recent_value from request
-        let new_value = 'add query here'
+        // set recent value of device with deviceId from request to recent_value from request
+        let new_value = await prisma.device.update({
+            where: {
+                deviceId: deviceId
+            },
+            data: {
+                recentValue: recent_value
+            }
+        });
         
         return NextResponse.json(new_value, { status: 200 });
     } catch (err) {

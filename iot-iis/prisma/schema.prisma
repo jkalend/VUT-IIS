@@ -9,15 +9,13 @@ datasource db {
 }
 
 model Parameter {
-  name        String       @id @unique
-  typeName    String
+  name        String     @id @unique
   valuesFrom  Float
   valuesTo    Float
-  precision   Int          @default(2)
-  type        String
-  deviceTypes DeviceType   @relation(fields: [typeName], references: [name])
+  precision   Int        @default(2)
+  typeName    String
+  deviceTypes DeviceType @relation(fields: [typeName], references: [name])
 
-  @@index([type])
   @@index([typeName])
 }
 
@@ -29,64 +27,47 @@ model DeviceType {
 
 model Device {
   alias       String
-  brokerId    Int         @default(1)
   description String?
-  deviceId    Int         @id @default(autoincrement())
-  recentValue Float       @default(0.0)
+  deviceId    Int        @id @default(autoincrement())
+  recentValue Float      @default(0.0)
   systemId    Int?
-  userId      Int
   typus       String
-  deviceType  DeviceType  @relation(fields: [typus], references: [name])
-  user        User        @relation("UserDevice", fields: [userId], references: [userId])
-  system      System?     @relation(fields: [systemId], references: [systemId])
-  broker      User        @relation("Broker", fields: [brokerId], references: [userId])
+  username    String     @default("cultsauce")
+  deviceType  DeviceType @relation(fields: [typus], references: [name])
+  user        User       @relation("UserDevice", fields: [userId], references: [userId])
+  system      System?    @relation(fields: [systemId], references: [systemId])
+  broker      User       @relation("Broker", fields: [brokerId], references: [userId])
 
   @@index([typus])
-  @@index([userId])
   @@index([systemId])
-  @@index([brokerId])
+  @@index([username])
 }
 
 model Kpi {
   kpiId     Int    @id @default(autoincrement())
   relation  String
   threshold Float
-  result    String //result is an error or OK
+  result    String
   deviceId  Int
 
   @@index([deviceId])
 }
 
 model User {
-  userId       Int      @id @default(autoincrement())
-  username     String   @unique
+  username     String   @id @unique
   password     String
-  adminId      Int      @default(0)
+  admin_flag   Int      @default(0)
   devices      Device[] @relation("UserDevice")
   systems      System[]
   device       Device[] @relation("Broker")
-  admin        User     @relation("Admin", fields: [adminId], references: [userId], onDelete: Restrict, onUpdate: Restrict)
   managedUsers User[]   @relation("Admin")
-
-  @@index([adminId])
 }
 
 model System {
   systemId    Int      @id @default(autoincrement())
   name        String
   description String?
-  userId      Int
+  username    String   @default("cultsauce")
   devices     Device[]
   users       User     @relation(fields: [userId], references: [userId])
-
-  @@index([userId])
-}
-
-model DeviceTypeToParameter {
-  A String
-  B String
-
-  @@unique([A, B], map: "_DeviceTypeToParameter_AB_unique")
-  @@index([B], map: "_DeviceTypeToParameter_B_index")
-  @@map("_DeviceTypeToParameter")
 }

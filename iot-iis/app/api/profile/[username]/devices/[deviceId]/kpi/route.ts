@@ -32,8 +32,12 @@ export const GET = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
         try {
-            // TODO: fetch KPI for device with params.deviceId
-            const kpi = 'query here'
+            //fetch KPI for device with params.deviceId
+            const kpi = await prisma.kpi.findMany({
+                where: {
+                    deviceId: Number(params.deviceId)
+                }
+            })
 
             return NextResponse.json(kpi, { status: 200 });
         } catch (err) {
@@ -50,10 +54,25 @@ export const DELETE = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
         try {
-            // TODO: delete kpi for device with params.deviceId
-            const kpi = 'query here'
+            //delete kpi for device with params.deviceId
+            const kpis = await prisma.kpi.findMany({
+                where: {
+                    deviceId: Number(params.deviceId)
+                }
+            })
+            for (const kpi of kpis) {
+                try {
+                    await prisma.kpi.delete({
+                        where: {
+                            kpiId: kpi.kpiId
+                        }
+                    });
+                } catch (error) {
+                    console.error(`Failed to delete KPI with ID ${kpi.kpiId}:`, error);
+                }
+            }
 
-            return NextResponse.json(kpi, { status: 200 });
+            return NextResponse.json(kpis, { status: 200 });
         } catch (err) {
             return NextResponse.json("Could not delete kpi from device", { status: 500 });
         }

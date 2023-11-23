@@ -2,6 +2,7 @@ import prisma from '@/app/db'
 import {NextRequest, NextResponse} from "next/server"
 import { authOptions } from "@/app/api/auth/\[...nextauth\]/route"
 import { getServerSession } from "next-auth/next"
+import { DeviceTypeWhereUniqueInput } from '@/app/db' // Import the DeviceTypeWhereUniqueInput type
 
 /* POST- create new parameter for deviceType with deviceTypeName */
 export const POST = async (request: NextRequest, {params}) => {
@@ -9,10 +10,20 @@ export const POST = async (request: NextRequest, {params}) => {
     if (session && session.user?.username == params.username) {
         const { parameterName, valuesFrom, valuesTo, precision } = await request.json();
         try {
-            // TODO: create new parameter for device type with params.deviceTypeName
-            const parameter = 'query here'
+            // create new parameter for device type with params.deviceTypeName
 
-            return NextResponse.json(parameter, {status: 200});
+            const parameter = await prisma.parameter.create({
+                data: {
+                    typeName: params.deviceTypeName,
+                    name: parameterName,
+                    valuesFrom: Number(valuesFrom),
+                    valuesTo: Number(valuesTo),
+                    precision: Number(precision),
+                    deviceTypes: { connect: { typeName: params.deviceTypeName } as DeviceTypeWhereUniqueInput }, // Replace 'typeName' with the actual field name for device type name
+                },
+            });
+
+            return NextResponse.json(parameter, { status: 200 });
         } catch (error) {
             return NextResponse.json("Could not create new parameter", {status: 500});
         }
