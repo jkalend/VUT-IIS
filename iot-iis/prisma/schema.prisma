@@ -13,6 +13,7 @@ model Parameter {
   valuesFrom  Float
   valuesTo    Float
   precision   Int        @default(2)
+  type        String
   typeName    String
   deviceTypes DeviceType @relation(fields: [typeName], references: [name])
 
@@ -23,24 +24,25 @@ model DeviceType {
   name       String      @id @unique
   parameters Parameter[]
   devices    Device[]
+  username   String
+  user        User       @relation("UserDevice", fields: [username], references: [username])
 }
 
 model Device {
+  deviceId    Int        @id @default(autoincrement())
   alias       String
   description String?
-  deviceId    Int        @id @default(autoincrement())
   recentValue Float      @default(0.0)
   systemId    Int?
-  typus       String
   username    String     @default("cultsauce")
+  typus       String
   deviceType  DeviceType @relation(fields: [typus], references: [name])
-  user        User       @relation("UserDevice", fields: [userId], references: [userId])
+  user        User       @relation("UserDevice", fields: [username], references: [username])
   system      System?    @relation(fields: [systemId], references: [systemId])
-  broker      User       @relation("Broker", fields: [brokerId], references: [userId])
 
   @@index([typus])
-  @@index([systemId])
   @@index([username])
+  @@index([systemId])
 }
 
 model Kpi {
@@ -56,18 +58,17 @@ model Kpi {
 model User {
   username     String   @id @unique
   password     String
-  admin_flag   Int      @default(0)
+  admin_flag      Int   @default(0)
   devices      Device[] @relation("UserDevice")
   systems      System[]
-  device       Device[] @relation("Broker")
-  managedUsers User[]   @relation("Admin")
 }
 
 model System {
   systemId    Int      @id @default(autoincrement())
   name        String
   description String?
-  username    String   @default("cultsauce")
+  username    String    @default("cultsauce")
   devices     Device[]
-  users       User     @relation(fields: [userId], references: [userId])
+  users       User     @relation(fields: [username], references: [username])
 }
+
