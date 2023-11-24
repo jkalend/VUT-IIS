@@ -35,13 +35,13 @@ export const DELETE = async (request: NextRequest, { params }) => {
                 where: {
                     value: {
                         deviceId: Number(params.deviceId),
-                        parameterName: String(parameterName)
+                        valueId: Number(valueId)
                     }
                 }
             });
             const deletedKpi = await prisma.kpi.delete({
                 where: {
-                    kpiId: kpiToDelete.kpiId
+                    kpiId: Number(kpiToDelete.kpiId)
                 }
             });
 
@@ -61,8 +61,21 @@ export const PUT = async (request: NextRequest, { params }) => {
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
         const { relation, threshold, result } = await request.json();
         try {
-            const kpi = 'fetch old kpi - params.kpiId'
-            const new_kpi = 'edit old kpi with new values'
+            const kpi = await prisma.kpi.findUnique({
+                where: {
+                    kpiId: Number(params.kpiId)
+                }
+            })
+            const new_kpi = await prisma.kpi.update({
+                where: {
+                    kpiId: Number(params.kpiId)
+                },
+                data: {
+                    relation: relation,
+                    threshold: threshold,
+                    result: result,
+                }
+            });
             return NextResponse.json(new_kpi, { status: 200 });
         } catch (err) {
             return NextResponse.json("Could change KPI values", { status: 500 });

@@ -132,10 +132,20 @@ export const POST = async (request: NextRequest, { params }) => {
     if (session && session.user?.username == params.username) {
         const { relation, threshold, result } = await request.json();
         try {
-            // TODO: add valueId FK ?
+            const value = await prisma.value.findFirst({
+                where: {
+                    deviceId: params.deviceId,
+                    parameter: {
+                        name: parameterName
+                    }
+                },
+                select: {
+                    valueId: true
+                }
+            });
             const kpi = await prisma.kpi.create({
                 data: {
-                    deviceId: Number(params.deviceId),
+                    valueId: value.valueId,
                     relation: relation,
                     threshold: threshold,
                     result: result,

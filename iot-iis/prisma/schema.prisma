@@ -87,7 +87,7 @@ model System {
   description String?
   username    String    @default("cultsauce")
   devices     Device[]
-  users       User     @relation(fields: [username], references: [username])
+  user        User     @relation(fields: [username], references: [username])
 
   @@index([username])
 }

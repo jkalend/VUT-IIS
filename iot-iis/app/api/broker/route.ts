@@ -17,18 +17,28 @@ export const POST = async (request: NextRequest) => {
             return NextResponse.json("Could not authenticate broker", { status: 400 })
 
         // set recent value of device with deviceId, paramId from request to recent_value from request
-        let new_value = await prisma.device.update({
+        const value = await prisma.value.findUnique({
             where: {
-                deviceId: data.payload.deviceId
+                deviceId: data.payload.deviceId,
                 parameterId: data.payload.paramId
-            },
-            data: {
-                recentValue: data.payload.recentValue
             }
         });
+        const new_value = await prisma.value.update({
+            where: {
+                valueId: Number(value.valueId)
+            },
+            data: {
+                recentValue: Number(data.payload.recent_value)
+            }
+        });
+        
 
-        // TODO: fetch parameter with data.payload.paramId
-        const allowed_values = 'query'
+        // fetch parameter with data.payload.paramId
+        const allowed_values = await prisma.parameter.findUnique({
+            where: {
+                parameterId: data.payload.paramId
+            }
+        });
         
         // TODO: skontrolovat ci hodnota od brokera je ok s danym parametrom - to spravim ja
 
