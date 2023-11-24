@@ -26,7 +26,12 @@ export const POST = async (request: NextRequest) => {
                 recentValue: data.payload.recentValue
             }
         });
+
+        // TODO: fetch parameter with data.payload.paramId
+        const allowed_values = 'query'
         
+        // TODO: skontrolovat ci hodnota od brokera je ok s danym parametrom - to spravim ja
+
         return NextResponse.json(new_value, { status: 200 });
     } catch (err) {
         console.log (err)

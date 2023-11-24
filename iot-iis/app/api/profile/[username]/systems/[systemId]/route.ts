@@ -57,3 +57,4 @@ export const DELETE = async (request: NextRequest, { params }) => {
 		return NextResponse.json("Unauthorized", {status: 400});
 	}
 };
+
