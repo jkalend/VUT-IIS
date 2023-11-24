@@ -15,7 +15,7 @@ model Parameter {
   precision   Int        @default(2)
   type        String
   typeName    String
-  deviceTypes DeviceType @relation(fields: [typeName], references: [name])
+  deviceTypes DeviceType @relation(fields: [typeName], references: [name], onUpdate: Cascade, onDelete: Cascade)
 
   @@index([typeName])
 }
@@ -25,7 +25,9 @@ model DeviceType {
   parameters Parameter[]
   devices    Device[]
   username   String
-  user        User       @relation("UserDevice", fields: [username], references: [username])
+  user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
+
+  @@index([username])
 }
 
 model Device {
@@ -37,7 +39,7 @@ model Device {
   username    String     @default("cultsauce")
   typus       String
   deviceType  DeviceType @relation(fields: [typus], references: [name])
-  user        User       @relation("UserDevice", fields: [username], references: [username])
+  user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
   system      System?    @relation(fields: [systemId], references: [systemId])
 
   @@index([typus])
@@ -71,5 +73,7 @@ model System {
   username    String    @default("cultsauce")
   devices     Device[]
   users       User     @relation(fields: [username], references: [username])
+
+  @@index([username])
 }
 

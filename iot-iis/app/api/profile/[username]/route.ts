@@ -30,11 +30,18 @@ export const PUT = async (request: NextRequest, { params }) => {
     if (session && session.user?.username == params.username) {
 		const { new_pwd, old_pwd } = await request.json();
 		try {
-            // TODO: fetch password of user with params.username
-			let pwd = 'add query here'
+            // fetch password of user with params.username
+			let user = await prisma.user.findUnique({
+                where: {
+                    username: params.username
+                },
+                select: {
+                    password: true
+                }
+            })
 
             let pwd_check = await bcrypt.hash (old_pwd, 10)
-            let valid = bcrypt.compare (pwd_check, pwd)
+            let valid = bcrypt.compare (pwd_check, user.password)
             if (!valid)
                 return NextResponse.json("Wrong password", {status: 400});
 
@@ -56,12 +63,24 @@ export const DELETE = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
 		try {
-            // TODO: fetch user with params.username
-            let user = 'add query here'
+            //fetch user with params.username
+            let user = await prisma.user.findUnique({
+                where: {
+                    username: params.username
+                },
+                select: {
+                    admin_flag: true
+                }
+            })
             if (user.admin_flag == 1) 
                 return NextResponse.json("Admin account cannot be deleted", { status: 400 });
             
-            // TODO: delete user with params.username and CASCADE CONSTRAINTS (mozno to je default v prisme idk)
+            // delete user with params.username and CASCADE CONSTRAINTS (mozno to je default v prisme idk)
+            await prisma.user.delete({
+                where: {
+                    username: params.username
+                }
+            })
 
 			return NextResponse.json("Account deleted successfully", { status: 200 });
 		} catch (err) {
