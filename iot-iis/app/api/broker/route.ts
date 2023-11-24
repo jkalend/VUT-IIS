@@ -16,10 +16,11 @@ export const POST = async (request: NextRequest) => {
         if (!authenticated)
             return NextResponse.json("Could not authenticate broker", { status: 400 })
 
-        // set recent value of device with deviceId from request to recent_value from request
+        // set recent value of device with deviceId, paramId from request to recent_value from request
         let new_value = await prisma.device.update({
             where: {
                 deviceId: data.payload.deviceId
+                parameterId: data.payload.paramId
             },
             data: {
                 recentValue: data.payload.recentValue

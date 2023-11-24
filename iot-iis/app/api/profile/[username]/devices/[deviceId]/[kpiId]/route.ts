@@ -3,31 +3,7 @@ import {NextRequest, NextResponse} from "next/server";
 import { authOptions } from "@/app/api/auth/\[...nextauth\]/route"
 import { getServerSession } from "next-auth/next"
 
-// POST - create new KPI for device
-export const POST = async (request: NextRequest, { params }) => {
-    const session = await getServerSession(authOptions)
-    if (session && session.user?.username == params.username) {
-        const { relation, threshold, result } = await request.json();
-        try {
-            const kpi = await prisma.kpi.create({
-                data: {
-                    deviceId: Number(params.deviceId),
-                    relation: relation,
-                    threshold: threshold,
-                    result: result,
-                },
-            });
-            return NextResponse.json(kpi, { status: 200 });
-        } catch (err) {
-            return NextResponse.json("Could not add KPI to system", { status: 500 });
-        }
-    }
-    else {
-        return NextResponse.json("Unauthorized", {status: 400});
-    }
-};
-
-// GET - fetch kpi for device
+// GET - fetch kpi with params.kpiId
 export const GET = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
@@ -35,13 +11,13 @@ export const GET = async (request: NextRequest, { params }) => {
             //fetch KPI for device with params.deviceId
             const kpi = await prisma.kpi.findMany({
                 where: {
-                    deviceId: Number(params.deviceId)
+                    kpiId: Number(params.kpiId)
                 }
             })
 
             return NextResponse.json(kpi, { status: 200 });
         } catch (err) {
-            return NextResponse.json("Could fetch kpi for device", { status: 500 });
+            return NextResponse.json("Could not fetch kpi", { status: 500 });
         }
     }
     else {
@@ -85,11 +61,11 @@ export const PUT = async (request: NextRequest, { params }) => {
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
         const { relation, threshold, result } = await request.json();
         try {
-            const kpi = 'fetch old kpi'
+            const kpi = 'fetch old kpi - params.kpiId'
             const new_kpi = 'edit old kpi with new values'
             return NextResponse.json(new_kpi, { status: 200 });
         } catch (err) {
-            return NextResponse.json("Could not KPI for device", { status: 500 });
+            return NextResponse.json("Could change KPI values", { status: 500 });
         }
     }
     else {

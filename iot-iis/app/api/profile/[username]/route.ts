@@ -40,8 +40,7 @@ export const PUT = async (request: NextRequest, { params }) => {
                 }
             })
 
-            let pwd_check = await bcrypt.hash (old_pwd, 10)
-            let valid = bcrypt.compare (pwd_check, user.password)
+            let valid = await bcrypt.compare (old_pwd, user.password)
             if (!valid)
                 return NextResponse.json("Wrong password", {status: 400});
 
