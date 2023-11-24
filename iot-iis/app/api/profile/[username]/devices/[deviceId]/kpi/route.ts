@@ -55,24 +55,21 @@ export const DELETE = async (request: NextRequest, { params }) => {
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
         try {
             //delete kpi for device with params.deviceId
-            const kpis = await prisma.kpi.findMany({
+            const kpiToDelete = await prisma.kpi.findFirst({
                 where: {
-                    deviceId: Number(params.deviceId)
+                    value: {
+                        deviceId: Number(params.deviceId),
+                        parameterName: String(parameterName)
+                    }
                 }
-            })
-            for (const kpi of kpis) {
-                try {
-                    await prisma.kpi.delete({
-                        where: {
-                            kpiId: kpi.kpiId
-                        }
-                    });
-                } catch (error) {
-                    console.error(`Failed to delete KPI with ID ${kpi.kpiId}:`, error);
+            });
+            const deletedKpi = await prisma.kpi.delete({
+                where: {
+                    kpiId: kpiToDelete.kpiId
                 }
-            }
+            });
 
-            return NextResponse.json(kpis, { status: 200 });
+            return NextResponse.json(deletedKpi, { status: 200 });
         } catch (err) {
             return NextResponse.json("Could not delete kpi from device", { status: 500 });
         }

@@ -23,7 +23,7 @@ model Parameter {
 
 model Value {
   valueId  Int    @id @default(autoincrement())
-  recentValue Float
+  recentValue Float @default(0.0)
   deviceId Int 
   parameterName String
   
@@ -39,7 +39,7 @@ model DeviceType {
   name       String      @id @unique
   parameters Parameter[]
   devices    Device[]
-  username   String
+  username   String      @unique
   user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
 
   @@index([username])
@@ -49,7 +49,6 @@ model Device {
   deviceId    Int        @id @default(autoincrement())
   alias       String
   description String?
-  recentValue Float      @default(0.0)
   systemId    Int?
   username    String     @default("cultsauce")
   typus       String
@@ -70,7 +69,6 @@ model Kpi {
   result    String
   valueId   Int @unique
   value     Value  @relation(fields: [valueId], references: [valueId])
-
 }
 
 model User {

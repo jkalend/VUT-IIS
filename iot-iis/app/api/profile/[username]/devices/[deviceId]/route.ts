@@ -17,7 +17,9 @@ export const GET = async (request: NextRequest, { params }) => {
             })
             const kpis = await prisma.kpi.findMany({
                 where: {
-                    deviceId: Number(params.deviceId)
+                    value: {
+                        deviceId: Number(params.deviceId)
+                    }
                 }
             })
             if (kpis && kpis.length == 1) {
