@@ -113,7 +113,7 @@ const UserProfile = () => {
                     </div>
                     <div className={"flex flex-col"}>
                       <h1 className={"font-bold text-xl"}>
-                        {system.devices.length}
+                        {system.devices ? system.devices.length : 0}
                       </h1>
                     </div>
                   </Link>
