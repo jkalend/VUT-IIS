@@ -7,17 +7,17 @@ import bcrypt from 'bcrypt'
 /* GET - public route - get metadata about a user */
 export const GET = async (request: NextRequest, {params}) => {
     try {
-        const devices = await prisma.device.findMany({
+        const devices = await prisma.device.count({
+            where: {
+                username: params.username
+            },
+        });
+        const systems = await prisma.system.count({
             where: {
                 username: params.username
             }
         });
-        const systems = await prisma.system.findMany({
-            where: {
-                username: params.username
-            }
-        });
-        return NextResponse.json({"devices": devices.length, "systems":systems.length}, {status: 200});
+        return NextResponse.json({"devices": devices, "systems": systems}, {status: 200});
     } catch (error) {
         console.log("err: ", error)
         return NextResponse.json(error, {status: 500});

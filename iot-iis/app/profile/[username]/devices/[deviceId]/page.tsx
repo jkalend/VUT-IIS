@@ -30,6 +30,19 @@ const DeviceDetailsPage = () => {
         return data;
     }
 
+    const getKPI = async () => {
+        if (!session) return;
+        // @ts-ignore
+        const res = await fetch(`/api/profile/${session.user?.userId}`, {
+            method: "Get",
+            headers: { "Content-Type": "application/json" },
+        });
+        //if (!res.ok) throw new Error("Failed to fetch devices");
+        const data = await res.json();
+        // console.log(data);
+        return data;
+    }
+
     const editDevice = async () => {
         if (!session) return;
         // @ts-ignore
@@ -62,6 +75,9 @@ const DeviceDetailsPage = () => {
         if (status === "authenticated") {
             getDevice().then(r => {
                 setDevice(r);
+            });
+            getKPI().then(r => {
+                console.log(r);
             });
         } else if (status === "unauthenticated") {
             router.push("/profile/login");

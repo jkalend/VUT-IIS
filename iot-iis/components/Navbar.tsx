@@ -9,23 +9,6 @@ export default function Navbar() {
     const { data: session } = useSession()
     const [openDropdown, setOpenDropdown] = useState(false);
 
-    const logout = async () => {
-        try {
-            // const res = await fetch("/api/profile/logout", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            // });
-            //
-            // if (!res.ok) throw new Error("Logout failed");
-            //
-            // const data = await res.json();
-            // console.log(data);
-            console.log("Logout successful");
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
     return (
         <nav className={"fixed top-0 w-full mb-16 bg-gradient-to-bl from-gray-800 backdrop-blur-xl text-white z-10 inline-flex justify-between"}>
             <div className={'ml-16 flex flex-row justify-between space-x-5 outline-black'}>
@@ -62,6 +45,11 @@ export default function Navbar() {
                           className={'text-center justify-center items-center flex bg-black rounded-xl border-amber-50 hover:bg-orange-900 whitespace-nowrap px-3 my-[0.4rem]'}
                           onClick={() => setOpenDropdown(false)}>
                         My Profile
+                    </Link>
+                    <Link href={`/profile/${session.user?.username}/edit`}
+                          className={'text-center justify-center items-center flex bg-black rounded-xl border-amber-50 hover:bg-orange-900 whitespace-nowrap px-3 my-[0.4rem]'}
+                          onClick={() => setOpenDropdown(false)}>
+                        Edit Profile
                     </Link>
                     <button
                         className={'text-center justify-center items-center flex bg-black rounded-xl border-amber-50 hover:bg-orange-900 whitespace-nowrap px-3 my-[0.4rem]'}

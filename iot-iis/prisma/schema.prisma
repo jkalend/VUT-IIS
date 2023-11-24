@@ -60,6 +60,7 @@ model User {
   password     String
   admin_flag      Int   @default(0)
   devices      Device[] @relation("UserDevice")
+  deviceTypes  DeviceType[] @relation("UserDevice")
   systems      System[]
 }
 

@@ -41,7 +41,7 @@ const SystemPage = () => {
             </div>
             <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
                 {systems.map((system: any) => (
-                    <Link key={system.id} href={`/profile/${session?.user?.username}/systems/${system.systemId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                    <Link key={system.systemId} href={`/profile/${session?.user?.username}/systems/${system.systemId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                         <div className={"flex flex-col"}>
                             <div className={"font-bold text-xl"}>
                                 {system.name}

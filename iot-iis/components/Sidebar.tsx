@@ -15,7 +15,7 @@ export default function Sidebar() {
                     <nav className={`flex h-full w-full flex-col p-4 bg-gradient-to-r from-gray-800 from-10% transition-transform`}
                     >
                         <ul className="mt-16 fixed">
-                            <li className="mb-4 "><Link href="/" className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Overview</Link></li>
+                            <li className="mb-4 "><Link href={session ? `/profile/${session?.user?.username}` : "/"} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Overview</Link></li>
                             {session && <li className="mb-4"><Link href={`/profile/${session?.user?.username}/systems`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Systems</Link></li>}
                             {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/devices`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Devices</Link></li>}
                             {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/devicetype`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Add Device Type</Link></li>}

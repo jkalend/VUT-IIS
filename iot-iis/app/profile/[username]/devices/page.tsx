@@ -48,7 +48,7 @@ const DevicesPage = () => {
             </div>
             <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
                 {devices.map((device: any) => (
-                    <Link key={device.id} href={`/profile/${session?.user?.username}/devices/${device.deviceId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                    <Link key={device.deviceId} href={`/profile/${session?.user?.username}/devices/${device.deviceId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                         <div className={"flex flex-col"}>
                             <div className={"font-bold text-xl"}>
                                 {device.alias}
