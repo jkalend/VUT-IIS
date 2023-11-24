@@ -1,13 +1,17 @@
 import prisma from "@/app/db";
 import {NextRequest, NextResponse} from "next/server";
+import jwt from "jsonwebtoken"
 
 // POST - set new recent value for device using broker
 export const POST = async (request: NextRequest) => {
 
-    const { deviceId, recent_value, jwt } = await request.json();
+    const req  = await request.json();
     try {
         // TODO: authenticate broker using JWT (toto spravim este ja)
-        let authenticated = true;
+        let authenticated = false;
+        let data = jwt.decode (req.token, {complete: true})
+        if (data.payload.username == "cultsauce" && data.payload.password == "cultsauce")
+            authenticated = true;
 
         if (!authenticated)
             return NextResponse.json("Could not authenticate broker", { status: 400 })
@@ -15,15 +19,16 @@ export const POST = async (request: NextRequest) => {
         // set recent value of device with deviceId from request to recent_value from request
         let new_value = await prisma.device.update({
             where: {
-                deviceId: deviceId
+                deviceId: data.payload.deviceId
             },
             data: {
-                recentValue: recent_value
+                recentValue: data.payload.recentValue
             }
         });
         
         return NextResponse.json(new_value, { status: 200 });
     } catch (err) {
+        console.log (err)
         return NextResponse.json("Could not change recent value of device", { status: 500 });
     }
 
