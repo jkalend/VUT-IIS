@@ -9,7 +9,8 @@ datasource db {
 }
 
 model Parameter {
-  name        String     @id @unique
+  parameterId Int    @id @default(autoincrement())
+  name        String
   valuesFrom  Float
   valuesTo    Float
   precision   Int        @default(2)
@@ -25,13 +26,13 @@ model Value {
   valueId  Int    @id @default(autoincrement())
   recentValue Float @default(0.0)
   deviceId Int 
-  parameterName String
+  parameterId Int @unique
   
   kpi Kpi?
   device   Device @relation(fields: [deviceId], references: [deviceId])
-  parameter Parameter @relation(fields: [parameterName], references: [name])
+  parameter Parameter @relation(fields: [parameterId], references: [parameterId])
 
-  @@index([parameterName])
+  @@index([parameterId])
   @@index([deviceId])
 }
 
