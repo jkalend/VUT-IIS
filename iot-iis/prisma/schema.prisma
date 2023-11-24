@@ -16,8 +16,23 @@ model Parameter {
   type        String
   typeName    String
   deviceTypes DeviceType @relation(fields: [typeName], references: [name], onUpdate: Cascade, onDelete: Cascade)
+  values     Value[]
 
   @@index([typeName])
+}
+
+model Value {
+  valueId  Int    @id @default(autoincrement())
+  recentValue Float
+  deviceId Int 
+  parameterName String
+  
+  kpi Kpi?
+  device   Device @relation(fields: [deviceId], references: [deviceId])
+  parameter Parameter @relation(fields: [parameterName], references: [name])
+
+  @@index([parameterName])
+  @@index([deviceId])
 }
 
 model DeviceType {
@@ -38,6 +53,7 @@ model Device {
   systemId    Int?
   username    String     @default("cultsauce")
   typus       String
+  values     Value[]
   deviceType  DeviceType @relation(fields: [typus], references: [name])
   user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
   system      System?    @relation(fields: [systemId], references: [systemId])
@@ -52,9 +68,9 @@ model Kpi {
   relation  String
   threshold Float
   result    String
-  deviceId  Int
+  valueId   Int @unique
+  value     Value  @relation(fields: [valueId], references: [valueId])
 
-  @@index([deviceId])
 }
 
 model User {
