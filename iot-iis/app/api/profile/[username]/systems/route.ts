@@ -12,9 +12,9 @@ export const GET = async (request: NextRequest, { params }) => {
 				where: {
 					username: params.username,
 				},
-				include: { // TODO: toto tu ma byt ? ked fetchujes iba systemy
-					devices: true,
-				}
+				//include: { toto tu ma byt ? ked fetchujes iba systemy
+				//	devices: true,
+				//}
 			});
 			return NextResponse.json(allSystems, { status: 200 });
 		} catch (err) {

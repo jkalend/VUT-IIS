@@ -38,8 +38,12 @@ export const GET = async (request: NextRequest, {params}) => {
     const session = await getServerSession(authOptions)
     if (session && session.user?.username == params.username) {
         try {
-            // TODO: fetch all parameters for params.deviceTypeName
-            const parameters = 'query here'
+            //fetch all parameters for params.deviceTypeName
+            const parameters = await prisma.parameter.findMany({
+                where: {
+                    typeName: params.deviceTypeName
+                }
+            })
             
             return NextResponse.json(parameters, {status: 200});
         } catch (error) {
