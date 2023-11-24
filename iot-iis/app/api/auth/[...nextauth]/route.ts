@@ -20,7 +20,6 @@ export const authOptions: AuthOptions ={
       async authorize(credentials) {
         const {username, password} = credentials
 
-        let pwd = await bcrypt.hash (password, 10)
         try {
             const user = await prisma.user.findMany({
                 where: {
@@ -29,7 +28,7 @@ export const authOptions: AuthOptions ={
             })
             if (!user)
                 return null
-            let valid = bcrypt.compare (pwd, user[0].password)
+            let valid = await bcrypt.compare (password, user[0].password)
             if (!valid)
                 return null
 
@@ -68,6 +67,9 @@ export const authOptions: AuthOptions ={
       session.user.username = token.username
       session.is_admin = token.is_admin
       return session;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      return true
     },
   }
 };
