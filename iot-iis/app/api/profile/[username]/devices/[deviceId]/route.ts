@@ -9,20 +9,40 @@ export const GET = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
         try {
+            let kpi_status = true;
             const device = await prisma.device.findUnique({
                 where: {
                     deviceId: Number(params.deviceId)
                 }
             })
-            const kpi = await prisma.kpi.findMany({
+            const kpis = await prisma.kpi.findMany({
                 where: {
                     deviceId: Number(params.deviceId)
                 }
             })
-            if (kpi) {
+            if (kpis && kpis.length == 1) {
                 /* check value against recent value of device */
+                if (kpis[0].relation == "=") { 
+                    kpi_status = device?.recentValue == kpis[0].threshold
+                }
+                else if (kpis[0].relation == ">") {
+                    kpi_status = device?.recentValue > kpis[0].threshold
+                }
+                else if (kpis[0].relation == "<") {
+                    kpi_status = device?.recentValue < kpis[0].threshold
+                }
+                else if (kpis[0].relation == ">=") {
+                    kpi_status = device?.recentValue >= kpis[0].threshold
+                }
+                else if (kpis[0].relation == "<=") {
+                    kpi_status = device?.recentValue <= kpis[0].threshold
+                }
+                else if (kpis[0].relation == "!=") {
+                    kpi_status = device?.recentValue != kpis[0].threshold
+                }
+                if (kpis[0].result == "ERROR") kpi_status = !kpi_status
             }
-            return NextResponse.json({"device":device, "kpi_status":true}, {status: 200});
+            return NextResponse.json({"device":device, "kpi_status":kpi_status}, {status: 200});
         }
         catch (err) {
             return NextResponse.json(err, {status: 500});
@@ -91,26 +111,3 @@ export const DELETE = async (request: NextRequest, { params }) => {
     }
 }
 
-// POST - create new KPI for device
-export const POST = async (request: NextRequest, { params }) => {
-    const session = await getServerSession(authOptions)
-    if (session && session.user?.username == params.username) {
-        const { relation, threshold, result } = await request.json();
-        try {
-            const kpi = await prisma.kpi.create({
-                data: {
-                    deviceId: Number(params.deviceId),
-                    relation: relation,
-                    threshold: threshold,
-                    result: result,
-                },
-            });
-            return NextResponse.json(kpi, { status: 200 });
-        } catch (err) {
-            return NextResponse.json("Could not add KPI to system", { status: 500 });
-        }
-    }
-    else {
-        return NextResponse.json("Unauthorized", {status: 400});
-    }
-};
