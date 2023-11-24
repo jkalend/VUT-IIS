@@ -31,7 +31,7 @@ export const PUT = async (request: NextRequest, { params }) => {
 		const { new_pwd, old_pwd } = await request.json();
 		try {
             // fetch password of user with params.username
-			let pwd = await prisma.user.findUnique({
+			let user = await prisma.user.findUnique({
                 where: {
                     username: params.username
                 },
@@ -41,7 +41,7 @@ export const PUT = async (request: NextRequest, { params }) => {
             })
 
             let pwd_check = await bcrypt.hash (old_pwd, 10)
-            let valid = bcrypt.compare (pwd_check, pwd)
+            let valid = bcrypt.compare (pwd_check, user.password)
             if (!valid)
                 return NextResponse.json("Wrong password", {status: 400});
 
@@ -63,7 +63,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
 		try {
-            // TODO: fetch user with params.username
+            //fetch user with params.username
             let user = await prisma.user.findUnique({
                 where: {
                     username: params.username
