@@ -55,8 +55,31 @@ export const DELETE = async (request: NextRequest, { params }) => {
         const { username_del } = await request.json();
 		try {
 
-            // TODO: remove username_del from params.systemId shared users
-			const deletedAccess = 'query here'
+            // remove username_del from params.systemId shared users
+			const deletedAccess = await prisma.system.update({
+				where: {
+					systemId: params.systemId
+				},
+				data: {
+					allowed_users: {
+						disconnect: {
+							username: username_del
+						}
+					}
+				}
+			})
+			const deletedAccessUser = await prisma.user.update({
+				where: {
+					username: username_del
+				},
+				data: {
+					allowed_systems: {
+						disconnect: {
+							systemId: params.systemId
+						}
+					}
+				}
+			})
 
 			return NextResponse.json(
 				"Successfully removed access of user to system",
@@ -77,8 +100,15 @@ export const GET = async (request: NextRequest, { params }) => {
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
 		try {
 
-            // TODO: fetch users with access to view system
-			const users = 'query here'
+            // fetch users with access to view system
+			const users = await prisma.system.findUnique({
+				where: {
+					systemId: params.systemId
+				},
+				select: {
+					allowed_users: true
+				}
+			})
 
 
 			return NextResponse.json(
