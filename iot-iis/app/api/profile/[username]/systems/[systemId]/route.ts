@@ -62,8 +62,16 @@ export const GET = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
 	let has_access = false;
 	try {
-		// TODO:
-		const users = ['get usernames of all users that can view system']
+		//
+		const system = await prisma.system.findUnique({
+			where: {
+				systemId: Number(params.systemId),
+			},
+			include: {
+				allowed_users: true
+			}
+		});
+		const users = system.allowed_users;
 		if (users.filter((user) => user.username == session.user?.username).length > 0)
 			has_access = true;
 

@@ -15,6 +15,7 @@ model Parameter {
   precision   Int        @default(2)
   parameterId Int        @id @default(autoincrement())
   typeId      Int
+  unit        String?
   deviceTypes DeviceType @relation(fields: [typeId], references: [typeId], onDelete: Cascade, onUpdate: Cascade)
   values      Value[]
 
