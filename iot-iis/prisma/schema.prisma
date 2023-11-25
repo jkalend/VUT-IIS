@@ -52,7 +52,7 @@ model Device {
   description String?
   systemId    Int?
   username    String     @default("cultsauce")
-  typeId      Int
+  typeId      Int        @default(1)
   values     Value[]
   deviceType  DeviceType @relation(fields: [typeId], references: [typeId])
   user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
