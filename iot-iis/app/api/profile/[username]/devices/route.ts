@@ -14,12 +14,16 @@ export const GET = async (request: NextRequest, { params }) => {
 				},
 				select: {
 					devices: {
-						include: {
-							values: true,
-						},
+						select: {
+                            deviceId: true,
+                            alias: true,
+                            description: true,
+                            values: true,
+                            deviceType: true,
+                        },
 					}
 				},
-			}).devices();
+			});
 			return NextResponse.json(devices, { status: 200 });
 		} catch (err) {
 			console.log("err: ", err)

@@ -45,7 +45,15 @@ export const PUT = async (request: NextRequest, { params }) => {
                 return NextResponse.json("Wrong password", {status: 400});
 
             let new_pwd_hash = await bcrypt.hash (new_pwd, 10)
-            // TODO: set password of user with params.username to new_pwd_hash
+            //set password of user with params.username to new_pwd_hash
+            const updatedUser = await prisma.user.update({
+                where: {
+                    username: params.username
+                },
+                data: {
+                    password: new_pwd_hash
+                }
+            })
 
 			return NextResponse.json("Password changed successfully", { status: 200 });
 		} catch (err) {

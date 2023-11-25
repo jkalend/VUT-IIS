@@ -89,7 +89,7 @@ export const PUT = async (request: NextRequest, { params }) => {
                 },
                 data: {
                     alias: alias !== "" ? alias : (device && device.alias),
-                    typus: deviceTypeName !== "" ? deviceTypeName : (device && device.typus),
+                    typeId: deviceTypeId,
                     // deviceType: { connect: { name: deviceTypeName } },
                     description: description !== "" ? description : (device && device.description),
                 }
