@@ -8,8 +8,31 @@ export const POST = async (request: NextRequest, { params }) => {
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
 		try {
             
-            // TODO: create access of user_add to params.systemId
-			const user_access = 'query here'
+            // create access of user_add to params.systemId
+			const system_user = await prisma.system.update({
+				where: {
+					systemId: params.systemId
+				},
+				data: {
+					allowed_users: {
+						connect: {
+							username: username
+						}
+					}
+				}
+			})
+			const user_access = await prisma.user.update({
+				where: {
+					username: username
+				},
+				data: {
+					allowed_systems: {
+						connect: {
+							systemId: params.systemId
+						}
+					}
+				}
+			})
 
 			return NextResponse.json(
 				"Successully added acces of user to system",

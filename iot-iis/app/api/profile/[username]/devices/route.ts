@@ -45,7 +45,7 @@ export const POST = async (request: NextRequest, { params }) => {
 			let device = await prisma.device.create({
 				data: {
 					alias: alias,
-					typus: deviceTypeName,
+					typeId: deviceTypeId,
 					// systemId: systemId,
 					description: description,
 					username: params.username,

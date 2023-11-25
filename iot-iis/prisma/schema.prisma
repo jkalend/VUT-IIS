@@ -14,12 +14,11 @@ model Parameter {
   valuesFrom  Float
   valuesTo    Float
   precision   Int        @default(2)
-  type        String
-  typeName    String
-  deviceTypes DeviceType @relation(fields: [typeName], references: [name], onUpdate: Cascade, onDelete: Cascade)
-  values      Value[]
+  typeId      Int
+  deviceTypes DeviceType @relation(fields: [typeId], references: [typeId], onUpdate: Cascade, onDelete: Cascade)
+  values     Value[]
 
-  @@index([typeName])
+  @@index([typeId])
 }
 
 model Value {
@@ -27,6 +26,7 @@ model Value {
   recentValue Float @default(0.0)
   deviceId Int 
   parameterId Int @unique
+  
   kpi Kpi?
   device   Device @relation(fields: [deviceId], references: [deviceId])
   parameter Parameter @relation(fields: [parameterId], references: [parameterId])
@@ -36,10 +36,11 @@ model Value {
 }
 
 model DeviceType {
-  name       String      @id @unique
+  typeId     Int         @id @default(autoincrement())
+  name       String
   parameters Parameter[]
   devices    Device[]
-  username   String      @unique
+  username   String      
   user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
 
   @@index([username])
@@ -51,13 +52,13 @@ model Device {
   description String?
   systemId    Int?
   username    String     @default("cultsauce")
-  typus       String
+  typeId      Int
   values     Value[]
-  deviceType  DeviceType @relation(fields: [typus], references: [name])
+  deviceType  DeviceType @relation(fields: [typeId], references: [typeId])
   user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
   system      System?    @relation(fields: [systemId], references: [systemId])
 
-  @@index([typus])
+  @@index([typeId])
   @@index([username])
   @@index([systemId])
 }
@@ -77,7 +78,8 @@ model User {
   admin_flag      Int   @default(0)
   devices      Device[] @relation("UserDevice")
   deviceTypes  DeviceType[] @relation("UserDevice")
-  systems      System[]
+  systems      System[] @relation("created system")
+  allowed_systems System[] @relation("SystemUser")
 }
 
 model System {
@@ -86,7 +88,8 @@ model System {
   description String?
   username    String    @default("cultsauce")
   devices     Device[]
-  user        User     @relation(fields: [username], references: [username])
+  user        User     @relation("created system", fields: [username], references: [username])
+  allowed_users User[] @relation("SystemUser")
 
   @@index([username])
 }
