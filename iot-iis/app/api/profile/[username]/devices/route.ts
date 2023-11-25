@@ -35,12 +35,12 @@ export const GET = async (request: NextRequest, { params }) => {
 export const POST = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
     if (session && session.user?.username == params.username) {
-		const { alias, deviceTypeName, description } = await request.json();
+		const { alias, description, deviceTypeId } = await request.json();
 		try {
 			console.log("params: ", params)
 			console.log("alias: ", alias)
-			console.log("deviceTypeName: ", deviceTypeName)
 			console.log("description: ", description)
+			console.log("deviceTypeId: ", deviceTypeId)
 		
 			let device = await prisma.device.create({
 				data: {
