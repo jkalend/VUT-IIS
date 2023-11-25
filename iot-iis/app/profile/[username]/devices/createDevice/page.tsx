@@ -115,21 +115,46 @@ const CreateDevicePage = () => {
     )
 
     const addDevice = async (e : any) => {
-
-        //here you get form as device dava
-        //typeParams is the array of params
-        //form.type is the name of the type
-
-
         e.preventDefault();
         if (!session) return;
+        let deviceTypeId = 0;
+        if (form.type == "new") {
+            // create new device type
+            const res = await fetch(`/api/profile/${session.user?.username}/devicetypes`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    devTypeName: newType
+                }),
+            });
+            const deviceType = await res.json()
+            deviceTypeId = deviceType.typeId
+
+            // create new params
+            for (let i = 0; i < typeParams.length; i++) {
+                const res = await fetch(`/api/profile/${session.user?.username}/parameters`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        paramName: typeParams[i].name,
+                        valuesFrom: typeParams[i].valuesFrom,
+                        valuesTo: typeParams[i].valuesTo,
+                        precision: typeParams[i].precision,
+                        deviceTypeId: deviceTypeId
+                    }),
+                });
+            }
+        }
+        else {
+            deviceTypeId = deviceTypes.filter ((devtype) => devtype.name == form.type)[0].typeId
+        }
         const res = await fetch(`/api/profile/${session.user?.username}/devices`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 alias: form.alias,
-                deviceTypeName: form.type,
                 description: form.description,
+                deviceTypeId: deviceTypeId,
             }),
         });
         const data = await res.json();
