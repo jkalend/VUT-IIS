@@ -6,8 +6,17 @@ import { getServerSession } from "next-auth/next"
 export const POST = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+        const { username_add } = await request.json();
 		try {
-            
+            const user_exists = await prisma.user.findMany({
+                where: {
+                    username: username_add,
+                },
+            });
+            if (user_exists.length == 0) {
+                return NextResponse.json("User does not exist", {status: 400});
+            }
+
             // create access of user_add to params.systemId
 			const system_user = await prisma.system.update({
 				where: {
@@ -16,7 +25,7 @@ export const POST = async (request: NextRequest, { params }) => {
 				data: {
 					allowed_users: {
 						connect: {
-							username: username
+							username: username_add
 						}
 					}
 				}

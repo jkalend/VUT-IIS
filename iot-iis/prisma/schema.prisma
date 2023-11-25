@@ -9,53 +9,52 @@ datasource db {
 }
 
 model Parameter {
-  parameterId Int    @id @default(autoincrement())
   name        String
   valuesFrom  Float
   valuesTo    Float
   precision   Int        @default(2)
+  parameterId Int        @id @default(autoincrement())
   typeId      Int
-  deviceTypes DeviceType @relation(fields: [typeId], references: [typeId], onUpdate: Cascade, onDelete: Cascade)
-  values     Value[]
+  deviceTypes DeviceType @relation(fields: [typeId], references: [typeId], onDelete: Cascade, onUpdate: Cascade)
+  values      Value[]
 
   @@index([typeId])
 }
 
 model Value {
-  valueId  Int    @id @default(autoincrement())
-  recentValue Float @default(0.0)
-  deviceId Int 
-  parameterId Int @unique
-  
-  kpi Kpi?
-  device   Device @relation(fields: [deviceId], references: [deviceId])
-  parameter Parameter @relation(fields: [parameterId], references: [parameterId])
+  valueId     Int       @id @default(autoincrement())
+  recentValue Float     @default(0.0)
+  deviceId    Int
+  parameterId Int       @unique
+  kpi         Kpi?
+  device      Device    @relation(fields: [deviceId], references: [deviceId])
+  parameter   Parameter @relation(fields: [parameterId], references: [parameterId])
 
   @@index([parameterId])
   @@index([deviceId])
 }
 
 model DeviceType {
-  typeId     Int         @id @default(autoincrement())
   name       String
+  username   String
+  typeId     Int         @id @default(autoincrement())
   parameters Parameter[]
   devices    Device[]
-  username   String      
-  user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
+  user       User        @relation("UserDevice", fields: [username], references: [username], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([username])
 }
 
 model Device {
-  deviceId    Int        @id @default(autoincrement())
   alias       String
   description String?
+  deviceId    Int        @id @default(autoincrement())
   systemId    Int?
   username    String     @default("cultsauce")
-  typeId      Int
-  values     Value[]
+  typeId      Int        @default(1)
+  values      Value[]
   deviceType  DeviceType @relation(fields: [typeId], references: [typeId])
-  user        User       @relation("UserDevice", fields: [username], references: [username], onUpdate: Cascade, onDelete: Cascade)
+  user        User       @relation("UserDevice", fields: [username], references: [username], onDelete: Cascade, onUpdate: Cascade)
   system      System?    @relation(fields: [systemId], references: [systemId])
 
   @@index([typeId])
@@ -68,29 +67,37 @@ model Kpi {
   relation  String
   threshold Float
   result    String
-  valueId   Int @unique
+  valueId   Int    @unique
   value     Value  @relation(fields: [valueId], references: [valueId])
 }
 
 model User {
-  username     String   @id @unique
-  password     String
-  admin_flag      Int   @default(0)
-  devices      Device[] @relation("UserDevice")
-  deviceTypes  DeviceType[] @relation("UserDevice")
-  systems      System[] @relation("created system")
-  allowed_systems System[] @relation("SystemUser")
+  username        String       @id @unique
+  password        String
+  admin_flag      Int          @default(0)
+  devices         Device[]     @relation("UserDevice")
+  deviceTypes     DeviceType[] @relation("UserDevice")
+  systems         System[]     @relation("created system")
+  allowed_systems System[]     @relation("SystemUser")
 }
 
 model System {
-  systemId    Int      @id @default(autoincrement())
-  name        String
-  description String?
-  username    String    @default("cultsauce")
-  devices     Device[]
-  user        User     @relation("created system", fields: [username], references: [username])
-  allowed_users User[] @relation("SystemUser")
+  systemId      Int      @id @default(autoincrement())
+  name          String
+  description   String?
+  username      String   @default("cultsauce")
+  devices       Device[]
+  user          User     @relation("created system", fields: [username], references: [username])
+  allowed_users User[]   @relation("SystemUser")
 
   @@index([username])
 }
 
+model SystemUser {
+  A Int
+  B String
+
+  @@unique([A, B], map: "_SystemUser_AB_unique")
+  @@index([B], map: "_SystemUser_B_index")
+  @@map("_SystemUser")
+}

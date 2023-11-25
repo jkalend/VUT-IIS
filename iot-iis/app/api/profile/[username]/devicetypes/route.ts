@@ -6,15 +6,17 @@ import { getServerSession } from "next-auth/next"
 /* POST- create new device type */
 export const POST = async (request: NextRequest, {params}) => {
     const session = await getServerSession(authOptions)
-    if (session && session.user?.name === params.username) {
+    if (session && session.user?.username === params.username) {
         const { devTypeName } = await request.json();
         try {
+            console.log (devTypeName)
             const device_type = await prisma.deviceType.create({
                 data: {
                     user: { connect: { username: params.username } },
                     name: devTypeName
                 }
             });
+            console.log (device_type)
             return NextResponse.json(device_type, {status: 200});
         } catch (error) {
             return NextResponse.json("Could not create new device type", {status: 500});
