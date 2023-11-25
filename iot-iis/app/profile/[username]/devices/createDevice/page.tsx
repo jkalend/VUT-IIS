@@ -100,6 +100,12 @@ const CreateDevicePage = () => {
     )
 
     const addDevice = async (e : any) => {
+
+        //here you get form as device dava
+        //typeParams is the array of params
+        //devicetypes is the array of types
+
+
         e.preventDefault();
         if (!session) return;
         // @ts-ignore

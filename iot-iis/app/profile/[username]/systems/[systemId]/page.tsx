@@ -126,7 +126,7 @@ const SystemPage = () => {
                 setSystem(r);
             });
             getUsers().then(r => {
-                setUsers(r);
+                setUsers(r.allowed_users);
             });
         } else if (status === "unauthenticated") {
             //router.push("/profile/login");
