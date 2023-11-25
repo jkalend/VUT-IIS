@@ -11,18 +11,17 @@ const SystemPage = () => {
 
     const fetchData = async () => {
         if (!session) return;
-        const res = await fetch(`/api/profile/${session.user?.username}/systems`, {
+        const res = await fetch(`/api/profile/${params.username}/systems`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
-        setSystems(data);
-        //console.log(data);
+        return data;
     }
 
     useEffect(() => {
         fetchData().then(r => {
+            setSystems(r);
         });
     }, [status])
 
@@ -35,13 +34,13 @@ const SystemPage = () => {
                 <h1 className={"font-bold text-2xl"}>
                     Systems
                 </h1>
-                <Link href={`/profile/${session?.user?.username}/systems/addSystem`} className={"p-2 rounded-2xl bg-green-950"}>
+                <Link href={`/profile/${params.username}/systems/addSystem`} className={"p-2 rounded-2xl bg-green-950"}>
                     Add system
                 </Link>
             </div>
             <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
-                {systems.map((system: any) => (
-                    <Link key={system.systemId} href={`/profile/${session?.user?.username}/systems/${system.systemId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                {systems?.map((system: any) => (
+                    <Link key={system.systemId} href={`/profile/${params.username}/systems/${system.systemId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                         <div className={"flex flex-col"}>
                             <div className={"font-bold text-xl"}>
                                 {system.name}
@@ -52,7 +51,7 @@ const SystemPage = () => {
                         </div>
                         <div className={"flex flex-col"}>
                             <h1 className={"font-bold text-xl"}>
-                                {system.devices.length}
+                                {system._count.devices}
                             </h1>
                         </div>
                     </Link>

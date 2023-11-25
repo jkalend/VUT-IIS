@@ -36,7 +36,7 @@ export const GET = async (request: NextRequest, { params }) => {
             const device = await prisma.device.findUnique({
                 where: {
                     deviceId: Number(params.deviceId)
-                }
+                },
             })
 
             const kpis = await prisma.kpi.findMany({

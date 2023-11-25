@@ -2,7 +2,6 @@
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {ChangeEvent, useEffect, useState} from "react";
-// import {useRouter} from "next/router";
 import Link from "next/link";
 
 const DeviceDetailsPage = () => {
@@ -10,6 +9,7 @@ const DeviceDetailsPage = () => {
     const router = useRouter();
     const { data: session, status } = useSession()
     const [device, setDevice] = useState({} as any);
+    const [kpi, setKpi] = useState({} as any);
     const [edit, setEdit] = useState(false);
     const [formValues, setFormValues] = useState({
         alias: "",
@@ -20,9 +20,9 @@ const DeviceDetailsPage = () => {
     const getDevice = async () => {
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.username}/devices/${params.deviceId}`, {
+        const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
             method: "Get",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         });
         //if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
@@ -30,23 +30,10 @@ const DeviceDetailsPage = () => {
         return data;
     }
 
-    const getKPI = async () => {
-        if (!session) return;
-        // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.userId}`, {
-            method: "Get",
-            headers: { "Content-Type": "application/json" },
-        });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
-        const data = await res.json();
-        // console.log(data);
-        return data;
-    }
-
     const editDevice = async () => {
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.username}/devices/${params.deviceId}`, {
+        const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formValues),
@@ -61,22 +48,21 @@ const DeviceDetailsPage = () => {
         e.preventDefault()
         if (!session) return;
         // @ts-ignore
-        const res = await fetch(`/api/profile/${session.user?.username}/devices/${params.deviceId}`, {
+        const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
         });
         //if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
         console.log(data);
-        router.push(`/profile/${session.user?.username}/devices/`);
+        router.push(`/profile/${params.username}/devices/`);
     }
 
     useEffect(() => {
         if (status === "authenticated") {
             getDevice().then(r => {
-                setDevice(r);
-            });
-            getKPI().then(r => {
+                setDevice(r.device);
+                setKpi(r.kpi_status)
                 console.log(r);
             });
         } else if (status === "unauthenticated") {
@@ -86,8 +72,6 @@ const DeviceDetailsPage = () => {
 
     const handleEdit = (event: any) => {
         setEdit(!edit);
-
-        //console.log('value is:', event.target.value);
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +91,7 @@ const DeviceDetailsPage = () => {
                             Device details
                         </h1>
                         <h1 className={"mr-8 text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white"}>
-                            KPI: {""}
+                            {`KPI: ${kpi}`}
                         </h1>
                     </div>
                     {edit ? (

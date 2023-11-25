@@ -44,7 +44,6 @@ export const GET = async (request: NextRequest, {params}) => {
                     typeName: params.deviceTypeName
                 }
             })
-            
             return NextResponse.json(parameters, {status: 200});
         } catch (error) {
             return NextResponse.json("Could not fetch parameters for device type", {status: 500});

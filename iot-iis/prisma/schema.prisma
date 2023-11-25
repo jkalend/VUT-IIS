@@ -17,7 +17,7 @@ model Parameter {
   type        String
   typeName    String
   deviceTypes DeviceType @relation(fields: [typeName], references: [name], onUpdate: Cascade, onDelete: Cascade)
-  values     Value[]
+  values      Value[]
 
   @@index([typeName])
 }
@@ -27,7 +27,6 @@ model Value {
   recentValue Float @default(0.0)
   deviceId Int 
   parameterId Int @unique
-  
   kpi Kpi?
   device   Device @relation(fields: [deviceId], references: [deviceId])
   parameter Parameter @relation(fields: [parameterId], references: [parameterId])

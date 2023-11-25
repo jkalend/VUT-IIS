@@ -1,5 +1,5 @@
 "use client";
-import {useRouter} from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 import {useSession} from "next-auth/react";
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
@@ -10,7 +10,7 @@ function ProtectedPage() {
     const [users, setUsers] = useState([]);
 
     if (session) {
-        router.push("/profile/" + session.user?.username);
+        redirect("/profile/" + session.user?.username)
     }
 
     const textStyle = {

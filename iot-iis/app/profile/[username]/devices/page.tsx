@@ -6,21 +6,19 @@ import {Session} from "next-auth";
 import Link from "next/link";
 
 const DevicesPage = () => {
-    // const { username } = useParams();
+    const params = useParams();
     const router = useRouter();
     const { data: session, status } = useSession()
     const [devices, setDevices] = useState([]);
 
     const fetchData = async () => {
         if (!session) return;
-        const res = await fetch(`/api/profile/${session.user?.username}/devices`, {
+        const res = await fetch(`/api/profile/${params.username}/devices`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
         return data;
-        //console.log(data);
     }
 
     useEffect(() => {
@@ -57,11 +55,13 @@ const DevicesPage = () => {
                                 {device.typus}
                             </h1>
                         </div>
+                        {/*
                         <div className={"flex flex-col"}>
                             <h1 className={"font-bold text-xl"}>
                                 {device.recentValue}
                             </h1>
                         </div>
+                        */}
                     </Link>
                 ), [])}
             </div>

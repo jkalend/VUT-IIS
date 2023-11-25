@@ -12,9 +12,13 @@ export const GET = async (request: NextRequest, { params }) => {
 				where: {
 					username: params.username,
 				},
-				//include: { toto tu ma byt ? ked fetchujes iba systemy
-				//	devices: true,
-				//}
+				include: { //needed
+					_count: {
+						select: {
+							devices: true,
+						}
+					}
+				}
 			});
 			return NextResponse.json(allSystems, { status: 200 });
 		} catch (err) {

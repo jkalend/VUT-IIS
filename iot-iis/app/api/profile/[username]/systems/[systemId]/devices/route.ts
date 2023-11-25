@@ -69,7 +69,6 @@ export const GET = async (request: NextRequest, { params }) => {
 					systemId: Number(params.systemId),
 				},
 			}).devices();
-			// console.log("devices: ", user)
 			return NextResponse.json(devices, { status: 200 });
 		} catch (err) {
 			console.log("err: ", err)

@@ -58,3 +58,21 @@ export const DELETE = async (request: NextRequest, { params }) => {
 	}
 };
 
+export const GET = async (request: NextRequest, { params }) => {
+	const session = await getServerSession(authOptions)
+	if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+		try {
+			const system = await prisma.system.findUnique({
+				where: {
+					systemId: Number(params.systemId),
+				},
+			});
+			return NextResponse.json(system, { status: 200 });
+		} catch (err) {
+			return NextResponse.json("Could not fetch system info", { status: 500 });
+		}
+	}
+	else {
+		return NextResponse.json("Unauthorized", {status: 400});
+	}
+};

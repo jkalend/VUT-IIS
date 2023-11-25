@@ -1,15 +1,103 @@
 "use client";
-import { useRouter } from "next/navigation";
+import {redirect, useParams, useRouter} from "next/navigation";
 import { useSession } from "next-auth/react";
-import {useEffect, useState} from "react";
-// import {useRouter} from "next/router";
+import {ChangeEvent, useEffect, useState} from "react";
 
-const CreateDevicePage = ({params} : {params: any}) => {
+type Param = {
+    id: number,
+    name: string,
+    valuesFrom: string,
+    valuesTo: string,
+    precision: string,
+    type: string,
+}
+
+const CreateDevicePage = () => {
     const router = useRouter();
+    const params = useParams();
     const { data: session, status } = useSession()
-    const [alias, setAlias] = useState('');
-    const [type, setType] = useState('');
-    const [description, setDescription] = useState('');
+    const [deviceTypes, setDeviceTypes] = useState([]);
+    const [selectedNew, setSelectedNew] = useState(false);
+    const [typeParams, setTypeParams] = useState([] as Param[]);
+    const [form, setForm] = useState({
+        alias: "",
+        type: "",
+        description: "",
+    });
+
+    const handleParams = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        const paramId = name.split("-")[0];
+        const paramName = name.split("-")[1];
+        setTypeParams([...typeParams].map((param) => {
+            if (param.id === Number(paramId)) {
+                return {
+                    ...param,
+                    [paramName]: value,
+                }
+            }
+            return param;
+        }));
+    }
+
+    const addParam = (param: Param) => {
+        return (
+        <div id={"`param-${param.id}`"} key={param.id} onChange={handleParams} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                <label htmlFor={`${param.id}-name`}
+                       className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameter name</label>
+                <input name={`${param.id}-name`} id={`${param.id}-name`} value={param.name} onChange={handleParams}
+                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       placeholder="New Param" required/>
+                <div className={"flex flex-row my-2"}>
+                    <h1 className={"text-center font-bold text-2xl mx-2"}>From</h1>
+                    <input name={`${param.id}-valuesFrom`} id={`${param.id}-valuesFrom`} value={param.valuesFrom} onChange={handleParams}
+                           className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                           placeholder={"value"} required/>
+                    <h1 className={"text-center font-bold text-2xl mx-2"}>to</h1>
+                    <input name={`${param.id}-valuesTo`} id={`${param.id}-valuesTo`} value={param.valuesTo} onChange={handleParams}
+                           className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                           placeholder={"value"} required/>
+                </div>
+                <div className={"flex flex-row my-2"}>
+                    <label className={"text-center font-bold text-xl mx-2 w-full whitespace-nowrap"}>With precision of</label>
+                    <input name={`${param.id}-precision`} id={`${param.id}-precision`} value={param.precision} onChange={handleParams}
+                           className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
+                           placeholder={"0.00"} required/>
+                </div>
+                <label htmlFor={`${param.id}-type`}
+                       className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Measured in</label>
+                <input name={`${param.id}-type`} id={`${param.id}-type`} value={param.type} onChange={handleParams}
+                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       placeholder="Units" required/>
+        </div>
+    )
+    }
+
+    const addType = (
+        <div className={"w-full rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-700 border-gray-700 p-2"}>
+            <label htmlFor="typeName"
+                   className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device Type</label>
+            <input name="typeName" id="typeName"
+                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="New Type" required/>
+            <div className={"flex flex-row my-2 w-full justify-between"}>
+            <h1 className="text-center mt-1 block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameters</h1>
+            <button type={"button"} className={"bg-gray-500 text-white rounded-lg p-1.5 ml-2"} onClick={() => {setTypeParams([...typeParams, {
+                id: typeParams.length,
+                name: "",
+                valuesFrom: "",
+                valuesTo: "",
+                precision: "",
+                type: "",
+            }])}}>Add Param</button>
+            </div>
+            <div className={"flex flex-col"}>
+                {typeParams.map((param) => (
+                    addParam(param)
+                ))}
+            </div>
+        </div>
+    )
 
     const addDevice = async (e : any) => {
         e.preventDefault();
@@ -19,65 +107,95 @@ const CreateDevicePage = ({params} : {params: any}) => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                alias: alias,
-                deviceTypeName: type,
-                description: description,
+                alias: form.alias,
+                deviceTypeName: form.type,
+                description: form.description,
             }),
         });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
-        console.log(data);
         // @ts-ignore
-        router.push(`/profile/${session.user?.username}/devices/`);
+        router.push(`/profile/${params.username}/devices/`);
     }
 
-    const handleAlias = (event: any) => {
-        setAlias(event.target.value);
+    const getDeviceTypes = async () => {
+        if (!session) return;
+        const res = await fetch(`/api/profile/${params.username}/devicetypes`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+        return data;
+    }
 
-        //console.log('value is:', event.target.value);
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setForm({ ...form, [name]: value });
     };
 
-    const handleType = (event: any) => {
-        setType(event.target.value);
+    useEffect(() => {
+        getDeviceTypes().then((data) => {
+            setDeviceTypes(data);
+        });
+    }, [status]);
 
-        //console.log('value is:', event.target.value);
-    };
-
-    const handleDescription = (event: any) => {
-        setDescription(event.target.value);
-
-        //console.log('value is:', event.target.value);
-    };
+    useEffect(() => {
+        if (form.type === "new") {
+            setSelectedNew(true);
+        } else {
+            setSelectedNew(false);
+        }
+    }, [form.type]);
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
-    return (
-        <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white">
-                        Create a new device
-                    </h1>
-                    <form className="space-y-4 md:space-y-6" onSubmit={addDevice}>
-                        <div>
-                            <label htmlFor="alias" className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device Alias</label>
-                            <input type="alias" name="alias" id="alias" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="My Little Device" onChange={handleAlias} required/>
-                        </div>
-                        <div>
-                            <label htmlFor="type" className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device type</label>
-                            <input type="type" name="type" id="type" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="thermometer" onChange={handleType} required/>
-                        </div>
-                        <div>
-                            <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                            <input type="description" name="description" id="description" placeholder="" className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900" onChange={handleDescription}/>
-                        </div>
-                        <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create</button>
-                    </form>
+    if (session?.user?.username === params.username) {
+        return (
+            <div
+                className=" flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0">
+                <div
+                    className="mb-16 w-full overflow-auto bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                    <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+                        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white">
+                            Create a new device
+                        </h1>
+                        <form className="space-y-4 md:space-y-6" onSubmit={addDevice}>
+                            <div>
+                                <label htmlFor="alias"
+                                       className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device
+                                    Alias</label>
+                                <input type="alias" name="alias" id="alias"
+                                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="My Little Device" onChange={handleChange} required/>
+                            </div>
+                            <div>
+                                <select name={"type"} id={"type"} onChange={handleChange} onClick={handleChange} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                                    <option className={"hidden"} value={""}>Select a type</option>
+                                    {deviceTypes?.map((deviceType) => (
+                                        <option key={deviceType.name} value={deviceType.name}>{deviceType.name}</option>
+                                    ))}
+                                    <option value={"new"}>New type</option>
+                                </select>
+                                {selectedNew ? addType : <></>}
+                            </div>
+                            <div>
+                                <label htmlFor="description"
+                                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                                <input type="description" name="description" id="description" placeholder=""
+                                       className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900"
+                                       onChange={handleChange}/>
+                            </div>
+                            <button type="submit"
+                                    className="w-full text-white bg-primary-600 hover:bg-primary-700 hover:ring-4 hover:outline-none hover:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    } else {
+        redirect("/profile/login")
+    }
 }
 
 export default CreateDevicePage;

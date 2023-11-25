@@ -47,20 +47,10 @@ export default function Register() {
 
     const handleUsername = (event: any) => {
         setUsername(event.target.value);
-
-        //console.log('value is:', event.target.value);
-    };
-
-    const handleEmail = (event: any) => {
-        setEmail(event.target.value);
-
-        //console.log('value is:', event.target.value);
     };
 
     const handlePassword = (event: any) => {
         setPassword(event.target.value);
-
-        //console.log('value is:', event.target.value);
     };
 
     return(

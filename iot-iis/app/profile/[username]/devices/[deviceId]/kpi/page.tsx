@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import {ChangeEvent, FormEvent,  useState} from "react";
+import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import Link from "next/link";
 
 const KpiPage = () => {
@@ -11,6 +11,7 @@ const KpiPage = () => {
     const [formValues, setFormValues] = useState({
         threshold: "",
     });
+    const [parameters, setParameters] = useState([] as any);
 
     const createKPI = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -26,12 +27,38 @@ const KpiPage = () => {
                 threshold: formData.get("threshold")
             }),
         });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
-        // console.log(data);
         router.back();
     }
 
+    const getParameters = async () => {
+        if (!session) return;
+        // @ts-ignore
+        const deviceRes = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
+            method: "Get",
+            headers: {"Content-Type": "application/json"},
+        });
+
+        const deviceData = await deviceRes.json();
+
+        const res = await fetch(`/api/profile/${params.username}/devicetypes/${deviceData.typus}`, {
+            method: "Get",
+            headers: {"Content-Type": "application/json"},
+        });
+        const data = await res.json();
+        return data;
+    }
+
+    useEffect(() => {
+        if (status === "authenticated") {
+            getParameters().then(r => {
+                setParameters(r);
+                console.log(r);
+            });
+        } else if (status === "unauthenticated") {
+            //router.push("/profile/login");
+        }
+    }, [status]);
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormValues({ ...formValues, [name]: value });
@@ -47,9 +74,19 @@ const KpiPage = () => {
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white w-full">
                         Add a new KPI
                     </h1>
+                    <div className={"flex flex-row gap-2 w-full justify-between"}>
+                        <h1 className={"mr-8 text-xl font-bold text-white whitespace-nowrap"}>
+                            For parameter:
+                        </h1>
+                        <select name={"parameter"} id={"parameter"} className={"flex flex-grow min-w-0 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                            {parameters.map((parameter: any) => (
+                                <option value={parameter.name}>{parameter.name}</option>
+                            ))}
+                        </select>
+                    </div>
                     <form id={"kpi"} className="flex grid-cols-3 grid-rows-1 justify-center items-center gap-2" onSubmit={createKPI}>
                         <div className={"w-1/3"}>
-                            <select name={"relation"} id={"relation"} className={"flex flex-grow min-w-0 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                            <select name={"result"} id={"result"} className={"flex flex-grow min-w-0 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
                                 <option value={"ok"} className={"max-w-full"}>OK</option>
                                 <option value={"err"}>ERROR</option>
                             </select>

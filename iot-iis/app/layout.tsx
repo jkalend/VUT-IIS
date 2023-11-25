@@ -23,7 +23,7 @@ export default function RootLayout({
       <Provider>
       <Navbar/>
       <Sidebar/>
-      <main className={"flex h-full relative ml-64 mt-16"}>
+      <main className={"flex h-full relative ml-64 mt-16 overflow-auto"}>
           {children}
       </main>
       </Provider>
