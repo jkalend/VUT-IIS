@@ -11,7 +11,7 @@ export const POST = async (request: NextRequest, { params }) => {
             // create access of user_add to params.systemId
 			const system_user = await prisma.system.update({
 				where: {
-					systemId: params.systemId
+					systemId: Number(params.systemId)
 				},
 				data: {
 					allowed_users: {
@@ -28,7 +28,7 @@ export const POST = async (request: NextRequest, { params }) => {
 				data: {
 					allowed_systems: {
 						connect: {
-							systemId: params.systemId
+							systemId: Number(params.systemId)
 						}
 					}
 				}
@@ -58,7 +58,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
             // remove username_del from params.systemId shared users
 			const deletedAccess = await prisma.system.update({
 				where: {
-					systemId: params.systemId
+					systemId: Number(params.systemId)
 				},
 				data: {
 					allowed_users: {
@@ -75,7 +75,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 				data: {
 					allowed_systems: {
 						disconnect: {
-							systemId: params.systemId
+							systemId: Number(params.systemId)
 						}
 					}
 				}
@@ -103,7 +103,7 @@ export const GET = async (request: NextRequest, { params }) => {
             // fetch users with access to view system
 			const users = await prisma.system.findUnique({
 				where: {
-					systemId: params.systemId
+					systemId: Number(params.systemId)
 				},
 				select: {
 					allowed_users: true
