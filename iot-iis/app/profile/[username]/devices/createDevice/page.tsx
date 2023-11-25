@@ -16,14 +16,24 @@ const CreateDevicePage = () => {
     const router = useRouter();
     const params = useParams();
     const { data: session, status } = useSession()
+
+    // selectable types
     const [deviceTypes, setDeviceTypes] = useState([]);
+
+    // a new type is selected
     const [selectedNew, setSelectedNew] = useState(false);
+
+    // params of the new type
     const [typeParams, setTypeParams] = useState([] as Param[]);
+
+    // the device form
     const [form, setForm] = useState({
         alias: "",
         type: "",
         description: "",
     });
+
+    const [newType, setNewType] = useState("");
 
     const handleParams = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -38,6 +48,11 @@ const CreateDevicePage = () => {
             }
             return param;
         }));
+    }
+
+    const handleNewType = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setNewType(value);
     }
 
     const addParam = (param: Param) => {
@@ -77,9 +92,9 @@ const CreateDevicePage = () => {
         <div className={"w-full rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-700 border-gray-700 p-2"}>
             <label htmlFor="typeName"
                    className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device Type</label>
-            <input name="typeName" id="typeName"
+            <input name="typeName" id="typeName" onChange={handleNewType}
                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                   placeholder="New Type" required/>
+                   placeholder="New Type" value={newType} required/>
             <div className={"flex flex-row my-2 w-full justify-between"}>
             <h1 className="text-center mt-1 block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameters</h1>
             <button type={"button"} className={"bg-gray-500 text-white rounded-lg p-1.5 ml-2"} onClick={() => {setTypeParams([...typeParams, {
@@ -103,12 +118,11 @@ const CreateDevicePage = () => {
 
         //here you get form as device dava
         //typeParams is the array of params
-        //devicetypes is the array of types
+        //form.type is the name of the type
 
 
         e.preventDefault();
         if (!session) return;
-        // @ts-ignore
         const res = await fetch(`/api/profile/${session.user?.username}/devices`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -119,7 +133,6 @@ const CreateDevicePage = () => {
             }),
         });
         const data = await res.json();
-        // @ts-ignore
         router.push(`/profile/${params.username}/devices/`);
     }
 
@@ -180,7 +193,7 @@ const CreateDevicePage = () => {
                                     {deviceTypes?.map((deviceType) => (
                                         <option key={deviceType.name} value={deviceType.name}>{deviceType.name}</option>
                                     ))}
-                                    <option value={"new"}>New type</option>
+                                    <option value={"new"} className={"p-4"}>New type</option>
                                 </select>
                                 {selectedNew ? addType : <></>}
                             </div>
