@@ -18,6 +18,8 @@ const SystemPage = () => {
 
     const fetchDevices = async () => {
         if (!session) return;
+        if (session.user?.username != params.username) return;
+        // not shared
         const res = await fetch(`/api/profile/${params.username}/devices`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -30,16 +32,6 @@ const SystemPage = () => {
         return filteredData;
     }
 
-    // useEffect(() => {
-    //     if (status === "authenticated") {
-    //         fetchDevices().then(r => {
-    //             setAllDevices(r);
-    //         });
-    //     } else if (status === "unauthenticated") {
-    //         router.push("/profile/login");
-    //     }
-    // }, [status])
-
     const addDevice = async (e : FormEvent<HTMLFormElement>) => {
         if (!session) return;
         const formData = new FormData(e.currentTarget)
@@ -51,6 +43,18 @@ const SystemPage = () => {
             }),
         });
         // const data = await res.json();
+        router.refresh()
+    }
+
+    const removeDevice = async (e : FormEvent<HTMLFormElement>) => {
+        const formData = new FormData(e.currentTarget)
+        const res = await fetch(`/api/profile/${params.username}/systems/${params.systemId}/devices`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                deviceId: formData.get("deviceId"),
+            }),
+        });
         router.refresh()
     }
 
@@ -80,6 +84,7 @@ const SystemPage = () => {
             method: "Get",
             headers: { "Content-Type": "application/json" },
         });
+        if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
         return data;
     }
@@ -95,12 +100,9 @@ const SystemPage = () => {
                 username: formData.get("username"),
             }),
         });
-        // const data = await res.json();
-        router.refresh()
     }
 
     const removeUser = async (e : FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
         if (!session) return;
         const formData = new FormData(e.currentTarget)
         const res = await fetch(`/api/profile/${params.username}/systems/${params.systemId}/share`, {
@@ -110,24 +112,30 @@ const SystemPage = () => {
                 username: formData.get("username"),
             }),
         });
-        // const data = await res.json();
-        router.refresh()
     }
 
     useEffect(() => {
         if (status === "authenticated") {
-            fetchDevices().then(r => {
-                setAllDevices(r);
-            });
-            getDevices().then(r => {
-                setDevices(r);
-            });
-            getSystem().then(r => {
-                setSystem(r);
-            });
-            getUsers().then(r => {
-                setUsers(r.allowed_users);
-            });
+            try {
+                getDevices().then(r => {
+                    setDevices(r);
+                });
+                getSystem().then(r => {
+                    setSystem(r);
+                });
+
+
+                //not for shared
+                fetchDevices().then(r => {
+                    setAllDevices(r);
+                });
+                getUsers().then(r => {
+                    setUsers(r.allowed_users);
+                    // setUsers([{username: "test"}, {username: "test2"}])
+                });
+            } catch (e) {
+                router.push("/profile/login");
+            }
         } else if (status === "unauthenticated") {
             //router.push("/profile/login");
         }
@@ -136,6 +144,7 @@ const SystemPage = () => {
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
+    if (session && (session.user?.username == params.username))
     return (
         <div className={"flex flex-col w-full p-2"}>
             <div className={"flex flex-row p-5 justify-between"}>
@@ -155,6 +164,7 @@ const SystemPage = () => {
                 <h1 className={"font-bold text-2xl"}>
                     Devices
                 </h1>
+                {session?.user?.username == params.username && (
                 <div className={"flex flex-row gap-2"}>
                     <button onClick={() => setDropdown(!dropdown)} className={"p-2 rounded-2xl bg-green-950"}>
                         {dropdown ? "Close" : "Add device"}
@@ -174,28 +184,46 @@ const SystemPage = () => {
                         </div>
                     }
                 </div>
+                )}
             </div>
             <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-auto max-h-[50%]"}>
-                {devices.map((device: any) => (
-                    <Link key={device.deviceId} href={`/profile/${params.username}/devices/${device.deviceId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
-                        <div className={"flex flex-col"}>
-                            <div className={"font-bold text-xl"}>
-                                {device.alias}
+                { session?.user?.username == params.username &&
+                    devices.map((device: any) => (
+                        <div key={device.deviceId} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                            <Link href={`/profile/${params.username}/devices/${device.deviceId}`} className={"w-[90%] flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                                <div className={"flex flex-col"}>
+                                    <div className={"font-bold text-xl"}>
+                                        {device.alias}
+                                    </div>
+                                    <h1 className={"text-gray-500"}>
+                                        {device.typus}
+                                    </h1>
+                                </div>
+                            </Link>
+                            <form className={"flex flex-col w-[10%]"} onSubmit={removeDevice}>
+                                <input name={"deviceId"} value={device.deviceId} hidden={true} onChange={() => {}}/>
+                                <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                                    Remove
+                                </button>
+                            </form>
+                        </div>
+                ), [])}
+                { session?.user?.username != params.username &&
+                    devices.map((device: any) => (
+                        <div key={device.deviceId} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                            <div className={"flex flex-col"}>
+                                <div className={"font-bold text-xl"}>
+                                    {device.alias}
+                                </div>
+                                <h1 className={"text-gray-500"}>
+                                    {device.typus}
+                                </h1>
                             </div>
-                            <h1 className={"text-gray-500"}>
-                                {device.typus}
-                            </h1>
                         </div>
-                        {/*
-                        <div className={"flex flex-col"}>
-                            <h1 className={"font-bold text-xl"}>
-                                {device.recentValue}
-                            </h1>
-                        </div>
-                        */}
-                    </Link>
                 ), [])}
             </div>
+            {session?.user?.username == params.username && (
+                <>
             <div className={"flex flex-row p-5 justify-between mt-32"}>
                 <h1 className={"font-bold text-2xl"}>
                     Users
@@ -219,20 +247,25 @@ const SystemPage = () => {
             </div>
             <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 max-h-[50%] pb-16"}>
                 {users && users.map((user: any) => (
-                    <Link key={user.username} href={`/profile/${params.username}/`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
-                        <div className={"flex flex-col truncate p-2"}>
-                            <div className={"font-bold text-xl truncate"}>
-                                {user.username}
+                    <div>
+                        <Link key={user.username} href={`/profile/${params.username}/`} className={"w-[90%] flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                            <div className={"flex flex-col truncate p-2"}>
+                                <div className={"font-bold text-xl truncate"}>
+                                    {user.username}
+                                </div>
                             </div>
-                        </div>
-                        <div className={"flex flex-col"}>
-                            <button className={"p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                        </Link>
+                        <form className={"flex flex-col w-[10%]"} onSubmit={removeUser}>
+                            <input name={"username"} value={user.username} hidden={true} onChange={() => {}}/>
+                            <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
                                 Remove
                             </button>
-                        </div>
-                    </Link>
+                        </form>
+                    </div>
                 ), [])}
             </div>
+        </>
+        )}
         </div>
     );
 }
