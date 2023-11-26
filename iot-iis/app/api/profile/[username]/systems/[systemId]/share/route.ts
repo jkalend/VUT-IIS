@@ -16,7 +16,6 @@ export const POST = async (request: NextRequest, { params }) => {
             if (user_exists.length == 0) {
                 return NextResponse.json("User does not exist", {status: 400});
             }
-
             // create access of user_add to params.systemId
 			const system_user = await prisma.system.update({
 				where: {
@@ -32,7 +31,7 @@ export const POST = async (request: NextRequest, { params }) => {
 			})
 			const user_access = await prisma.user.update({
 				where: {
-					username: username
+					username: username_add
 				},
 				data: {
 					allowed_systems: {
@@ -48,7 +47,7 @@ export const POST = async (request: NextRequest, { params }) => {
 				{ status: 200 }
 			);
 		} catch (err) {
-			return NextResponse.json("Could add access to system", { status: 500 });
+			return NextResponse.json("Could not add access to system", { status: 500 });
 		}
 	}
 	else {

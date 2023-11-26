@@ -127,7 +127,7 @@ const SystemPage = () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                username: formData.get("username"),
+                username_add: formData.get("username"),
             }),
         });
         if (!res.ok) {
@@ -144,7 +144,7 @@ const SystemPage = () => {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                username: formData.get("username"),
+                username_del: formData.get("username"),
             }),
         });
         if (!res.ok) {
