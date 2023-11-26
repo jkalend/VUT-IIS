@@ -12,6 +12,7 @@ export const POST = async (request: NextRequest, {params}) => {
         try {
             // create new parameter for device type with params.deviceTypeName
 
+            // @ts-ignore
             const parameter = await prisma.parameter.create({
                 data: {
                     typeId: params.deviceTypeId,

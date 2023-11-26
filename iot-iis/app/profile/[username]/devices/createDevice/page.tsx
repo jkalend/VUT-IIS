@@ -60,9 +60,14 @@ const CreateDevicePage = () => {
 
     const addParam = (param: Param) => {
         return (
-        <div id={"`param-${param.id}`"} key={param.id} onChange={handleParams} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
-                <label htmlFor={`${param.id}-name`}
-                       className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameter name</label>
+        <div id={`param-${param.id}`} key={param.id} onChange={handleParams} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                <div className={"w-full justify-between flex flex-row"}>
+                    <label htmlFor={`${param.id}-name`}
+                           className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameter name</label>
+                    <button type={"button"} className={"items-center justify-center text-center h-5 w-5 bg-gray-500 text-white rounded-lg"} onClick={() => {
+                        setTypeParams([...typeParams].filter((p) => p.id !== param.id))
+                    }}>X</button>
+                </div>
                 <input name={`${param.id}-name`} id={`${param.id}-name`} value={param.name} onChange={handleParams}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="New Param"/>
@@ -198,9 +203,9 @@ const CreateDevicePage = () => {
                     }),
                 });
                 if (!res.ok) {
-                setError("Error creating a new value");
-                return;
-            }
+                    setError("Error creating a new value");
+                    return;
+                }
             }
             router.push(`/profile/${params.username}/devices/`);
         }

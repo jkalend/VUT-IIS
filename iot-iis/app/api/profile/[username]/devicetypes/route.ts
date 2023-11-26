@@ -48,7 +48,15 @@ export const GET = async (request: NextRequest, {params}) => {
                     username: params.username,
                 },
                 include:{
-                    parameters: true
+                    parameters: {
+                        select: {
+                            name: true,
+                            unit: true,
+                            parameterId: true,
+                            valuesFrom: true,
+                            valuesTo: true,
+                        }
+                    }
                 }
             });
             return NextResponse.json(device_types, {status: 200});
