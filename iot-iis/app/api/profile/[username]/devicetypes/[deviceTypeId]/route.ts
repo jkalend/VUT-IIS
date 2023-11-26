@@ -47,13 +47,14 @@ export const GET = async (request: NextRequest, {params}) => {
             const typeName = await prisma.deviceType.findMany({
                 where: {
                     typeId: Number(params.deviceTypeId)
-                }
+                },
                 select: {
                     name: true
                 }
             })
             return NextResponse.json({"parameters":parameters, "typeName":typeName[0]}, {status: 200});
         } catch (error) {
+            console.log(error)
             return NextResponse.json("Could not fetch parameters for device type", {status: 500});
         }
     }

@@ -41,7 +41,6 @@ export const GET = async (request: NextRequest, { params }) => {
                     deviceType: true
                 }
             })
-            console.log("device",device)
             const kpis = await prisma.kpi.findMany({
                 where: {
                     value: {
@@ -77,7 +76,7 @@ export const PUT = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         // TODO: ake parametre tu chceme??? resp co vsetko sa moze menit
-        const {alias, deviceTypeName, description} = await request.json();
+        const {alias, type, description} = await request.json();
         try {
 
             const device = await prisma.device.findUnique({
@@ -92,7 +91,7 @@ export const PUT = async (request: NextRequest, { params }) => {
                 },
                 data: {
                     alias: alias !== "" ? alias : (device && device.alias),
-                    typeId: deviceTypeId,
+                    typeId: Number(type),
                     // deviceType: { connect: { name: deviceTypeName } },
                     description: description !== "" ? description : (device && device.description),
                 }
@@ -113,7 +112,6 @@ export const DELETE = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
-            
             const deletedDevice = await prisma.device.delete({
                 where: {
                     deviceId: Number(params.deviceId)

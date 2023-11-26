@@ -200,7 +200,6 @@ const CreateDevicePage = () => {
                 return;
             }
             }
-            
             router.push(`/profile/${params.username}/devices/`);
         }
     }
