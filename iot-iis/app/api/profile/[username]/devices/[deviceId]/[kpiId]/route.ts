@@ -31,17 +31,9 @@ export const DELETE = async (request: NextRequest, { params }) => {
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
             //delete kpi for device with params.deviceId
-            const kpiToDelete = await prisma.kpi.findFirst({
-                where: {
-                    value: {
-                        deviceId: Number(params.deviceId),
-                        valueId: Number(valueId)
-                    }
-                }
-            });
             const deletedKpi = await prisma.kpi.delete({
                 where: {
-                    kpiId: Number(kpiToDelete.kpiId)
+                    kpiId: Number(params.kpiId)
                 }
             });
 
