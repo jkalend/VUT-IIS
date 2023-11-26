@@ -159,7 +159,6 @@ const SystemPage = () => {
                     setSystem(r);
                 });
                 getDevices().then(r => {
-                    console.log(r)
                     setDevices(r);
                 });
 
