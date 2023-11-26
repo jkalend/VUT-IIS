@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next"
 // GET - get all devices with given userId
 export const GET = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		try {
 			const devices = await prisma.user.findUnique({
 				where: {
@@ -15,18 +15,18 @@ export const GET = async (request: NextRequest, { params }) => {
 				select: {
 					devices: {
 						select: {
-                            deviceId: true,
-                            alias: true,
-                            description: true,
-                            values: true,
-                            deviceType: true,
-                        },
+							deviceId: true,
+							alias: true,
+							description: true,
+							values: true,
+							deviceType: true,
+							systemId: true,
+						},
 					}
 				},
 			});
-			return NextResponse.json(devices, { status: 200 });
+			return NextResponse.json(devices?.devices, { status: 200 });
 		} catch (err) {
-			console.log("err: ", err)
 			return NextResponse.json(err, { status: 500 });
 		}
 	}
@@ -58,7 +58,6 @@ export const POST = async (request: NextRequest, { params }) => {
 			});
 			return NextResponse.json(device, { status: 200 });
 		} catch (err) {
-			console.log("err: ", err)
 			return NextResponse.json(err, { status: 500 });
 		}
 	}

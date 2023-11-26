@@ -68,7 +68,7 @@ export const PUT = async (request: NextRequest, { params }) => {
 // DELETE - delete user with params.username
 export const DELETE = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		try {
             //fetch user with params.username
             let user = await prisma.user.findUnique({

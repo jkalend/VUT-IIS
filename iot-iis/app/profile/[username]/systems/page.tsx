@@ -8,15 +8,21 @@ const SystemPage = () => {
     const { data: session, status } = useSession()
     const [systems, setSystems] = useState([]);
     const params = useParams();
+    const [error, setError] = useState(false);
 
     const fetchData = async () => {
-        if (!session) return;
-        const res = await fetch(`/api/profile/${params.username}/systems`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        return data;
+        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+            const res = await fetch(`/api/profile/${params.username}/systems`, {
+                method: "GET",
+                headers: {"Content-Type": "application/json"},
+            });
+            if (!res.ok) {
+                setError(true);
+                return [];
+            }
+            const data = await res.json();
+            return data;
+        }
     }
 
     useEffect(() => {
@@ -28,7 +34,7 @@ const SystemPage = () => {
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
-    if (session && (session.user?.username == params.username)) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         return (
             <div className={"flex flex-col w-full p-2"}>
                 <div className={"flex flex-row p-5 justify-between"}>
@@ -41,7 +47,8 @@ const SystemPage = () => {
                     </Link>
                 </div>
                 <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
-                    {systems?.map((system: any) => (
+                    {error ? <div className={"text-red-500"}>Error loading systems</div> :
+                    systems?.map((system: any) => (
                         <Link key={system.systemId} href={`/profile/${params.username}/systems/${system.systemId}`}
                               className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                             <div className={"flex flex-col"}>
@@ -63,7 +70,7 @@ const SystemPage = () => {
             </div>
         );
     } else {
-        redirect("/profile/login")
+        return redirect("/profile/login")
     }
 }
 

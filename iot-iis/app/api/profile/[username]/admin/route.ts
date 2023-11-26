@@ -8,12 +8,15 @@ import { getServerSession } from "next-auth/next"
 // GET - all user in system
 export const GET = async (request: NextRequest, response: NextResponse) => {
     const session = await getServerSession(authOptions)
-    if (session && session.user?.is_admin == 1) {
+    if (session && session.is_admin == 1) {
         try {
-            const users = await prisma.user.findMany();
+            const users = await prisma.user.findMany({
+                where: {
+                    admin_flag: 0
+                }
+            });
             return NextResponse.json(users, {status: 200});
         } catch (error) {
-            console.log("err: ", error)
             return NextResponse.json(error, {status: 500});
         }
     }

@@ -10,10 +10,10 @@ export default function Navbar() {
     const [openDropdown, setOpenDropdown] = useState(false);
 
     return (
-        <nav className={"fixed top-0 w-full mb-16 bg-gradient-to-bl from-gray-800 backdrop-blur-xl text-white z-10 inline-flex justify-between"}>
+        <nav className={"fixed top-0 max-h-[64px] w-full mb-16 bg-gradient-to-bl from-gray-800 from-5% to-60% backdrop-blur-xl text-white z-10 inline-flex justify-between"}>
             <div className={'ml-16 flex flex-row justify-between space-x-5 outline-black'}>
-                <Link href={'/'} className={'text-center w-full flex'}>
-                    <Image className={"fill-current"} src={"/vercel.svg"} alt={"Menu icon"} width={50} height={50}/>
+                <Link href={'/'} className={'w-full flex justify-center items-center'}>
+                    <h1 className={"text-4xl font-bold text-orange-400 text-center"}>IOTA</h1>
                 </Link>
             </div>
             <div className={'flex justify-between gap-3'}>
@@ -36,7 +36,7 @@ export default function Navbar() {
                             className="text-center flex items-center gap-3 p-1"
                             onClick={() => setOpenDropdown(!openDropdown)}
                             >
-                        <span className={"text-white text-2xl font-semibold font-['Inter']"}>{session ? session.user?.username : "Visitor"}</span>
+                        <span className={"text-white text-3xl font-semibold "}>{session ? session.user?.username : "Visitor"}</span>
                     </button>
                 </div>
                 {session && <>

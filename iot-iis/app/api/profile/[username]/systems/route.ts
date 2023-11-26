@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next"
 // GET - all systems with given userId
 export const GET = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		try {
 			const allSystems = await prisma.system.findMany({
 				where: {

@@ -1,15 +1,17 @@
 "use client";
 
 import {useState} from 'react';
-import {useRouter} from "next/navigation";
+import {redirect, useRouter} from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Register() {
 
     let router = useRouter();
+    const {data: session, status} = useSession()
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
 
     const sendForm = async(e:any) => {
@@ -25,24 +27,24 @@ export default function Register() {
                     }),
                 }
             )
-            if (!res.ok) throw new Error("Login failed");
+            if (!res.ok) {
+                setError("Failed to sign in")
+            }
             const user  = await res.json();
-            console.log (user);
             try {
-            const res = await signIn("credentials", {
-                redirect: true,
-                username: user.username,
-                password: user.password,
-                callbackUrl:`/profile/${user.username}`
-            });
+                const _ = await signIn("credentials", {
+                    redirect: true,
+                    username: user.username,
+                    password: user.password,
+                    callbackUrl:`/profile/${user.username}`
+                });
             } catch (err) {
-                console.log ("Failed to signin: " + err);
+                setError("Failed to sign in")
             }
         }
-        catch (error) {
-            console.log ("Failed to create user: " + error);
+        catch (error : any) {
+            setError(error.message)
         }
-        
     }
 
     const handleUsername = (event: any) => {
@@ -52,6 +54,9 @@ export default function Register() {
     const handlePassword = (event: any) => {
         setPassword(event.target.value);
     };
+
+    if (status === "loading") return <></>
+    if (status === "authenticated") return redirect("/")
 
     return(
         <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
@@ -69,6 +74,11 @@ export default function Register() {
                                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                                 <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900" onChange={handlePassword} required/>
                             </div>
+                            {error ? (
+                                <h1 className={"text-base text-red-700 flex flex-col text-center w-full"}>{error}</h1>
+                            ) : (
+                                <></>
+                            )}
                             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign up</button>
                         </form>
                     </div>

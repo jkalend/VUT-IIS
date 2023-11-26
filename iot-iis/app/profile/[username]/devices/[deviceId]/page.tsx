@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, useParams } from "next/navigation";
+import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
 import {ChangeEvent, useEffect, useState} from "react";
 import Link from "next/link";
@@ -16,46 +16,53 @@ const DeviceDetailsPage = () => {
         typus: "",
         description: "",
     });
+    const [error, setError] = useState("");
 
     const getDevice = async () => {
-        if (!session) return;
-        // @ts-ignore
-        const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
-            method: "Get",
-            headers: {"Content-Type": "application/json"},
-        });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
-        const data = await res.json();
-        //console.log(data);
-        return data;
+        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+            const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
+                method: "Get",
+                headers: {"Content-Type": "application/json"},
+            });
+            if (!res.ok) {
+                setError("Error fetching a device data");
+                return;
+            }
+            const data = await res.json();
+            return data;
+        }
     }
 
-    const editDevice = async () => {
-        if (!session) return;
-        // @ts-ignore
-        const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formValues),
-        });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
-        const data = await res.json();
-        console.log(data);
-        setEdit(false);
+    const editDevice = async (e : any) => {
+        e.preventDefault()
+        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+            const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
+                method: "PUT",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(formValues),
+            });
+            if (!res.ok) {
+                setError("Error editing a device");
+                return;
+            }
+            setEdit(false);
+            router.push(`/profile/${params.username}/devices`)
+        }
     }
 
     const deleteDevice = async (e: any) => {
         e.preventDefault()
-        if (!session) return;
-        // @ts-ignore
-        const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-        });
-        //if (!res.ok) throw new Error("Failed to fetch devices");
-        const data = await res.json();
-        console.log(data);
-        router.push(`/profile/${params.username}/devices/`);
+        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+            const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json"},
+            });
+            if (!res.ok) {
+                setError("Error deleting a device");
+                return;
+            }
+            router.push(`/profile/${params.username}/devices/`);
+        }
     }
 
     useEffect(() => {
@@ -82,6 +89,7 @@ const DeviceDetailsPage = () => {
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
     return (
         <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -108,6 +116,7 @@ const DeviceDetailsPage = () => {
                                 <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                 <input type="description" name="description" id="description" placeholder={device.description} className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900" onChange={handleChange}/>
                             </div>
+                            {error && <div className={"w-full text-center text-red-500"}>{error}</div>}
                             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Accept</button>
                         </form>
                     ) : (
@@ -130,10 +139,11 @@ const DeviceDetailsPage = () => {
                                     {device.description}
                                 </span>
                             </div>
+                            {error && <div className={"w-full text-center text-red-500"}>{error}</div>}
                             <button onClick={handleEdit} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Edit</button>
                             <button onClick={deleteDevice} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Delete</button>
                             <div className={"flex flex-row gap-2"}>
-                                <Link href={`/profile/${session?.user?.username}/devices/${params.deviceId}/kpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add KPI</Link>
+                                <Link href={`/profile/${params.username}/devices/${params.deviceId}/kpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add KPI</Link>
                             </div>
                         </div>
                     )}
@@ -141,6 +151,9 @@ const DeviceDetailsPage = () => {
             </div>
         </div>
     );
+    } else {
+        return redirect("/profile/login")
+    }
 }
 
 export default DeviceDetailsPage;

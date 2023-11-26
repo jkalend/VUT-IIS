@@ -30,7 +30,7 @@ function validate_kpi (recentValue: Number, threshold: Number, relation: String,
 // GET - get all device with deviceId
 export const GET = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
             let kpi_status = true;
             const device = await prisma.device.findUnique({
@@ -72,7 +72,7 @@ export const GET = async (request: NextRequest, { params }) => {
 // PUT - edit device with given deviceId
 export const PUT = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         // TODO: ake parametre tu chceme??? resp co vsetko sa moze menit
         const {alias, deviceTypeName, description} = await request.json();
         try {
@@ -108,7 +108,7 @@ export const PUT = async (request: NextRequest, { params }) => {
 //DELETE - delete device with given device id
 export const DELETE = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
             const deletedDevice = await prisma.device.delete({
                 where: {

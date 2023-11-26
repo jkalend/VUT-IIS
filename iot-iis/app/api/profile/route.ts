@@ -8,7 +8,9 @@ export const GET = async (request: NextRequest, response: NextResponse) => {
             take: 20,
             select: {
                 username: true,
-                admin_flag: false,
+            },
+            where: {
+                admin_flag: 0
             }
         });
         return NextResponse.json(users, {status: 200});

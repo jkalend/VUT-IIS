@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next"
 // GET - fetch kpi with params.kpiId
 export const GET = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
             //fetch KPI for device with params.deviceId
             const kpi = await prisma.kpi.findMany({
@@ -28,7 +28,7 @@ export const GET = async (request: NextRequest, { params }) => {
 // DELETE - delete kpi for device
 export const DELETE = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
             //delete kpi for device with params.deviceId
             const kpiToDelete = await prisma.kpi.findFirst({
@@ -58,7 +58,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 // PUT - edit KPI for device
 export const PUT = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         const { relation, threshold, result } = await request.json();
         try {
             const kpi = await prisma.kpi.findUnique({

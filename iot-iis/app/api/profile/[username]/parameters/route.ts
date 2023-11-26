@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth/next"
 export const POST = async (request: NextRequest, {params}) => {
     const session = await getServerSession(authOptions)
     if (session && session.user?.username === params.username) {
-        const { paramName, valuesFrom, valuesTo, precision, deviceTypeId } = await request.json();
+        const { paramName, valuesFrom, valuesTo, precision, deviceTypeId, unit } = await request.json();
         try {
             const parameter = await prisma.parameter.create({
                 data: {
@@ -15,7 +15,8 @@ export const POST = async (request: NextRequest, {params}) => {
                     valuesFrom: valuesFrom,
                     valuesTo: valuesTo,
                     precision: precision,
-                    deviceTypes: deviceTypeId
+                    deviceTypes: deviceTypeId,
+                    unit: unit,
                 }
             });
             return NextResponse.json(parameter, {status: 200});

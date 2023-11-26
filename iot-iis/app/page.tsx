@@ -6,11 +6,11 @@ import Link from "next/link";
 
 function ProtectedPage() {
     const router = useRouter();
-    const {data: session} = useSession()
+    const {data: session, status} = useSession()
     const [users, setUsers] = useState([]);
 
     if (session) {
-        redirect("/profile/" + session.user?.username)
+        return redirect("/profile/" + session.user?.username)
     }
 
     const textStyle = {
@@ -32,6 +32,10 @@ function ProtectedPage() {
         });
     }, [])
 
+
+    if (status === "loading") {
+        return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
+    }
 
     return (
         <div className={"flex relative w-full flex-col"}>

@@ -33,7 +33,10 @@ const CreateDevicePage = () => {
         description: "",
     });
 
+    // holds the name of the new type
     const [newType, setNewType] = useState("");
+
+    const [error, setError] = useState("");
 
     const handleParams = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -116,59 +119,76 @@ const CreateDevicePage = () => {
 
     const addDevice = async (e : any) => {
         e.preventDefault();
-        if (!session) return;
-        let deviceTypeId = 0;
-        if (form.type == "new") {
-            // create new device type
-            const res = await fetch(`/api/profile/${session.user?.username}/devicetypes`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    devTypeName: newType
-                }),
-            });
-            const deviceType = await res.json()
-            deviceTypeId = deviceType.typeId
-
-            // create new params
-            for (let i = 0; i < typeParams.length; i++) {
-                const res = await fetch(`/api/profile/${session.user?.username}/parameters`, {
+        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+            let deviceTypeId = 0;
+            if (form.type == "new") {
+                // create new device type
+                const res = await fetch(`/api/profile/${params.username}/devicetypes`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
-                        paramName: typeParams[i].name,
-                        valuesFrom: typeParams[i].valuesFrom,
-                        valuesTo: typeParams[i].valuesTo,
-                        precision: typeParams[i].precision,
-                        deviceTypeId: deviceTypeId
+                        devTypeName: newType
                     }),
                 });
+                if (!res.ok) {
+                    setError("Error creating a new device type");
+                    return;
+                }
+                const deviceType = await res.json()
+                deviceTypeId = deviceType.typeId
+
+                // create new params
+                for (let i = 0; i < typeParams.length; i++) {
+                    const res = await fetch(`/api/profile/${params.username}/parameters`, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            paramName: typeParams[i].name,
+                            valuesFrom: typeParams[i].valuesFrom,
+                            valuesTo: typeParams[i].valuesTo,
+                            precision: typeParams[i].precision,
+                            deviceTypeId: deviceTypeId,
+                            unit: typeParams[i].type,
+                        }),
+                    });
+                    if (!res.ok) {
+                        setError("Error creating a new parameter:" + typeParams[i].name);
+                        return;
+                    }
+                }
+            } else {
+                deviceTypeId = deviceTypes.filter((devtype) => devtype.name == form.type)[0].typeId
             }
+            const res = await fetch(`/api/profile/${params.username}/devices`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    alias: form.alias,
+                    description: form.description,
+                    deviceTypeId: deviceTypeId,
+                }),
+            });
+            if (!res.ok) {
+                setError("Error creating a new device");
+                return;
+            }
+            router.push(`/profile/${params.username}/devices/`);
         }
-        else {
-            deviceTypeId = deviceTypes.filter ((devtype) => devtype.name == form.type)[0].typeId
-        }
-        const res = await fetch(`/api/profile/${session.user?.username}/devices`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                alias: form.alias,
-                description: form.description,
-                deviceTypeId: deviceTypeId,
-            }),
-        });
-        const data = await res.json();
-        router.push(`/profile/${params.username}/devices/`);
     }
 
     const getDeviceTypes = async () => {
-        if (!session) return;
-        const res = await fetch(`/api/profile/${params.username}/devicetypes`, {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        return data;
+        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+            const res = await fetch(`/api/profile/${params.username}/devicetypes`, {
+                method: "GET",
+                headers: {"Content-Type": "application/json"},
+            });
+            if (!res.ok) {
+                setError("Error loading device types");
+                return [];
+            }
+            const data = await res.json();
+            return data;
+        }
     }
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -193,7 +213,7 @@ const CreateDevicePage = () => {
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
-    if (session?.user?.username === params.username) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         return (
             <div
                 className=" flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0">
@@ -214,11 +234,13 @@ const CreateDevicePage = () => {
                             </div>
                             <div>
                                 <select name={"type"} id={"type"} onChange={handleChange} onClick={handleChange} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
-                                    <option className={"hidden"} value={""}>Select a type</option>
-                                    {deviceTypes?.map((deviceType) => (
-                                        <option key={deviceType.name} value={deviceType.name}>{deviceType.name}</option>
-                                    ))}
-                                    <option value={"new"} className={"p-4"}>New type</option>
+                                    {error ? <option className={"hidden"} value={""}>Error loading device types</option> : <>
+                                        <option className={"hidden"} value={""}>Select a type</option>
+                                        {deviceTypes?.map((deviceType) => (
+                                            <option key={deviceType.name} value={deviceType.name}>{deviceType.name}</option>
+                                        ))}
+                                        <option value={"new"} className={"p-4"}>New type</option>
+                                    </>}
                                 </select>
                                 {selectedNew ? addType : <></>}
                             </div>
@@ -229,6 +251,7 @@ const CreateDevicePage = () => {
                                        className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900"
                                        onChange={handleChange}/>
                             </div>
+                            {error ? <div className={"text-red-500"}>{error}</div> : <></>}
                             <button type="submit"
                                     className="w-full text-white bg-primary-600 hover:bg-primary-700 hover:ring-4 hover:outline-none hover:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
                             </button>

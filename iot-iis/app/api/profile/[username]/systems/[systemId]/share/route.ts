@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth/next"
 
 export const POST = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         const { username_add } = await request.json();
 		try {
             const user_exists = await prisma.user.findMany({
@@ -60,7 +60,7 @@ export const POST = async (request: NextRequest, { params }) => {
 // DELETE access for user to view system
 export const DELETE = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         const { username_del } = await request.json();
 		try {
 
@@ -106,7 +106,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 // GET - fetch all users with access to view system
 export const GET = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		try {
 
             // fetch users with access to view system

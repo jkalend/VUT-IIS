@@ -30,7 +30,7 @@ export const POST = async (request: NextRequest, {params}) => {
 // GET - get all device types from db
 export const GET = async (request: NextRequest, {params}) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
             const device_types = await prisma.deviceType.findMany({
                 where: {

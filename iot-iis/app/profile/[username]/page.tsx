@@ -6,7 +6,6 @@ import Link from "next/link";
 
 const UserProfile = () => {
     const params = useParams();
-    const router = useRouter();
     const {data: session, status} = useSession()
     const [devices, setDevices] = useState([]);
     const [systems, setSystems] = useState([]);
@@ -14,6 +13,9 @@ const UserProfile = () => {
         devices: 0,
         systems: 0,
     });
+    const [error, setError] = useState(false);
+    const [systemsError, setSystemsError] = useState(false);
+    const [devicesError, setDevicesError] = useState(false);
 
     const fetchCounts = async () => {
         const user = session?.user?.username === params.username ? session.user?.username : params.username;
@@ -21,9 +23,12 @@ const UserProfile = () => {
             method: "GET",
             headers: {"Content-Type": "application/json"},
         });
+        if (!res.ok) {
+            setError(true);
+            return { devices: 0, systems: 0 };
+        }
         const data = await res.json();
         return data;
-        //console.log(data);
     }
     const fetchData = async () => {
         const user = session?.user?.username === params.username ? session.user?.username : params.username;
@@ -31,20 +36,26 @@ const UserProfile = () => {
             method: "GET",
             headers: {"Content-Type": "application/json"},
         });
+        if (!res.ok) {
+            setDevicesError(true);
+            return [];
+        }
         const data = await res.json();
         return data;
-        //console.log(data);
     }
 
     const fetchSystems = async () => {
         const user = session?.user?.username === params.username ? session.user?.username : params.username;
-        const res = await fetch(`/api/profile/${session?.user?.username}/systems`, {
+        const res = await fetch(`/api/profile/${user}/systems`, {
             method: "GET",
             headers: {"Content-Type": "application/json"},
         });
         const data = await res.json();
+        if (!res.ok) {
+            setSystemsError(true);
+            return [];
+        }
         return data;
-        //console.log(data);
     }
 
     useEffect(() => {
@@ -65,7 +76,7 @@ const UserProfile = () => {
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
-    if (session && (session.user?.username == params.username)) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         return (
             <div className={"flex flex-row w-full"}>
                 <div className={"flex flex-col w-full p-2"}>
@@ -75,7 +86,8 @@ const UserProfile = () => {
                         </h1>
                     </div>
                     <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
-                        {devices.map((device: any) => (
+                        {devicesError ? <div className={"text-red-500"}>Error loading devices</div> :
+                            devices.map((device: any) => (
                             <Link key={device.deviceId}
                                   href={`/profile/${session?.user?.username}/devices/${device.deviceId}`}
                                   className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
@@ -103,7 +115,8 @@ const UserProfile = () => {
                         </h1>
                     </div>
                     <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
-                        {systems.map((system: any) => (
+                        {systemsError ? <div className={"text-red-500"}>Error loading systems</div> :
+                            systems.map((system: any) => (
                             <Link key={system.systemId}
                                   href={`/profile/${session?.user?.username}/systems/${system.systemId}`}
                                   className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>

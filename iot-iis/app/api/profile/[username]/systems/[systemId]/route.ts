@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth/next"
 // PUT - change system info
 export const PUT = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		const { sysName, description } = await request.json();
 		try {
 			const system = await prisma.system.findUnique({
@@ -38,7 +38,7 @@ export const PUT = async (request: NextRequest, { params }) => {
 // DELETE system from db
 export const DELETE = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		try {
 			const deletedSystem = await prisma.system.delete({
 				where: {
@@ -78,7 +78,7 @@ export const GET = async (request: NextRequest, { params }) => {
 	} catch (err) {
 		// do nothing
 	}
-	if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1) || (has_access))) {
+	if (session && ((session.user?.username == params.username) || (session.is_admin == 1) || (has_access))) {
 		try {
 			const system = await prisma.system.findUnique({
 				where: {

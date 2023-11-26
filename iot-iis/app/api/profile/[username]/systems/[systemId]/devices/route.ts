@@ -33,7 +33,7 @@ export const POST = async (request: NextRequest, { params }) => {
 // DELETE device from system - NOT COMPLETELY
 export const DELETE = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		const { deviceId } = await request.json();
 		try {
 			const deletedDevice = await prisma.device.update({
@@ -62,7 +62,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 // GET - get all devices in the system
 export const GET = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.user?.is_admin == 1))) {
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
 		try {
 			const devices = await prisma.system.findUnique({
 				where: {
