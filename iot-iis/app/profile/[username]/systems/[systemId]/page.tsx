@@ -197,18 +197,25 @@ const SystemPage = () => {
 
     return (
         <div className={"flex flex-col w-full p-2"}>
-            <div className={"flex flex-row p-5 justify-between"}>
+            <div className={"flex flex-col p-5 justify-between"}>
+                <div className={"flex flex-row gap-2 w-full justify-between"}>
+                    <div className={"flex flex-row gap-2"}>
+                        <h1 className={"font-bold text-2xl"}>
+                            System
+                        </h1>
+                        <h1 className={"font-bold text-2xl text-orange-400"}>
+                            {system.name}
+                        </h1>
+                    </div>
+                    <Link href={`/profile/${params.username}/systems/${params.systemId}/editSystem`} className={"p-2 rounded-2xl bg-orange-500"}>
+                        Edit system
+                    </Link>
+                </div>
                 <div className={"flex flex-row gap-2"}>
-                    <h1 className={"font-bold text-2xl"}>
-                        System
-                    </h1>
-                    <h1 className={"font-bold text-2xl text-orange-400"}>
-                        {system.name}
+                    <h1 className={"font-bold text-base text-gray-400"}>
+                        {system.description}
                     </h1>
                 </div>
-                <Link href={`/profile/${params.username}/systems/${params.systemId}/editSystem`} className={"p-2 rounded-2xl bg-orange-500"}>
-                    Edit system
-                </Link>
             </div>
             <div className={"flex flex-row p-5 justify-between"}>
                 <h1 className={"font-bold text-2xl"}>

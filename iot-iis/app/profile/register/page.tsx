@@ -6,7 +6,6 @@ import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Register() {
 
-    let router = useRouter();
     const {data: session, status} = useSession()
 
     const [username, setUsername] = useState('');
