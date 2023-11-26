@@ -23,15 +23,15 @@ export const POST = async (request: NextRequest) => {
             }
         });
     
-        if (ok_vals?.valuesFrom < Number(data.payload.recent_value) ||
-            ok_vals?.valuesTo > Number(data.payload.recent_value)) {
+        if (ok_vals?.valuesFrom > Number(data.payload.recentValue) ||
+            ok_vals?.valuesTo < Number(data.payload.recentValue)) {
                 return NextResponse.json("Wrong values", { status: 400 });
         }
         // set recent value of device with deviceId, paramId from request to recent_value from request
         const value = await prisma.value.findUnique({
             where: {
-                deviceId: data.payload.deviceId,
-                parameterId: data.payload.paramId
+                deviceId: Number(data.payload.deviceId),
+                parameterId: Number(data.payload.paramId)
             }
         });
         const new_value = await prisma.value.update({
@@ -39,13 +39,13 @@ export const POST = async (request: NextRequest) => {
                 valueId: Number(value.valueId)
             },
             data: {
-                recentValue: Number(data.payload.recent_value)
+                recentValue: Number(data.payload.recentValue)
             }
         });
         return NextResponse.json(new_value, { status: 200 });
     } catch (err) {
         console.log (err)
-        return NextResponse.json("Could not change recent value of device", { status: 500 });
+        return NextResponse.json("Could not change recent value of device" + err, { status: 500 });
     }
 
 };

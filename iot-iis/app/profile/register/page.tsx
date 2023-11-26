@@ -23,7 +23,7 @@ export default function Register() {
                     method: "POST",
                     body: JSON.stringify({
                         username: username,
-                        password: password,
+                        password: password
                     }),
                 }
             )
@@ -32,10 +32,11 @@ export default function Register() {
             }
             const user  = await res.json();
             try {
+                console.log (user.username, user.password)
                 const _ = await signIn("credentials", {
                     redirect: true,
                     username: user.username,
-                    password: user.password,
+                    password: password,
                     callbackUrl:`/profile/${user.username}`
                 });
             } catch (err) {
