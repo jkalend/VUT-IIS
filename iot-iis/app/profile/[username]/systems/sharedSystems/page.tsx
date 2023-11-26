@@ -27,7 +27,6 @@ const SharedSystemsPage = () => {
 
     useEffect(() => {
         fetchData().then(r => {
-            console.log(r)
             setSystems(r);
         });
     }, [status])

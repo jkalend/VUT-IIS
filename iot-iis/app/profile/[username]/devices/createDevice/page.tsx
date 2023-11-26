@@ -172,7 +172,6 @@ const CreateDevicePage = () => {
                 deviceTypeParams = devtype.parameters.map (function (param) {
                     return param.parameterId
                 })
-                console.log("devtype", devtype)
             }
 
             const res = await fetch(`/api/profile/${params.username}/devices`, {
@@ -190,8 +189,6 @@ const CreateDevicePage = () => {
             }
             const res_json = await res.json()
             const devId = res_json.deviceId
-            console.log ("devicetypeparams",deviceTypeParams)
-            console.log ("device Id",devId)
             // create values
             for (let i = 0; i < deviceTypeParams.length; i++) {
                 const res = await fetch(`/api/profile/${params.username}/values`, {

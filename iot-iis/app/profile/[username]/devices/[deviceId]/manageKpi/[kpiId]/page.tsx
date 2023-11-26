@@ -87,7 +87,6 @@ const EditKpiPage = () => {
                 setFormValues({
                     threshold: r.threshold,
                 })
-                console.log(r)
             });
             getParameters().then(r => {
                 setParameters(r.parameters);

@@ -15,8 +15,26 @@ type Parameter = {
 const DeviceTypePage = () => {
     const { data: session, status } = useSession()
     const [types, setTypes] = useState([]);
+    const [deleted , setDeleted] = useState(true);
     const params = useParams();
     const [error, setError] = useState(false);
+    const [deleteError, setDeleteError] = useState(-1);
+
+    const deleteType = async (e: any) => {
+        e.preventDefault()
+        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+            const formData = new FormData(e.currentTarget)
+            const res = await fetch(`/api/profile/${params.username}/devicetypes/${formData.get("typeId")}`, {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json"},
+            });
+            if (!res.ok) {
+                setDeleteError(Number(formData.get("typeId")));
+                return;
+            }
+            setTypes(types.filter((type: any) => type.deviceId != formData.get("deviceId")));
+        }
+    }
 
     const newParam = (parameter : Parameter) => {
         return (
@@ -52,20 +70,20 @@ const DeviceTypePage = () => {
     }
 
     useEffect(() => {
-        if (status === "authenticated") {
+        if (status === "authenticated" && deleted) {
             fetchData().then(r => {
                 setTypes(r);
-                console.log(r);
             });
+            setDeleted(false)
         } else if (status === "unauthenticated") {
             // router.push("/profile/login");
         }
-    }, [status])
+        setDeleteError(-1)
+    }, [status, types])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
-    // return (<></>)
 
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         return (
@@ -78,23 +96,32 @@ const DeviceTypePage = () => {
                 <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
                     {error ? <div className={"text-red-500"}>Error loading types</div> :
                         types.map((type: any) => (
-                            <Link key={type.deviceId} href={`/profile/${params.username}/devices/${type.deviceId}`}
-                                  className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                            <div key={type.typeId} className={"flex-col flex"}>
+                            <div className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
                                     <div className={"font-bold text-xl"}>
                                         {type.name}
                                     </div>
                                 </div>
-                                {/*<div className={"max-w-[65%]"}>*/}
-                                {/*grid grid-rows-1 grid-cols-[repeat(${device.values.length}, minmax(0, 1fr))]*/}
-                                <div className={`${type.parameters.length === 0 ? "hidden" : ""} flex flex-row min-w-fit max-w-full gap-2 rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-700 border-gray-800 p-2 overflow-x-auto overflow-y-hidden`}>
-                                    { type.parameters.map((parameter: any) => (
-                                        newParam(parameter)
-                                    ))}
+                                <div className={"flex flex-row gap-2"}>
+                                    <div className={`${type.parameters.length === 0 ? "hidden" : ""} flex flex-row min-w-fit max-w-full gap-2 rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-700 border-gray-800 p-2 overflow-x-auto overflow-y-hidden`}>
+                                        { type.parameters.map((parameter: any) => (
+                                            newParam(parameter)
+                                        ))}
+                                    </div>
+                                    <form className={"flex justify-center items-center gap-1 max-w-fit max-h-fit"} onSubmit={deleteType}>
+                                        <input name={"typeId"} value={type.typeId} hidden={true} onChange={() => {}}/>
+                                        <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                                            Remove
+                                        </button>
+                                    </form>
                                 </div>
-                            </Link>
+                            </div>
+                                {deleteError == type.typeId ? <div className={"text-red-500"}>Error deleting type, likely because the type is linked to a device</div> : <></>}
+                            </div>
                         ), [])}
                 </div>
+
             </div>
         );
     } else {

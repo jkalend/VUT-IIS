@@ -77,6 +77,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
             return NextResponse.json(JSON.stringify(`Deleted device type ${deletedType.typeId}`), {status: 200});
         }
         catch (err) {
+            console.log(err)
             return NextResponse.json(JSON.stringify("Could not fetch device type"), {status: 500})
         }
     }

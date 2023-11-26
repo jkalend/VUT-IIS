@@ -57,7 +57,6 @@ const DevicesPage = () => {
         if (status === "authenticated") {
             fetchData().then(r => {
                 setDevices(r);
-                console.log(r);
             });
         } else if (status === "unauthenticated") {
             router.push("/profile/login");

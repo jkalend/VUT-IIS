@@ -38,7 +38,6 @@ const ManagePage = () => {
         }
     }, [status])
 
-    console.log(session?.user?.is_admin);
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
