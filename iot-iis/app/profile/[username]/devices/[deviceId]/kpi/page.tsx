@@ -25,7 +25,8 @@ const KpiPage = () => {
                 body: JSON.stringify({
                     result: formData.get("result"),
                     relation: formData.get("relation"),
-                    threshold: formData.get("threshold")
+                    threshold: formData.get("threshold"),
+                    parameterId: formData.get("parameter"),
                 }),
             });
             if (!res.ok) {
@@ -66,6 +67,7 @@ const KpiPage = () => {
         if (status === "authenticated") {
             getParameters().then(r => {
                 setParameters(r.parameters);
+                console.log(r)
                 setTypeName(r.typeName);
             });
         } else if (status === "unauthenticated") {
@@ -86,7 +88,7 @@ const KpiPage = () => {
             <div className="flex flex-col items-center justify-center h-screen w-screen md:h-screen lg:py-0 mr-64">
                 <div
                     className="min-w-[55%] rounded-lg shadow dark:border md:mt-0 sm:max-w-md bg-gray-800 border-gray-700">
-                    <div className="space-y-4 md:space-y-6 sm:p-8 min-w-screen">
+                    <form id={"kpi"} className="space-y-4 md:space-y-6 sm:p-8 min-w-screen"  onSubmit={createKPI}>
                         <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl dark:text-white w-full">
                             Add a new KPI
                         </h1>
@@ -98,12 +100,11 @@ const KpiPage = () => {
                                     className={"flex flex-grow min-w-0 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
                                 {parametersError ? <option value={""} className={"max-w-full"}>Error loading parameters</option> :
                                     parameters.map((parameter: any) => (
-                                    <option value={parameter.name}>{parameter.name}</option>
+                                    <option key={parameter.parameterId} value={parameter.parameterId}>{parameter.name}</option>
                                 ))}
                             </select>
                         </div>
-                        <form id={"kpi"} className="flex grid-cols-3 grid-rows-1 justify-center gap-2"
-                              onSubmit={createKPI}>
+                        <div className="flex grid-cols-3 grid-rows-1 justify-center gap-2">
                             <div className={"w-1/3 mt-4"}>
                                 <select name={"result"} id={"result"}
                                         className={"flex flex-grow min-w-0 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
@@ -131,12 +132,12 @@ const KpiPage = () => {
                                        onChange={handleChange} required/>
                                 <p className=" text-sm italic text-red-800">*required</p>
                             </div>
-                        </form>
+                        </div>
                         {error && <div className={"text-red-500"}>{error}</div>}
                         <button type="submit" form={"kpi"}
                                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Accept
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         );

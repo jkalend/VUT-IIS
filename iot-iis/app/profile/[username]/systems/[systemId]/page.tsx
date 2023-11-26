@@ -114,7 +114,6 @@ const SystemPage = () => {
             setError({...error, users: true});
             return [];
         }
-        if (!res.ok) throw new Error("Failed to fetch devices");
         const data = await res.json();
         return data;
     }
@@ -160,17 +159,20 @@ const SystemPage = () => {
                     setSystem(r);
                 });
                 getDevices().then(r => {
+                    console.log(r)
                     setDevices(r);
                 });
 
                 //not for shared
-                fetchDevices().then(r => {
-                    setAllDevices(r);
-                });
-                getUsers().then(r => {
-                    setUsers(r.allowed_users);
-                    // setUsers([{username: "test"}, {username: "test2"}])
-                });
+                if (session?.user?.username == params.username) {
+                    fetchDevices().then(r => {
+                        setAllDevices(r);
+                    });
+                    getUsers().then(r => {
+                        setUsers(r.allowed_users);
+                        // setUsers([{username: "test"}, {username: "test2"}])
+                    });
+                }
             } catch (e) {
                 router.push("/profile/login");
             }
@@ -183,7 +185,7 @@ const SystemPage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status, devices])
+    }, [status, devices, users])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
@@ -207,9 +209,11 @@ const SystemPage = () => {
                             {system.name}
                         </h1>
                     </div>
+                    {session?.user?.username == params.username && (
                     <Link href={`/profile/${params.username}/systems/${params.systemId}/editSystem`} className={"p-2 rounded-2xl bg-orange-500"}>
                         Edit system
                     </Link>
+                    )}
                 </div>
                 <div className={"flex flex-row gap-2"}>
                     <h1 className={"font-bold text-base text-gray-400"}>
@@ -260,7 +264,7 @@ const SystemPage = () => {
                                             {device.alias}
                                         </div>
                                         <h1 className={"text-gray-500"}>
-                                            {device.typus}
+                                            {device.deviceType.name}
                                         </h1>
                                     </div>
                                 </Link>
@@ -282,7 +286,7 @@ const SystemPage = () => {
                                         {device.alias}
                                     </div>
                                     <h1 className={"text-gray-500"}>
-                                        {device.typus}
+                                        {device.deviceType.name}
                                     </h1>
                                 </div>
                             </div>
@@ -320,22 +324,22 @@ const SystemPage = () => {
             <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 max-h-[50%] mb-16"}>
                 {error.users ? <div className={"text-red-500"}>Error loading users</div> :
                     users && users.map((user: any) => (
-                    <div>
-                        <Link key={user.username} href={`/profile/${params.username}/`} className={"w-[90%] flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
-                            <div className={"flex flex-col truncate p-2"}>
-                                <div className={"font-bold text-xl truncate"}>
-                                    {user.username}
+                        <div key={user.username} className={"flex flex-row items-center justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                            <Link href={`/profile/${params.username}`} className={"w-[90%] flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                                <div className={"flex flex-col"}>
+                                    <div className={"font-bold text-xl"}>
+                                        {user.username}
+                                    </div>
                                 </div>
-                            </div>
-                        </Link>
-                        <form className={"flex flex-col w-[10%]"} onSubmit={removeUser}>
-                            <input name={"username"} value={user.username} hidden={true} onChange={() => {}}/>
-                            <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
-                                Remove
-                            </button>
-                        </form>
-                        {error.removeUser && <h1 className={"text-red-700"}>Error removing a user</h1>}
-                    </div>
+                            </Link>
+                            <form className={"flex flex-col w-[10%]"} onSubmit={removeUser}>
+                                <input name={"username"} value={user.username} hidden={true} onChange={() => {}}/>
+                                <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                                    Remove
+                                </button>
+                            </form>
+                            {error.removeDevice && <h1 className={"text-red-700"}>Error removing a device</h1>}
+                        </div>
                 ), [])}
             </div>
         </>

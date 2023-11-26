@@ -46,7 +46,7 @@ const SharedSystemsPage = () => {
                 <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
                     {error ? <div className={"text-red-500"}>Error loading systems</div> :
                         systems?.map((system: any) => (
-                            <Link key={system.systemId} href={`/profile/${params.username}/systems/${system.systemId}`}
+                            <Link key={system.systemId} href={`/profile/${system.username}/systems/${system.systemId}`}
                                   className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
                                     <div className={"font-bold text-xl"}>
@@ -56,11 +56,11 @@ const SharedSystemsPage = () => {
                                         {system.description}
                                     </h1>
                                 </div>
-                                <div className={"flex flex-col"}>
-                                    <h1 className={"font-bold text-xl"}>
-                                        {system._count.devices}
-                                    </h1>
-                                </div>
+                                {/*<div className={"flex flex-col"}>*/}
+                                {/*    <h1 className={"font-bold text-xl"}>*/}
+                                {/*        {system._count.devices}*/}
+                                {/*    </h1>*/}
+                                {/*</div>*/}
                             </Link>
                         ), [])}
                 </div>

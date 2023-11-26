@@ -86,8 +86,31 @@ export const GET = async (request: NextRequest, { params }) => {
 				where: {
 					systemId: Number(params.systemId),
 				},
-			}).devices();
-			return NextResponse.json(devices, { status: 200 });
+				select: {
+					devices: {
+						select: {
+							deviceId: true,
+							alias: true,
+							description: true,
+							values: {
+								select: {
+									valueId: true,
+									recentValue: true,
+									parameter: {
+										select: {
+											unit: true,
+										}
+									}
+								}
+							},
+							typeId: true,
+							deviceType: true,
+							systemId: true,
+						},
+					}
+				},
+			});
+			return NextResponse.json(devices?.devices, { status: 200 });
 		} catch (err) {
 			console.log("err: ", err)
 			return NextResponse.json(err, { status: 500 });
