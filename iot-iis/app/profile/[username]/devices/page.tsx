@@ -4,12 +4,39 @@ import { useSession } from "next-auth/react";
 import {useEffect, useState} from "react";
 import Link from "next/link";
 
+type Value = {
+    parameter: {
+        name: string,
+        unit: string,
+    },
+    recentValue: string,
+    valueId: number,
+}
+
 const DevicesPage = () => {
     const params = useParams();
     const router = useRouter();
     const { data: session, status } = useSession()
     const [devices, setDevices] = useState([]);
     const [error, setError] = useState(false);
+
+    const newValue = (value : Value) => {
+        return (
+            <div key={value.valueId} className={"flex flex-col mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 h-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                <h1 className={"w-full text-sm font-bold"}>
+                    {value.parameter.name}
+                </h1>
+                <div className={"flex flex-row w-full gap-1 text-xs"}>
+                    <h1>
+                        {value.recentValue}
+                    </h1>
+                    <h2>
+                        {value.parameter.unit}
+                    </h2>
+                </div>
+            </div>
+        )
+    }
 
     const fetchData = async () => {
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
@@ -30,6 +57,7 @@ const DevicesPage = () => {
         if (status === "authenticated") {
             fetchData().then(r => {
                 setDevices(r);
+                console.log(r);
             });
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
@@ -65,13 +93,11 @@ const DevicesPage = () => {
                                     {device.deviceType.name}
                                 </h1>
                             </div>
-                            <div className={"max-w-[65%]"}>
+                            {/*<div className={"max-w-[65%]"}>*/}
+                            {/*grid grid-rows-1 grid-cols-[repeat(${device.values.length}, minmax(0, 1fr))]*/}
+                            <div className={`${device.values.length === 0 ? "hidden" : ""} flex flex-row min-w-fit max-w-full gap-2 rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-700 border-gray-800 p-2 overflow-x-auto overflow-y-hidden`}>
                                 { device.values.map((value: any) => (
-                                <div className={"flex flex-col"}>
-                                    <h1 className={"font-bold text-xl"}>
-                                        {value.recentValue}
-                                    </h1>
-                                </div>
+                                    newValue(value)
                                 ))}
                             </div>
                         </Link>
