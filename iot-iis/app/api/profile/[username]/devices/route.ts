@@ -56,15 +56,25 @@ export const POST = async (request: NextRequest, { params }) => {
 			console.log("alias: ", alias)
 			console.log("description: ", description)
 			console.log("deviceTypeId: ", deviceTypeId)
+
+            const devices = await prisma.device.findMany({
+                where: {
+                    username: params.username,
+                }
+            })
+
+            const aliasExists = devices.some(device => device.alias === alias);
+
+            if (aliasExists) {
+                return NextResponse.json("Alias already exists", {status: 400});
+            }
 		
-			let device = await prisma.device.create({
+			const device = await prisma.device.create({
 				data: {
 					alias: alias,
 					typeId: deviceTypeId,
-					// systemId: systemId,
 					description: description,
 					username: params.username,
-					/// systemId: systemId !== undefined ? systemId : null, ----- toto bude vzdy null podla mna ked vytvaras device
 				},
 			});
 			return NextResponse.json(device, { status: 200 });

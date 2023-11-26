@@ -36,6 +36,19 @@ export const POST = async (request: NextRequest, { params }) => {
     if (session && session.user?.username == params.username) {
 		const { name, description } = await request.json();
 		try {
+
+            const systems = await prisma.system.findMany({
+                where: {
+                    username: params.username,
+                }
+            })
+
+            const nameExists = systems.some(system => system.name === name);
+
+            if (nameExists) {
+                return NextResponse.json("Name already exists", {status: 400});
+            }
+
 			const system = await prisma.system.create({
 				data: {
 					username: params.username,

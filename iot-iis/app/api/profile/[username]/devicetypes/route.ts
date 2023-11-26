@@ -9,6 +9,19 @@ export const POST = async (request: NextRequest, {params}) => {
     if (session && session.user?.username === params.username) {
         const { devTypeName } = await request.json();
         try {
+            
+            const deviceTypes = await prisma.deviceType.findMany({
+                where: {
+                    username: params.username,
+                }
+            })
+
+            const nameExists = deviceTypes.some(deviceType => deviceType.name === devTypeName);
+
+            if (nameExists) {
+                return NextResponse.json("Name already exists", {status: 400});
+            }
+
             const device_type = await prisma.deviceType.create({
                 data: {
                     user: { connect: { username: params.username } },

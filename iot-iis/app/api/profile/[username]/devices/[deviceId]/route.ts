@@ -85,6 +85,17 @@ export const PUT = async (request: NextRequest, { params }) => {
                 }
             })
 
+            const devices = await prisma.device.findMany({
+                where: {
+                    username: params.username,
+                }
+            })
+
+            const aliasExists = devices.some(device => device.alias === alias);
+
+            if (aliasExists) {
+                return NextResponse.json("Alias already exists", {status: 400});
+            }
             const updatedDevice = await prisma.device.update({
                 where: {
                     deviceId: Number(params.deviceId)
@@ -92,10 +103,10 @@ export const PUT = async (request: NextRequest, { params }) => {
                 data: {
                     alias: alias !== "" ? alias : (device && device.alias),
                     typeId: Number(type),
-                    // deviceType: { connect: { name: deviceTypeName } },
                     description: description !== "" ? description : (device && device.description),
                 }
-            })
+            });
+
             return NextResponse.json(updatedDevice, {status: 200});
         }
         catch (err) {
