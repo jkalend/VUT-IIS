@@ -59,7 +59,6 @@ const ManageKpiPage = () => {
             getKPIs().then(r => {
                 setKpis(r);
                 setDeleted(false);
-                console.log(r)
             });
         } else if (status === "unauthenticated") {
             router.push("/profile/login");

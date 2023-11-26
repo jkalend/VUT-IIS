@@ -29,7 +29,7 @@ export default function Login() {
                 //router.push("/")
             }
         } catch (err) {
-            console.log(err);
+            //console.log(err);
         }
     }
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
