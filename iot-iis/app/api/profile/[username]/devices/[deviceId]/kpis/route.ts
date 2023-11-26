@@ -24,6 +24,12 @@ export const GET = async (request: NextRequest, { params }) => {
                     value: {
                         select: {
                             recentValue: true,
+                            parameter: {
+                                select: {
+                                    parameterId: true,
+                                    name: true,
+                                }
+                            }
                         }
                     }
                 }

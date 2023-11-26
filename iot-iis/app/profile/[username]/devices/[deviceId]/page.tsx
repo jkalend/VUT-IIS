@@ -44,12 +44,6 @@ const DeviceDetailsPage = () => {
         e.preventDefault()
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
             const formData = new FormData(e.currentTarget)
-            // console.log(JSON.stringify({
-            //     alias: formData.get("alias"),
-            //     type: formData.get("type"),
-            //     description: formData.get("description"),
-            // }))
-            // return
             const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
@@ -76,7 +70,7 @@ const DeviceDetailsPage = () => {
                 headers: {"Content-Type": "application/json"},
             });
             if (!res.ok) {
-                setError({...error, delete: true});
+                setError({...error, deleteDevice: true});
                 return;
             }
             router.push(`/profile/${params.username}/devices/`);
@@ -111,7 +105,7 @@ const DeviceDetailsPage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-        setError({...error, type: false, edit: false, delete: false})
+        setError({...error, type: false, edit: false, deleteDevice: false})
     }, [status])
 
     const handleEdit = (event: any) => {
@@ -164,7 +158,7 @@ const DeviceDetailsPage = () => {
                                 <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                 <input type="description" name="description" id="description" placeholder={device.description} className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900" onChange={handleChange}/>
                             </div>
-                            {error.delete && <div className={"w-full text-center text-red-500"}>Error deleting a device</div>}
+                            {error.deleteDevice && <div className={"w-full text-center text-red-500"}>Error deleting a device</div>}
                             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Accept</button>
                         </form>
                     ) : (
@@ -191,7 +185,7 @@ const DeviceDetailsPage = () => {
                             <button onClick={handleEdit} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Edit</button>
                             <button onClick={deleteDevice} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Delete</button>
                             <div className={"flex flex-row gap-2"}>
-                                <Link href={`/profile/${params.username}/devices/${params.deviceId}/kpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Add KPI</Link>
+                                <Link href={`/profile/${params.username}/devices/${params.deviceId}/manageKpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Manage KPIs</Link>
                             </div>
                         </div>
                     )}

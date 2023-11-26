@@ -9,9 +9,17 @@ export const GET = async (request: NextRequest, { params }) => {
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
             //fetch KPI for device with params.deviceId
-            const kpi = await prisma.kpi.findMany({
+            const kpi = await prisma.kpi.findUnique({
                 where: {
                     kpiId: Number(params.kpiId)
+                },
+                include: {
+                    value: {
+                        select: {
+                            recentValue: true,
+                            parameterId: true,
+                        }
+                    }
                 }
             })
 
@@ -51,8 +59,19 @@ export const DELETE = async (request: NextRequest, { params }) => {
 export const PUT = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
-        const { relation, threshold, result } = await request.json();
+        const { relation, threshold, result, parameterId } = await request.json();
         try {
+            const value = await prisma.value.findFirst({
+                where: {
+                    deviceId: Number(params.deviceId),
+                    parameter: {
+                        parameterId: Number(parameterId)
+                    },
+                },
+                select: {
+                    valueId: true
+                }
+            });
             const kpi = await prisma.kpi.findUnique({
                 where: {
                     kpiId: Number(params.kpiId)
@@ -63,13 +82,15 @@ export const PUT = async (request: NextRequest, { params }) => {
                     kpiId: Number(params.kpiId)
                 },
                 data: {
+                    valueId: Number(value.valueId),
                     relation: relation,
-                    threshold: threshold,
+                    threshold: Number(threshold),
                     result: result,
                 }
             });
             return NextResponse.json(new_kpi, { status: 200 });
         } catch (err) {
+            console.log(err);
             return NextResponse.json("Could change KPI values", { status: 500 });
         }
     }
