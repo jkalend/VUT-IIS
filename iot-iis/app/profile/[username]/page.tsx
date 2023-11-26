@@ -96,14 +96,14 @@ const UserProfile = () => {
                                         {device.alias}
                                     </div>
                                     <h1 className={"text-gray-500"}>
-                                        {device.typus}
+                                        {device.deviceType.name}
                                     </h1>
                                 </div>
-                                <div className={"flex flex-col"}>
-                                    <h1 className={"font-bold text-xl"}>
-                                        {device.recentValue}
-                                    </h1>
-                                </div>
+                                {/*<div className={"flex flex-col"}>*/}
+                                {/*    <h1 className={"font-bold text-xl"}>*/}
+                                {/*        {device.recentValue}*/}
+                                {/*    </h1>*/}
+                                {/*</div>*/}
                             </Link>
                         ), [])}
                     </div>

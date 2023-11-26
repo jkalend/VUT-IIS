@@ -18,7 +18,8 @@ export default function Sidebar() {
                             <li className="mb-4 "><Link href={session ? `/profile/${session?.user?.username}` : "/"} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Overview</Link></li>
                             {session && <li className="mb-4"><Link href={`/profile/${session?.user?.username}/systems`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Systems</Link></li>}
                             {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/devices`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Devices</Link></li>}
-                            {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/manage`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Admin</Link></li>}
+                            {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/systems/sharedSystems`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Shared Systems</Link></li>}
+                            {session && session.is_admin == 1 && <li className="mb-4"><Link href={`/profile/${session.user?.username}/manage`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Admin</Link></li>}
                         </ul>
                     </nav>
                 </div>
