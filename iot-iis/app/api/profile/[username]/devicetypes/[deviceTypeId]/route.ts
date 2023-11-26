@@ -14,7 +14,7 @@ export const POST = async (request: NextRequest, {params}) => {
 
             const parameter = await prisma.parameter.create({
                 data: {
-                    typeName: params.deviceTypeName,
+                    typeId: params.deviceTypeId,
                     name: parameterName,
                     valuesFrom: Number(valuesFrom),
                     valuesTo: Number(valuesTo),
@@ -47,7 +47,7 @@ export const GET = async (request: NextRequest, {params}) => {
             const typeName = await prisma.deviceType.findMany({
                 where: {
                     typeId: Number(params.deviceTypeId)
-                }
+                },
                 select: {
                     name: true
                 }

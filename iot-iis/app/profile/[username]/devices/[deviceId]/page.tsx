@@ -108,10 +108,12 @@ const DeviceDetailsPage = () => {
                             <div>
                                 <label htmlFor="alias" className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device Alias</label>
                                 <input type="alias" name="alias" id="alias" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={device.alias} onChange={handleChange}/>
+                                <p className="mt-1 text-sm italic text-red-800">*required</p>
                             </div>
                             <div>
                                 <label htmlFor="typus" className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device type</label>
                                 <input type="typus" name="typus" id="typus" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={device.typus} onChange={handleChange}/>
+                                <p className="mt-1 text-sm italic text-red-800">*required</p>
                             </div>
                             <div>
                                 <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>

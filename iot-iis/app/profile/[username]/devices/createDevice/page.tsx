@@ -66,27 +66,32 @@ const CreateDevicePage = () => {
                 <input name={`${param.id}-name`} id={`${param.id}-name`} value={param.name} onChange={handleParams}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="New Param" required/>
+                <p className="mt-1 text-sm italic text-red-800">*required</p>
                 <div className={"flex flex-row my-2"}>
                     <h1 className={"text-center font-bold text-2xl mx-2"}>From</h1>
                     <input name={`${param.id}-valuesFrom`} id={`${param.id}-valuesFrom`} value={param.valuesFrom} onChange={handleParams}
                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                            placeholder={"value"} required/>
+                    <p className="mt-1 text-sm italic text-red-800">*required</p>
                     <h1 className={"text-center font-bold text-2xl mx-2"}>to</h1>
                     <input name={`${param.id}-valuesTo`} id={`${param.id}-valuesTo`} value={param.valuesTo} onChange={handleParams}
                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                            placeholder={"value"} required/>
+                    <p className="mt-1 text-sm italic text-red-800">*required</p>
                 </div>
                 <div className={"flex flex-row my-2"}>
                     <label className={"text-center font-bold text-xl mx-2 w-full whitespace-nowrap"}>With precision of</label>
                     <input name={`${param.id}-precision`} id={`${param.id}-precision`} value={param.precision} onChange={handleParams}
                            className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                            placeholder={"0.00"} required/>
+                    <p className="mt-1 text-sm italic text-red-800">*required</p>
                 </div>
                 <label htmlFor={`${param.id}-type`}
                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Measured in</label>
                 <input name={`${param.id}-type`} id={`${param.id}-type`} value={param.type} onChange={handleParams}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="Units" required/>
+                <p className="mt-1 text-sm italic text-red-800">*required</p>
         </div>
     )
     }
@@ -98,6 +103,7 @@ const CreateDevicePage = () => {
             <input name="typeName" id="typeName" onChange={handleNewType}
                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    placeholder="New Type" value={newType} required/>
+            <p className="mt-1 text-sm italic text-red-800">*required</p>
             <div className={"flex flex-row my-2 w-full justify-between"}>
             <h1 className="text-center mt-1 block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameters</h1>
             <button type={"button"} className={"bg-gray-500 text-white rounded-lg p-1.5 ml-2"} onClick={() => {setTypeParams([...typeParams, {
@@ -260,9 +266,10 @@ const CreateDevicePage = () => {
                                 <input type="alias" name="alias" id="alias"
                                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        placeholder="My Little Device" onChange={handleChange} required/>
+                                <p className="mt-1 text-sm italic text-red-800">*required</p>
                             </div>
                             <div>
-                                <select name={"type"} id={"type"} onChange={handleChange} onClick={handleChange} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                                <select name={"type"} id={"type"} onChange={handleChange} onClick={handleChange} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"} required>
                                     {error ? <option className={"hidden"} value={""}>Error loading device types</option> : <>
                                         <option className={"hidden"} value={""}>Select a type</option>
                                         {deviceTypes?.map((deviceType) => (
@@ -271,6 +278,7 @@ const CreateDevicePage = () => {
                                         <option value={"new"} className={"p-4"}>New type</option>
                                     </>}
                                 </select>
+                                <p className="-mt-1 text-sm italic text-red-800">*required</p>
                                 {selectedNew ? addType : <></>}
                             </div>
                             <div>
