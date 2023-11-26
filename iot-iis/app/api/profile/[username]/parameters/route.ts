@@ -15,8 +15,8 @@ export const POST = async (request: NextRequest, {params}) => {
                     valuesFrom: valuesFrom,
                     valuesTo: valuesTo,
                     precision: precision,
-                    deviceTypes: deviceTypeId,
-                    unit: unit,
+                    typeId: deviceTypeId,
+                    unit: unit
                 }
             });
             return NextResponse.json(parameter, {status: 200});

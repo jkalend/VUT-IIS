@@ -11,6 +11,7 @@ const DeviceDetailsPage = () => {
     const [device, setDevice] = useState({} as any);
     const [kpi, setKpi] = useState({} as any);
     const [edit, setEdit] = useState(false);
+    const [deviceTypeName, setDeviceTypeName] = useState("");
     const [formValues, setFormValues] = useState({
         alias: "",
         typus: "",
@@ -70,7 +71,7 @@ const DeviceDetailsPage = () => {
             getDevice().then(r => {
                 setDevice(r.device);
                 setKpi(r.kpi_status)
-                console.log(r);
+                setDeviceTypeName(r.device.deviceType.name)
             });
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
@@ -130,7 +131,7 @@ const DeviceDetailsPage = () => {
                             <div>
                                 <label htmlFor="type" className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device type</label>
                                 <span id="type" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    {device.typus}
+                                    {deviceTypeName}
                                 </span>
                             </div>
                             <div>

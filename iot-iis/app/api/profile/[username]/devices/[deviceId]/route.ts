@@ -37,8 +37,11 @@ export const GET = async (request: NextRequest, { params }) => {
                 where: {
                     deviceId: Number(params.deviceId)
                 },
+                include: {
+                    deviceType: true
+                }
             })
-
+            console.log("device",device)
             const kpis = await prisma.kpi.findMany({
                 where: {
                     value: {
@@ -110,6 +113,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         try {
+            
             const deletedDevice = await prisma.device.delete({
                 where: {
                     deviceId: Number(params.deviceId)

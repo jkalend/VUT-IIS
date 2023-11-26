@@ -9,14 +9,12 @@ export const POST = async (request: NextRequest, {params}) => {
     if (session && session.user?.username === params.username) {
         const { devTypeName } = await request.json();
         try {
-            console.log (devTypeName)
             const device_type = await prisma.deviceType.create({
                 data: {
                     user: { connect: { username: params.username } },
                     name: devTypeName
                 }
             });
-            console.log (device_type)
             return NextResponse.json(device_type, {status: 200});
         } catch (error) {
             return NextResponse.json("Could not create new device type", {status: 500});
@@ -35,6 +33,9 @@ export const GET = async (request: NextRequest, {params}) => {
             const device_types = await prisma.deviceType.findMany({
                 where: {
                     username: params.username,
+                },
+                include:{
+                    parameters: true
                 }
             });
             return NextResponse.json(device_types, {status: 200});

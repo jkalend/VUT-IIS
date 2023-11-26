@@ -121,6 +121,7 @@ const CreateDevicePage = () => {
         e.preventDefault();
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
             let deviceTypeId = 0;
+            let deviceTypeParams = [];
             if (form.type == "new") {
                 // create new device type
                 const res = await fetch(`/api/profile/${params.username}/devicetypes`, {
@@ -144,10 +145,10 @@ const CreateDevicePage = () => {
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({
                             paramName: typeParams[i].name,
-                            valuesFrom: typeParams[i].valuesFrom,
-                            valuesTo: typeParams[i].valuesTo,
-                            precision: typeParams[i].precision,
-                            deviceTypeId: deviceTypeId,
+                            valuesFrom: Number(typeParams[i].valuesFrom),
+                            valuesTo: Number(typeParams[i].valuesTo),
+                            precision: Number(typeParams[i].precision),
+                            deviceTypeId: Number(deviceTypeId),
                             unit: typeParams[i].type,
                         }),
                     });
@@ -155,10 +156,18 @@ const CreateDevicePage = () => {
                         setError("Error creating a new parameter:" + typeParams[i].name);
                         return;
                     }
+                    const res_json = await res.json()
+                    deviceTypeParams.push (res_json.parameterId)
                 }
             } else {
-                deviceTypeId = deviceTypes.filter((devtype) => devtype.name == form.type)[0].typeId
+                const devtype = deviceTypes.filter((devtype) => devtype.name == form.type)[0]
+                deviceTypeId = devtype.typeId
+                deviceTypeParams = devtype.parameters.map (function (param) {
+                    return param.parameterId
+                })
+                console.log("devtype", devtype)
             }
+
             const res = await fetch(`/api/profile/${params.username}/devices`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
@@ -172,6 +181,26 @@ const CreateDevicePage = () => {
                 setError("Error creating a new device");
                 return;
             }
+            const res_json = await res.json()
+            const devId = res_json.deviceId
+            console.log ("devicetypeparams",deviceTypeParams)
+            console.log ("device Id",devId)
+            // create values
+            for (let i = 0; i < deviceTypeParams.length; i++) {
+                const res = await fetch(`/api/profile/${params.username}/values`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        parameterId: deviceTypeParams[i],
+                        deviceId: devId
+                    }),
+                });
+                if (!res.ok) {
+                setError("Error creating a new value");
+                return;
+            }
+            }
+            
             router.push(`/profile/${params.username}/devices/`);
         }
     }
