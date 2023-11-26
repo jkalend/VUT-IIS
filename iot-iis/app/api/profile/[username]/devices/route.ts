@@ -19,6 +19,7 @@ export const GET = async (request: NextRequest, { params }) => {
 							alias: true,
 							description: true,
 							values: true,
+							typeId: true,
 							deviceType: true,
 							systemId: true,
 						},

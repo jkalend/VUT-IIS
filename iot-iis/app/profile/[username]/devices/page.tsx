@@ -2,7 +2,6 @@
 import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
 import {useEffect, useState} from "react";
-import {Session} from "next-auth";
 import Link from "next/link";
 
 const DevicesPage = () => {
@@ -42,6 +41,7 @@ const DevicesPage = () => {
 
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         return (
+            <>
             <div className={"flex flex-col w-full p-2"}>
                 <div className={"flex flex-row p-5 justify-between"}>
                     <h1 className={"font-bold text-2xl"}>
@@ -65,17 +65,20 @@ const DevicesPage = () => {
                                     {device.deviceType.name}
                                 </h1>
                             </div>
-                            {/*
-                        <div className={"flex flex-col"}>
-                            <h1 className={"font-bold text-xl"}>
-                                {device.recentValue}
-                            </h1>
-                        </div>
-                        */}
+                            <div className={"max-w-[65%]"}>
+                                { device.values.map((value: any) => (
+                                <div className={"flex flex-col"}>
+                                    <h1 className={"font-bold text-xl"}>
+                                        {value.recentValue}
+                                    </h1>
+                                </div>
+                                ))}
+                            </div>
                         </Link>
                     ), [])}
                 </div>
             </div>
+            </>
         );
     } else {
         return redirect("/profile/login")

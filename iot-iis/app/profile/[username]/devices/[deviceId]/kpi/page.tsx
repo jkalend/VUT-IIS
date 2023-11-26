@@ -11,6 +11,7 @@ const KpiPage = () => {
         threshold: "",
     });
     const [parameters, setParameters] = useState([] as any);
+    const [typeName, setTypeName] = useState("");
     const [error, setError] = useState("");
     const [parametersError, setParametersError] = useState(false);
 
@@ -48,7 +49,7 @@ const KpiPage = () => {
 
             const deviceData = await deviceRes.json();
 
-            const res = await fetch(`/api/profile/${params.username}/devicetypes/${deviceData.typus}`, {
+            const res = await fetch(`/api/profile/${params.username}/devicetypes/${deviceData.device.typeId}`, {
                 method: "Get",
                 headers: {"Content-Type": "application/json"},
             });
@@ -64,8 +65,8 @@ const KpiPage = () => {
     useEffect(() => {
         if (status === "authenticated") {
             getParameters().then(r => {
-                setParameters(r);
-                console.log(r);
+                setParameters(r.parameters);
+                setTypeName(r.typeName);
             });
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
