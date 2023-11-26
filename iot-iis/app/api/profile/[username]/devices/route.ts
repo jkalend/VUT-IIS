@@ -18,7 +18,17 @@ export const GET = async (request: NextRequest, { params }) => {
 							deviceId: true,
 							alias: true,
 							description: true,
-							values: true,
+							values: {
+                                select: {
+                                    valueId: true,
+                                    recentValue: true,
+                                    parameter: {
+                                        select: {
+                                            unit: true,
+                                        }
+                                    }
+                                }
+                            },
 							typeId: true,
 							deviceType: true,
 							systemId: true,
