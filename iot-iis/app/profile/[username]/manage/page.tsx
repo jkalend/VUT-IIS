@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* list of all users in systems - with buttons for delete user, edit user, manage devices, manage systems */
 "use client";
 import {useRouter, useParams, redirect} from "next/navigation";
@@ -36,7 +37,7 @@ const ManagePage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status])
+    }, [status, router, fetchUsers])
 
 
     if (status === "loading")

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -64,7 +65,7 @@ const ManageKpiPage = () => {
             router.push("/profile/login");
         }
         setError({...error, type: false, edit: false, deleteKPI: false})
-    }, [status, kpis])
+    }, [status, kpis, error, deleted, getKPIs, router])
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;

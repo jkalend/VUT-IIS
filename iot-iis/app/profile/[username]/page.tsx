@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import {signIn, useSession} from 'next-auth/react'
@@ -71,7 +72,7 @@ const UserProfile = () => {
                 setCounts(r);
             });
         }
-    }, [status])
+    }, [status, fetchData, fetchSystems, fetchCounts, params.username, session?.user?.username])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>

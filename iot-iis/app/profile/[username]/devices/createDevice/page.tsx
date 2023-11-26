@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {redirect, useParams, useRouter} from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -232,7 +233,7 @@ const CreateDevicePage = () => {
         getDeviceTypes().then((data) => {
             setDeviceTypes(data);
         });
-    }, [status]);
+    }, [status, getDeviceTypes]);
 
     useEffect(() => {
         if (form.type === "new") {

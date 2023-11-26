@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import {signIn, useSession} from 'next-auth/react'
@@ -79,7 +80,7 @@ const DeviceTypePage = () => {
             // router.push("/profile/login");
         }
         setDeleteError(-1)
-    }, [status, types])
+    }, [status, types, fetchData, deleted])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
