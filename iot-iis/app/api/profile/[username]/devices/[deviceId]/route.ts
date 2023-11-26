@@ -132,14 +132,14 @@ export const DELETE = async (request: NextRequest, { params }) => {
 export const POST = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && session.user?.username == params.username) {
-        const { relation, threshold, result } = await request.json();
+        const { relation, threshold, result, parameterId } = await request.json();
         try {
             const value = await prisma.value.findFirst({
                 where: {
-                    deviceId: params.deviceId,
+                    deviceId: Number(params.deviceId),
                     parameter: {
-                        name: parameterName
-                    }
+                        parameterId: Number(parameterId)
+                    },
                 },
                 select: {
                     valueId: true
@@ -149,12 +149,13 @@ export const POST = async (request: NextRequest, { params }) => {
                 data: {
                     valueId: value.valueId,
                     relation: relation,
-                    threshold: threshold,
+                    threshold: Number(threshold),
                     result: result,
                 },
             });
             return NextResponse.json(kpi, { status: 200 });
         } catch (err) {
+            console.log(err);
             return NextResponse.json("Could not add KPI to system", { status: 500 });
         }
     }
