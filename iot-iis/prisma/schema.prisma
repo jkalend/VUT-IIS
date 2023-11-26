@@ -26,7 +26,7 @@ model Value {
   valueId     Int       @id @default(autoincrement())
   recentValue Float     @default(0.0)
   deviceId    Int
-  parameterId Int       @unique
+  parameterId Int       
   kpi         Kpi?
   device      Device    @relation(fields: [deviceId], references: [deviceId])
   parameter   Parameter @relation(fields: [parameterId], references: [parameterId])

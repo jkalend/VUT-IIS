@@ -10,7 +10,7 @@ export const POST = async (request: NextRequest, {params}) => {
         const { parameterId, deviceId } = await request.json();
         try {
             console.log ("paramId", parameterId)
-            console.log ("deviceId", parameterId)
+            console.log ("deviceId", deviceId)
             const value = await prisma.value.create({
                 data: {
                     parameterId:parameterId,
@@ -19,7 +19,7 @@ export const POST = async (request: NextRequest, {params}) => {
             });
             return NextResponse.json(value, {status: 200});
         } catch (error) {
-            return NextResponse.json("Could not create new value", {status: 500});
+            return NextResponse.json("Could not create new value"+error, {status: 500});
         }
     }
     else {
