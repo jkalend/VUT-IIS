@@ -68,24 +68,3 @@ export const GET = async (request: NextRequest, {params}) => {
         return NextResponse.json("Unauthorized", {status: 400});
     }
 }
-
-// DELETE - delete device type with given deviceTypeId
-export const DELETE = async (request: NextRequest, { params }) => {
-    const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
-        try {
-            const deletedType = await prisma.deviceType.delete({
-                where: {
-                    typeId: Number(params.deviceTypeId)
-                }
-            })
-            return NextResponse.json(JSON.stringify(`Deleted device type ${deletedType.typeId}`), {status: 200});
-        }
-        catch (err) {
-            return NextResponse.json(JSON.stringify("Could not fetch device type"), {status: 500})
-        }
-    }
-    else {
-        return NextResponse.json("Unauthorized", {status: 400});
-    }
-}
