@@ -102,20 +102,21 @@ const KpiPage = () => {
                                 ))}
                             </select>
                         </div>
-                        <form id={"kpi"} className="flex grid-cols-3 grid-rows-1 justify-center items-center gap-2"
+                        <form id={"kpi"} className="flex grid-cols-3 grid-rows-1 justify-center gap-2"
                               onSubmit={createKPI}>
-                            <div className={"w-1/3"}>
+                            <div className={"w-1/3 mt-4"}>
                                 <select name={"result"} id={"result"}
                                         className={"flex flex-grow min-w-0 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
                                     <option value={"ok"} className={"max-w-full"}>OK</option>
                                     <option value={"err"}>ERROR</option>
                                 </select>
                             </div>
-                            <h2>when </h2>
-                            <h2>value </h2>
-                            <div>
+                            <div className="flex flex-row mt-6">
+                            <h2 style={{ whiteSpace: 'nowrap' }}>when value</h2>
+                            </div>
+                            <div className="mt-4">
                                 <select name={"relation"} id={"relation"}
-                                        className={"text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                                        className={"text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-max p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"} required>
                                     <option value={'>'}>{'>'}</option>
                                     <option value={'<'}>{'<'}</option>
                                     <option value={'='}>{'='}</option>
@@ -124,10 +125,11 @@ const KpiPage = () => {
                                     <option value={'<='}>{'<='}</option>
                                 </select>
                             </div>
-                            <div>
+                            <div className="mt-4">
                                 <input type="threshold" name="threshold" id="threshold" placeholder={"threshold"}
                                        className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                                       onChange={handleChange}/>
+                                       onChange={handleChange} required/>
+                                <p className=" text-sm italic text-red-800">*required</p>
                             </div>
                         </form>
                         {error && <div className={"text-red-500"}>{error}</div>}

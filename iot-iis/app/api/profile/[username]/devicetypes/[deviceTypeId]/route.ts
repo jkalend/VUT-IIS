@@ -14,7 +14,7 @@ export const POST = async (request: NextRequest, {params}) => {
 
             const parameter = await prisma.parameter.create({
                 data: {
-                    typeName: params.deviceTypeName,
+                    typeId: params.deviceTypeId,
                     name: parameterName,
                     valuesFrom: Number(valuesFrom),
                     valuesTo: Number(valuesTo),
