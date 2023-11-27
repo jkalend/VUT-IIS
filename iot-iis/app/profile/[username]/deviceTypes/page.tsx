@@ -94,7 +94,7 @@ const DeviceTypePage = () => {
                         Device types
                     </h1>
                 </div>
-                <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
+                <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-x-hidden overflow-y-auto mb-16"}>
                     {error ? <div className={"text-red-500"}>Error loading types</div> :
                         types.map((type: any) => (
                             <div key={type.typeId} className={"flex-col flex"}>

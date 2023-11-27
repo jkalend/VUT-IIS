@@ -87,7 +87,7 @@ const UserProfile = () => {
                             Devices
                         </h1>
                     </div>
-                    <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
+                    <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-x-hidden overflow-y-auto mb-16"}>
                         {devicesError ? <div className={"text-red-500"}>Error loading devices</div> :
                             devices.map((device: any) => (
                             <Link key={device.deviceId}
@@ -116,7 +116,7 @@ const UserProfile = () => {
                             Systems
                         </h1>
                     </div>
-                    <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2"}>
+                    <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-x-hidden overflow-y-auto mb-16"}>
                         {systemsError ? <div className={"text-red-500"}>Error loading systems</div> :
                             systems.map((system: any) => (
                             <Link key={system.systemId}

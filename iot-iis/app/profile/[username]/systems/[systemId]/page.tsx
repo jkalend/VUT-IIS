@@ -208,7 +208,7 @@ const SystemPage = () => {
 
     return (
         <div className={"flex flex-col w-full p-2 mb-16"}>
-            <div className={"flex flex-col p-5 justify-between"}>
+            <div className={"flex flex-col p-2 justify-between"}>
                 <div className={"flex flex-row gap-2 w-full justify-between"}>
                     <div className={"flex flex-row gap-2"}>
                         <h1 className={"font-bold text-2xl"}>
@@ -262,7 +262,7 @@ const SystemPage = () => {
                 </div>
                 )}
             </div>
-            <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-y-auto overflow-x-hidden max-h-[50%]"}>
+            <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-y-auto overflow-x-hidden max-h-[30%]"}>
                 {session?.user?.username == params.username ? (
                     error.devices ? <div className={"text-red-500"}>Error loading devices</div> :
                         devices.map((device: any) => (
@@ -304,7 +304,7 @@ const SystemPage = () => {
             </div>
             {session?.user?.username == params.username && (
                 <>
-            <div className={"flex flex-row p-5 justify-between mt-32"}>
+            <div className={"flex flex-row p-5 justify-between mt-16"}>
                 <h1 className={"font-bold text-2xl"}>
                     Users
                 </h1>
@@ -334,7 +334,7 @@ const SystemPage = () => {
                 {error.users ? <div className={"text-red-500"}>Error loading users</div> :
                     users && users.map((user: any) => (
                         <div key={user.username} className={"flex flex-row items-center justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
-                            <Link href={`/profile/${params.username}`} className={"w-[90%] flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                            <Link href={`/profile/${user.username}`} className={"w-[90%] flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
                                     <div className={"font-bold text-xl"}>
                                         {user.username}
