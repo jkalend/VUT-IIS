@@ -40,6 +40,7 @@ export const GET = async (request: NextRequest, { params }) => {
 			});
 			return NextResponse.json(devices?.devices, { status: 200 });
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json(err, { status: 500 });
 		}
 	}
