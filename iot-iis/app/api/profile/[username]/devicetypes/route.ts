@@ -20,7 +20,7 @@ export const POST = async (request: NextRequest, {params}) => {
             const nameExists = deviceTypes.some(deviceType => deviceType.name === devTypeName);
 
             if (nameExists) {
-                return NextResponse.json("Name already exists", {status: 400});
+                return NextResponse.json("Type name already exists", {status: 400});
             }
 
             const device_type = await prisma.deviceType.create({
