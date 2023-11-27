@@ -67,6 +67,8 @@ const ProfileEdit = () => {
                 setShortPassword({...shortPassword, old_pwd: true})
             } else if (value.length < 6 && name == "new_pwd") {
                 setShortPassword({...shortPassword, new_pwd: true})
+            } else {
+                setShortPassword({...shortPassword, old_pwd: false, new_pwd: false})
             }
 
             if (value.length >= 40) {

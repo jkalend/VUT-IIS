@@ -94,10 +94,10 @@ const UserProfile = () => {
                                   href={`/profile/${params.username}/devices/${device.deviceId}`}
                                   className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
-                                    <div className={"font-bold text-xl"}>
+                                    <div className={"font-bold text-xl max-w-screen-sm truncate"}>
                                         {device.alias}
                                     </div>
-                                    <h1 className={"text-gray-500"}>
+                                    <h1 className={"text-gray-500 max-w-screen-sm truncate"}>
                                         {device.deviceType.name}
                                     </h1>
                                 </div>

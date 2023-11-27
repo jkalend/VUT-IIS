@@ -24,7 +24,7 @@ const DevicesPage = () => {
 
     const newValue = (value : Value) => {
         return (
-            <div key={value.valueId} className={"flex flex-col max mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 h-full max-w-[30vmin] p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 truncate"}>
+            <div key={value.valueId} className={"flex flex-col max mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 h-full max-w-[35vmin] p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 truncate"}>
                 <h1 className={"text-sm font-bold truncate"}>
                     {value.parameter.name}
                 </h1>
@@ -87,15 +87,15 @@ const DevicesPage = () => {
                         <Link key={device.deviceId} href={`/profile/${params.username}/devices/${device.deviceId}`}
                               className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                             <div className={"flex flex-col gap-1"}>
-                                <div className={"flex flex-row gap-5 justify-center items-center max-w-full"}>
-                                    <div className={"font-bold text-xl max-w-screen-sm truncate"}>
+                                <div className={"flex flex-row gap-5 justify-start items-center"}>
+                                    <div className={"font-bold text-xl"}>
                                         {device.alias}
                                     </div>
-                                    <div className={"font-bold text-gray-500 truncate max-w-[40vmin]"}>
+                                    <div className={"font-bold text-gray-500  max-w-[40vmin]"}>
                                         {device.deviceType.name}
                                     </div>
                                 </div>
-                                <h2 className={"text-gray-500 max-w-screen-sm truncate"}>
+                                <h2 className={"text-gray-500"}>
                                     {device.description}
                                 </h2>
                             </div>

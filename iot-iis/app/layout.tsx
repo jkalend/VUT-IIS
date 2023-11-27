@@ -24,7 +24,7 @@ export default function RootLayout({
       <Provider>
       <Navbar/>
       <Sidebar/>
-      <main className={"flex h-full relative ml-64 mt-16 overflow-y-auto overflow-x-hidden"}>
+      <main className={"flex h-full relative p-2 ml-64 mt-16 overflow-y-auto overflow-x-hidden"}>
           {children}
       </main>
       </Provider>

@@ -9,12 +9,11 @@ export const POST = async (request: NextRequest) => {
 
     const req  = await request.json();
     try {
-        // TODO: authenticate broker using JWT (toto spravim este ja)
         let authenticated = false;
         let data = jwt.decode (req.token, {complete: true})
         let broker_user = await prisma.user.findUnique({
                 where: {
-                    username: data.payload.username
+                    username: data.payload.brokerName
                 },
                 select: {
                     broker_flag: true,
@@ -80,7 +79,6 @@ export const POST = async (request: NextRequest) => {
         console.log (err)
         return NextResponse.json("Could not change recent value of device", { status: 500 });
     }
-
 };
 
 export const GET = async (request: NextRequest) => {

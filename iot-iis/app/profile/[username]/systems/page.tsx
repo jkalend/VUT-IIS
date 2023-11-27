@@ -55,10 +55,10 @@ const SystemPage = () => {
                         <Link key={system.systemId} href={`/profile/${params.username}/systems/${system.systemId}`}
                               className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                             <div className={"flex flex-col max-w-full"}>
-                                <div className={"font-bold text-xl max-w-screen-md truncate"}>
+                                <div className={"font-bold text-xl"}>
                                     {system.name}
                                 </div>
-                                <h1 className={"text-gray-500 max-w-screen-md truncate"}>
+                                <h1 className={"text-gray-500"}>
                                     {system.description}
                                 </h1>
                             </div>
