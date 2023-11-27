@@ -77,16 +77,20 @@ export const GET = async (request: NextRequest, { params }) => {
                     value: {
                         deviceId: Number(params.deviceId)
                     }
+                },
+                include: {
+                    value: {
+                        select: {
+                            recentValue: true
+                        }
+                    }
                 }
             })
             if (kpis) {
                 /* check value against recent value of device */
 
-                // TODO: find recent value of kpi.valueId
-                const recentVal = 0 // query here
-
                 kpis.forEach (function (kpi) {
-                    kpi_status &&= validate_kpi (recentVal, kpi.threshold, kpi.relation, kpi.result)
+                    kpi_status &&= validate_kpi (kpi.value.recentValue, kpi.threshold, kpi.relation, kpi.result)
                 })
                 
             }
