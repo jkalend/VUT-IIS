@@ -54,15 +54,15 @@ const SystemPage = () => {
                     systems?.map((system: any) => (
                         <Link key={system.systemId} href={`/profile/${params.username}/systems/${system.systemId}`}
                               className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
-                            <div className={"flex flex-col"}>
-                                <div className={"font-bold text-xl"}>
+                            <div className={"flex flex-col max-w-full"}>
+                                <div className={"font-bold text-xl max-w-screen-md truncate"}>
                                     {system.name}
                                 </div>
-                                <h1 className={"text-gray-500"}>
+                                <h1 className={"text-gray-500 max-w-screen-md truncate"}>
                                     {system.description}
                                 </h1>
                             </div>
-                            <div className={"flex flex-col"}>
+                            <div className={"flex flex-col w-fit"}>
                                 <h1 className={"font-bold text-xl"}>
                                     {system._count.devices}
                                 </h1>

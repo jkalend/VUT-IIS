@@ -59,6 +59,7 @@ const SystemPage = () => {
             setError({...error, addDevice: true});
             return;
         }
+        setDevices([...devices])
         setRefreshed(false)
     }
 
@@ -77,6 +78,7 @@ const SystemPage = () => {
             setError({...error, removeDevice: true});
             return;
         }
+        setDevices([...devices])
         setRefreshed(false)
     }
 
@@ -137,7 +139,7 @@ const SystemPage = () => {
             setError({...error, addUser: true});
             return;
         }
-        setUsers([])
+        setUsers([...users])
         setRefreshed(false)
     }
 
@@ -156,7 +158,7 @@ const SystemPage = () => {
             setError({...error, removeUser: true});
             return;
         }
-        setUsers([])
+        setUsers([...users])
         setRefreshed(false)
     }
 
@@ -210,11 +212,11 @@ const SystemPage = () => {
         <div className={"flex flex-col w-full p-2 mb-16"}>
             <div className={"flex flex-col p-2 justify-between"}>
                 <div className={"flex flex-row gap-2 w-full justify-between"}>
-                    <div className={"flex flex-row gap-2"}>
+                    <div className={"flex flex-row gap-2 max-w-full"}>
                         <h1 className={"font-bold text-2xl"}>
                             System
                         </h1>
-                        <h1 className={"font-bold text-2xl text-orange-400"}>
+                        <h1 className={"font-bold text-2xl text-orange-400 max-w-screen-md truncate"}>
                             {system.name}
                         </h1>
                     </div>
@@ -225,7 +227,7 @@ const SystemPage = () => {
                     )}
                 </div>
                 <div className={"flex flex-row gap-2"}>
-                    <h1 className={"font-bold text-base text-gray-400"}>
+                    <h1 className={"font-bold text-base text-gray-400 max-w-screen-md truncate"}>
                         {system.description}
                     </h1>
                 </div>

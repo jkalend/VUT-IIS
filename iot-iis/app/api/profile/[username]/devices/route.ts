@@ -60,10 +60,10 @@ export const POST = async (request: NextRequest, { params }) => {
     if (session && session.user?.username == params.username) {
 		const { alias, description, deviceTypeId } = await request.json();
 		try {
-			console.log("params: ", params)
-			console.log("alias: ", alias)
-			console.log("description: ", description)
-			console.log("deviceTypeId: ", deviceTypeId)
+			// console.log("params: ", params)
+			// console.log("alias: ", alias)
+			// console.log("description: ", description)
+			// console.log("deviceTypeId: ", deviceTypeId)
 
             const devices = await prisma.device.findMany({
                 where: {

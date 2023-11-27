@@ -87,11 +87,11 @@ const DevicesPage = () => {
                         <Link key={device.deviceId} href={`/profile/${params.username}/devices/${device.deviceId}`}
                               className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                             <div className={"flex flex-col gap-1"}>
-                                <div className={"flex flex-row gap-5 justify-center items-center"}>
-                                    <div className={"font-bold text-xl"}>
+                                <div className={"flex flex-row gap-5 justify-center items-center max-w-full"}>
+                                    <div className={"font-bold text-xl max-w-screen-md truncate"}>
                                         {device.alias}
                                     </div>
-                                    <div className={"font-bold text-gray-500"}>
+                                    <div className={"font-bold text-gray-500 truncate max-w-full"}>
                                         {device.deviceType.name}
                                     </div>
                                 </div>
@@ -99,8 +99,6 @@ const DevicesPage = () => {
                                     {device.description}
                                 </h2>
                             </div>
-                            {/*<div className={"max-w-[65%]"}>*/}
-                            {/*grid grid-rows-1 grid-cols-[repeat(${device.values.length}, minmax(0, 1fr))]*/}
                             <div className={`${device.values.length === 0 ? "hidden" : ""} flex flex-row min-w-fit max-w-full gap-2 rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-700 border-gray-800 p-2 overflow-x-auto overflow-y-hidden`}>
                                 { device.values.map((value: any) => (
                                     newValue(value)

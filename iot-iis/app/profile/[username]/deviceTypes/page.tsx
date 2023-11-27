@@ -33,6 +33,7 @@ const DeviceTypePage = () => {
                 setDeleteError(Number(formData.get("typeId")));
                 return;
             }
+            setDeleted(true)
             setTypes(types.filter((type: any) => type.deviceId != formData.get("deviceId")));
         }
     }
