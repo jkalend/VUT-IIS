@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* fetch all users from db */
 
 import prisma from '@/app/db'

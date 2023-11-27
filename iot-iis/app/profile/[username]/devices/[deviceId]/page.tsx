@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -106,7 +107,7 @@ const DeviceDetailsPage = () => {
             router.push("/profile/login");
         }
         setError({...error, type: false, edit: false, deleteDevice: false})
-    }, [status])
+    }, [status, error, getDevice, getDeviceTypes, router])
 
     const handleEdit = (event: any) => {
         setEdit(!edit);

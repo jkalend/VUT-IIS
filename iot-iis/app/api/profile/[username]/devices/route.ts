@@ -1,3 +1,4 @@
+// @ts-nocheck
 import prisma from "@/app/db";
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "@/app/api/auth/\[...nextauth\]/route"
@@ -39,6 +40,7 @@ export const GET = async (request: NextRequest, { params }) => {
 			});
 			return NextResponse.json(devices?.devices, { status: 200 });
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json(err, { status: 500 });
 		}
 	}

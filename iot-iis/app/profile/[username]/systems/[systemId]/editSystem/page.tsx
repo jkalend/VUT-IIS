@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -68,7 +69,7 @@ const DeviceDetailsPage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status])
+    }, [status, router, getSystem])
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;

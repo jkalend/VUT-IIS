@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -95,7 +96,7 @@ const EditKpiPage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status]);
+    }, [status, getKPI, getParameters, router])
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;

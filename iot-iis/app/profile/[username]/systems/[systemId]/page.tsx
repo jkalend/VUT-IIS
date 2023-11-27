@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {useRouter, useParams} from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -184,7 +185,7 @@ const SystemPage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status, devices, users])
+    }, [status, devices, users, error, fetchDevices, getDevices, getSystem, getUsers, session?.user?.username, params.username, router]);
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>

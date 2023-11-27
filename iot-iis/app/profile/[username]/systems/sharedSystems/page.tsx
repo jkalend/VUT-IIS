@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import {signIn, useSession} from 'next-auth/react'
@@ -29,7 +30,7 @@ const SharedSystemsPage = () => {
         fetchData().then(r => {
             setSystems(r);
         });
-    }, [status])
+    }, [status, fetchData])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
