@@ -43,7 +43,7 @@ export const POST = async (request: NextRequest) => {
         });
         const parameter = await prisma.parameter.findFirst({
             where: {
-                parameterName: data.payload.parameterName,
+                name: data.payload.parameterName,
                 typeId: Number(device.typeId)
             },
             select: {
