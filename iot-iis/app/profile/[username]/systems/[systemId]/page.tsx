@@ -185,7 +185,7 @@ const SystemPage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status, devices, users, error, fetchDevices, getDevices, getSystem, getUsers, session?.user?.username, params.username, router]);
+    }, [status, devices, users]);
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>

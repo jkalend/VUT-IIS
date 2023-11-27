@@ -65,7 +65,7 @@ const ManageKpiPage = () => {
             router.push("/profile/login");
         }
         setError({...error, type: false, edit: false, deleteKPI: false})
-    }, [status, kpis, error, deleted, getKPIs, router])
+    }, [status, kpis])
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;

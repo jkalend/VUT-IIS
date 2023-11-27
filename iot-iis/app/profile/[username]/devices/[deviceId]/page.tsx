@@ -107,7 +107,7 @@ const DeviceDetailsPage = () => {
             router.push("/profile/login");
         }
         setError({...error, type: false, edit: false, deleteDevice: false})
-    }, [status, error, getDevice, getDeviceTypes, router])
+    }, [status])
 
     const handleEdit = (event: any) => {
         setEdit(!edit);

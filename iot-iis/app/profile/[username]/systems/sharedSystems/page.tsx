@@ -30,7 +30,7 @@ const SharedSystemsPage = () => {
         fetchData().then(r => {
             setSystems(r);
         });
-    }, [status, fetchData])
+    }, [status])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>

@@ -233,7 +233,7 @@ const CreateDevicePage = () => {
         getDeviceTypes().then((data) => {
             setDeviceTypes(data);
         });
-    }, [status, getDeviceTypes]);
+    }, [status]);
 
     useEffect(() => {
         if (form.type === "new") {
