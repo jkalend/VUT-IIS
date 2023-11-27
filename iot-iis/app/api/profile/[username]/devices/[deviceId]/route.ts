@@ -42,7 +42,7 @@ export const GET = async (request: NextRequest, { params }) => {
 				systemId: true
 			}
 		});
-        if (!system_id) throw new Error ("device does not belong to a system")
+        if (!system_id) throw new Error ("Device does not belong to a system")
 
 		const system = await prisma.system.findUnique({
 			where: {
@@ -56,7 +56,10 @@ export const GET = async (request: NextRequest, { params }) => {
 		if (users.filter((user) => user.username == session.user?.username).length > 0)
 			has_access = true;
 
+        console.log(has_access)
+
 	} catch (err) {
+        console.log(err)
 		// do nothing
 	}
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1) || has_access)) {
