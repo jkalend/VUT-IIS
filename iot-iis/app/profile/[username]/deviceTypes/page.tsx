@@ -40,8 +40,8 @@ const DeviceTypePage = () => {
 
     const newParam = (parameter : Parameter) => {
         return (
-            <div key={parameter.parameterId} className={"flex flex-col mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 h-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
-                <h1 className={"w-full text-sm font-bold"}>
+            <div key={parameter.parameterId} className={"flex flex-col max-w-[30vmin] mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 h-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                <h1 className={"w-full text-sm font-bold truncate"}>
                     {parameter.name}
                 </h1>
                 <div className={"flex flex-row w-full gap-1 text-xs"}>
@@ -101,7 +101,7 @@ const DeviceTypePage = () => {
                             <div key={type.typeId} className={"flex-col flex"}>
                             <div className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
-                                    <div className={"font-bold text-xl"}>
+                                    <div className={"font-bold text-xl max-w-screen-sm truncate"}>
                                         {type.name}
                                     </div>
                                 </div>
