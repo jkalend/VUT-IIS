@@ -11,7 +11,7 @@ function ProtectedPage() {
     const [users, setUsers] = useState([]);
 
     const textStyle = {
-        transition: 'color 0.3s ease, font-size 0.3s ease, line-height 0.3s ease, font-weight 0.3 ease', // Adjust the transition duration as needed
+        transition: 'color 0.3s ease, font-size 0.3s ease, line-height 0.3s ease', // Adjust the transition duration as needed
     }
 
     const fetchData = async () => {
@@ -52,13 +52,13 @@ function ProtectedPage() {
             </div>
             <div className={"flex flex-row flex-grow-0 items-center text-center justify-center gap-4 pt-16 w-full"}>
                 <button onClick={() => router.push("/profile/login")}
-                        className={"p-2 text-xl text-slate-200 hover:font-extrabold hover:text-orange-400"}
+                        className={"p-2 text-xl text-slate-200 hover:text-2xl hover:text-orange-400 transition-transform"}
                         style={textStyle}>
                     Login
                 </button>
                 <h1 className={"text-xl text-slate-400"}>or</h1>
                 <button onClick={() => router.push("/profile/register")}
-                        className={"p-2 text-xl text-slate-200 hover:font-extrabold hover:text-orange-400"}
+                        className={"p-2 text-xl text-slate-200 hover:text-2xl hover:text-orange-400 transition-transform"}
                         style={textStyle}>
                     Register
                 </button>
