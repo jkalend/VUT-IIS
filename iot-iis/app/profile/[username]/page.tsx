@@ -72,7 +72,8 @@ const UserProfile = () => {
                 setCounts(r);
             });
         }
-    }, [status, fetchData, fetchSystems, fetchCounts, params.username, session?.user?.username])
+        console.log("mainpage");
+    }, [status])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>

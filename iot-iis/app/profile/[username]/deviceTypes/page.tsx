@@ -80,7 +80,7 @@ const DeviceTypePage = () => {
             // router.push("/profile/login");
         }
         setDeleteError(-1)
-    }, [status, types, fetchData, deleted])
+    }, [status, types])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>

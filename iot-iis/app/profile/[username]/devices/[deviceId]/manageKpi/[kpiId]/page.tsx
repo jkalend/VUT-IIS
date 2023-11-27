@@ -96,7 +96,7 @@ const EditKpiPage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status, getKPI, getParameters, router])
+    }, [status])
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;

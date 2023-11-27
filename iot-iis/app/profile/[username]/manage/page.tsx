@@ -37,7 +37,7 @@ const ManagePage = () => {
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
-    }, [status, router, fetchUsers])
+    }, [status])
 
 
     if (status === "loading")

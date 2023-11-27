@@ -27,10 +27,12 @@ const SystemPage = () => {
     }
 
     useEffect(() => {
-        fetchData().then(r => {
-            setSystems(r);
-        });
-    }, [status, fetchData])
+        if (status === "authenticated") {
+            fetchData().then(r => {
+                setSystems(r);
+            });
+        }
+    }, [status])
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
