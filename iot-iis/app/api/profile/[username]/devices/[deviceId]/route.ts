@@ -93,6 +93,7 @@ export const GET = async (request: NextRequest, { params }) => {
             return NextResponse.json({"device":device, "kpi_status":kpi_status}, {status: 200});
         }
         catch (err) {
+            console.log(err);
             return NextResponse.json(err, {status: 500});
         }
     }
@@ -106,8 +107,7 @@ export const GET = async (request: NextRequest, { params }) => {
 export const PUT = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
-        // TODO: ake parametre tu chceme??? resp co vsetko sa moze menit
-        const {alias, type, description} = await request.json();
+        const {alias, description} = await request.json();
         try {
 
             const device = await prisma.device.findUnique({
@@ -133,7 +133,7 @@ export const PUT = async (request: NextRequest, { params }) => {
                 },
                 data: {
                     alias: alias !== "" ? alias : (device && device.alias),
-                    typeId: Number(type),
+                    // typeId: Number(type),
                     description: description !== "" ? description : (device && device.description),
                 }
             });
@@ -141,6 +141,7 @@ export const PUT = async (request: NextRequest, { params }) => {
             return NextResponse.json(updatedDevice, {status: 200});
         }
         catch (err) {
+            console.log(err);
             return NextResponse.json(err, {status: 500});
         }
     }

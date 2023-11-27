@@ -27,6 +27,7 @@ export const POST = async (request: NextRequest, {params}) => {
 
             return NextResponse.json(parameter, { status: 200 });
         } catch (error) {
+            console.log(error)
             return NextResponse.json("Could not create new parameter", {status: 500});
         }
     }

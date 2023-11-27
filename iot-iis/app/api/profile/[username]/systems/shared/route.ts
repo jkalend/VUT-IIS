@@ -18,6 +18,7 @@ export const GET = async (request: NextRequest, { params }) => {
             });
 			return NextResponse.json(sharedSystems, { status: 200 });
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json("Could not fetch systems", { status: 500 });
 		}
 	}

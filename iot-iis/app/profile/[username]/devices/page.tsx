@@ -9,6 +9,7 @@ type Value = {
     parameter: {
         name: string,
         unit: string,
+        precision: number,
     },
     recentValue: string,
     valueId: number,
@@ -29,7 +30,7 @@ const DevicesPage = () => {
                 </h1>
                 <div className={"flex flex-row w-full gap-1 text-xs"}>
                     <h1>
-                        {value.recentValue}
+                        {value.recentValue.toFixed(value.parameter.precision)}
                     </h1>
                     <h2>
                         {value.parameter.unit}
@@ -58,6 +59,7 @@ const DevicesPage = () => {
         if (status === "authenticated") {
             fetchData().then(r => {
                 setDevices(r);
+                console.log(r)
             });
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
@@ -85,13 +87,18 @@ const DevicesPage = () => {
                     devices.map((device: any) => (
                         <Link key={device.deviceId} href={`/profile/${params.username}/devices/${device.deviceId}`}
                               className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
-                            <div className={"flex flex-col"}>
-                                <div className={"font-bold text-xl"}>
-                                    {device.alias}
+                            <div className={"flex flex-col gap-1"}>
+                                <div className={"flex flex-row gap-5 justify-center items-center"}>
+                                    <div className={"font-bold text-xl"}>
+                                        {device.alias}
+                                    </div>
+                                    <div className={"font-bold text-gray-500"}>
+                                        {device.deviceType.name}
+                                    </div>
                                 </div>
-                                <h1 className={"text-gray-500"}>
-                                    {device.deviceType.name}
-                                </h1>
+                                <h2 className={"text-gray-500"}>
+                                    {device.description}
+                                </h2>
                             </div>
                             {/*<div className={"max-w-[65%]"}>*/}
                             {/*grid grid-rows-1 grid-cols-[repeat(${device.values.length}, minmax(0, 1fr))]*/}
