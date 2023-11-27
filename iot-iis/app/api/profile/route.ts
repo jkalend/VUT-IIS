@@ -11,7 +11,8 @@ export const GET = async (request: NextRequest, response: NextResponse) => {
                 username: true,
             },
             where: {
-                admin_flag: 0
+                admin_flag: 0,
+                broker_flag: 0,
             }
         });
         return NextResponse.json(users, {status: 200});
