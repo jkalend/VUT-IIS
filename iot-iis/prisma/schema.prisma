@@ -76,6 +76,7 @@ model User {
   username        String       @id @unique
   password        String
   admin_flag      Int          @default(0)
+  broker_flag     Int          @default(0)
   devices         Device[]     @relation("UserDevice")
   deviceTypes     DeviceType[] @relation("UserDevice")
   systems         System[]     @relation("created system")
