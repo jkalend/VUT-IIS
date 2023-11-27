@@ -14,7 +14,7 @@ export const POST = async (request: NextRequest) => {
 		});
 		if (allUsers.length != 0) {
 			/* user already exists */
-			return new Response("User already exists", { status: 400 });
+			return NextResponse.json("User already exists", { status: 400 });
 		}
 
 		const user = await prisma.user.create({
@@ -23,8 +23,8 @@ export const POST = async (request: NextRequest) => {
 				password: pwd as string,
 			},
 		});
-		return new Response(JSON.stringify(user), { status: 200 });
+		return NextResponse.json(user, { status: 200 });
 	} catch (err) {
-		return new Response("Could not create new user", { status: 500 });
+		return NextResponse.json("Could not create new user", { status: 500 });
 	}
 };

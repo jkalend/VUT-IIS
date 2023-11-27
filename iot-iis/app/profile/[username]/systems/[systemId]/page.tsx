@@ -15,6 +15,7 @@ const SystemPage = () => {
     const [dropdown2, setDropdown2] = useState(false);
     const [system, setSystem] = useState({} as any);
     const [users, setUsers] = useState([]);
+    const [refreshed, setRefreshed] = useState(false);
     const [error, setError] = useState({
         deviceChoice: false,
         addUser: false,
@@ -27,7 +28,7 @@ const SystemPage = () => {
     });
 
     const fetchDevices = async () => {
-        if (!session || session.user?.username != params.username) return;
+        if (!session) return;
         // not shared
         const res = await fetch(`/api/profile/${params.username}/devices`, {
             method: "GET",
@@ -58,11 +59,12 @@ const SystemPage = () => {
             setError({...error, addDevice: true});
             return;
         }
-
+        setRefreshed(false)
     }
 
     const removeDevice = async (e : FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if (!session) return;
         const formData = new FormData(e.currentTarget)
         const res = await fetch(`/api/profile/${params.username}/systems/${params.systemId}/devices`, {
             method: "DELETE",
@@ -75,6 +77,7 @@ const SystemPage = () => {
             setError({...error, removeDevice: true});
             return;
         }
+        setRefreshed(false)
     }
 
     const getDevices = async () => {
@@ -134,6 +137,7 @@ const SystemPage = () => {
             setError({...error, addUser: true});
             return;
         }
+        setRefreshed(false)
     }
 
     const removeUser = async (e : FormEvent<HTMLFormElement>) => {
@@ -151,40 +155,48 @@ const SystemPage = () => {
             setError({...error, removeUser: true});
             return;
         }
+        setRefreshed(false)
     }
 
     useEffect(() => {
-        if (status === "authenticated") {
-            try {
-                getSystem().then(r => {
-                    setSystem(r);
-                });
-                getDevices().then(r => {
-                    setDevices(r);
-                });
+        const timer = setTimeout(() => {
+            if (status === "authenticated" && !refreshed) {
+                try {
+                    getSystem().then(r => {
+                        setSystem(r);
+                    });
+                    getDevices().then(r => {
+                        setDevices(r);
+                    });
 
-                //not for shared
-                if (session?.user?.username == params.username) {
-                    fetchDevices().then(r => {
-                        setAllDevices(r);
-                    });
-                    getUsers().then(r => {
-                        setUsers(r.allowed_users);
-                        // setUsers([{username: "test"}, {username: "test2"}])
-                    });
+                    //not for shared
+                    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+                        fetchDevices().then(r => {
+                            setAllDevices(r);
+                        });
+                        getUsers().then(r => {
+                            setUsers(r.allowed_users);
+                            // setUsers([{username: "test"}, {username: "test2"}])
+                        });
+                    }
+                    clearTimeout(timer)
+                } catch (e) {
+                    router.push("/");
                 }
-            } catch (e) {
+                setRefreshed(true);
+
+                for (const [key, value] of Object.entries(error)) {
+                    if (key === ("deviceChoice" || "system" || "users" || "devices")) continue;
+                    if (value) {
+                        setError({...error, [key]: false});
+                    }
+                }
+            } else if (status === "unauthenticated") {
                 router.push("/profile/login");
             }
-            for (const [key, value] of Object.entries(error)) {
-                if (key === ("deviceChoice" || "system" || "users" || "devices")) continue;
-                if (value) {
-                    setError({...error, [key]: false});
-                }
-            }
-        } else if (status === "unauthenticated") {
-            router.push("/profile/login");
-        }
+        }, 1000);
+
+        return () => clearTimeout(timer);
     }, [status, devices, users]);
 
     if (status === "loading")
@@ -270,7 +282,7 @@ const SystemPage = () => {
                                 </Link>
                                 <form className={"flex flex-col w-[10%]"} onSubmit={removeDevice}>
                                     <input name={"deviceId"} value={device.deviceId} hidden={true} onChange={() => {}}/>
-                                    <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                                    <button type={"submit"} className={"min-w-fit z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
                                         Remove
                                     </button>
                                 </form>
@@ -280,7 +292,7 @@ const SystemPage = () => {
                 ) : (
                     error.devices ? <div className={"text-red-500"}>Error loading devices</div> :
                         devices.map((device: any) => (
-                            <div key={device.deviceId} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
+                            <Link key={device.deviceId} href={`/profile/${params.username}/devices/${device.deviceId}`} className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
                                     <div className={"font-bold text-xl"}>
                                         {device.alias}
@@ -289,7 +301,7 @@ const SystemPage = () => {
                                         {device.deviceType.name}
                                     </h1>
                                 </div>
-                            </div>
+                            </Link>
                     ), [])
                 )}
             </div>
@@ -334,7 +346,7 @@ const SystemPage = () => {
                             </Link>
                             <form className={"flex flex-col w-[10%]"} onSubmit={removeUser}>
                                 <input name={"username"} value={user.username} hidden={true} onChange={() => {}}/>
-                                <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                                <button type={"submit"} className={"min-w-fit z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
                                     Remove
                                 </button>
                             </form>

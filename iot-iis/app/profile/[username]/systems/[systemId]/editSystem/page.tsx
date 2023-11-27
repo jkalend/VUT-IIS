@@ -4,7 +4,7 @@ import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 
-const DeviceDetailsPage = () => {
+const SystemEditPage = () => {
     const params = useParams();
     const router = useRouter();
     const { data: session, status } = useSession()
@@ -120,8 +120,8 @@ const DeviceDetailsPage = () => {
             </div>
         );
     } else {
-        redirect("/profile/login")
+        return redirect("/profile/login")
     }
 }
 
-export default DeviceDetailsPage;
+export default SystemEditPage;

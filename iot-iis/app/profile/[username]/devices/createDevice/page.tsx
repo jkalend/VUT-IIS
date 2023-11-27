@@ -140,12 +140,13 @@ const CreateDevicePage = () => {
                     }),
                 });
                 if (!res.ok) {
-                    setError("Error creating a new device type");
+                    setError(await res.json());
                     return;
                 }
                 const deviceType = await res.json()
                 deviceTypeId = deviceType.typeId
 
+                console.log("typeParams",typeParams.length)
                 // create new params
                 for (let i = 0; i < typeParams.length; i++) {
                     const res = await fetch(`/api/profile/${params.username}/parameters`, {
@@ -286,7 +287,7 @@ const CreateDevicePage = () => {
                                        className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900"
                                        onChange={handleChange}/>
                             </div>
-                            {error ? <div className={"text-red-500"}>{error}</div> : <></>}
+                            {error ? <div className={"text-red-500 w-full text-center"}>{error}</div> : <></>}
                             <button type="submit"
                                     className="w-full text-white bg-primary-600 hover:bg-primary-700 hover:ring-4 hover:outline-none hover:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create
                             </button>
@@ -296,7 +297,7 @@ const CreateDevicePage = () => {
             </div>
         );
     } else {
-        redirect("/profile/login")
+        return redirect("/profile/login")
     }
 }
 

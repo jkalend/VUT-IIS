@@ -11,6 +11,7 @@ const ProfileEdit = () => {
     const { data: session, status } = useSession()
     const [error, setError] = useState(false);
     const [deleteError, setDeleteError] = useState(false);
+    const [deleteWarning, setDeleteWarning] = useState(false);
     const [formValues, setFormValues] = useState({
         old_pwd: "",
         new_pwd: "",
@@ -60,6 +61,10 @@ const ProfileEdit = () => {
         setError(false)
     };
 
+    const handleDelete = async (e: React.FormEvent) => {
+        setDeleteWarning(true)
+    }
+
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
@@ -84,9 +89,18 @@ const ProfileEdit = () => {
                             <div className="flex flex-row items-center justify-between">
                                 <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Save</button>
                             </div>
-                            <button onClick={deleteAccount} className="text-xs w-full text-red-900 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                            {deleteWarning ?
+                                <></>
+                                :
+                            <button type={"button"} onClick={handleDelete} className="text-xs w-full text-red-900 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                                 Delete account
                             </button>
+                            }
+                            {deleteWarning ? <><h1 className={"text-base font-bold w-full text-center text-red-800"}>Are you sure you want to delete your account? This action is irreversible</h1>
+                                <button type={"button"} onClick={deleteAccount} className="text-sm w-full text-red-900 bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                    Confirm deletion
+                                </button>
+                            </> : <></>}
                             {deleteError ? <h1 className={"text-base text-red-800"}>Error while deleting account</h1> : <></>}
                         </form>
                     </div>

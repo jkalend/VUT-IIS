@@ -132,7 +132,7 @@ const UserProfile = () => {
                                 </div>
                                 <div className={"flex flex-col"}>
                                     <h1 className={"font-bold text-xl"}>
-                                        {system.devices ? system.devices.length : 0}
+                                        {system._count.devices}
                                     </h1>
                                 </div>
                             </Link>
