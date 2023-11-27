@@ -69,30 +69,30 @@ const CreateDevicePage = () => {
                         setTypeParams([...typeParams].filter((p) => p.id !== param.id))
                     }}>X</button>
                 </div>
-                <input name={`${param.id}-name`} id={`${param.id}-name`} value={param.name} onChange={handleParams}
+                <input name={`${param.id}-name`} id={`${param.id}-name`} value={param.name} onChange={handleParams} maxLength={40}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="New Param"/>
                 <div className={"flex flex-row my-2"}>
                     <h1 className={"text-center font-bold text-2xl mx-2"}>From</h1>
-                    <input name={`${param.id}-valuesFrom`} id={`${param.id}-valuesFrom`} value={param.valuesFrom} onChange={handleParams}
+                    <input name={`${param.id}-valuesFrom`} id={`${param.id}-valuesFrom`} value={param.valuesFrom} onChange={handleParams} maxLength={8}
                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                            placeholder={"value"} required/>
                     <p className="mt-1 ml-1 text-sm font-bold text-red-800">*</p>
                     <h1 className={"text-center font-bold text-2xl mx-2"}>to</h1>
-                    <input name={`${param.id}-valuesTo`} id={`${param.id}-valuesTo`} value={param.valuesTo} onChange={handleParams}
+                    <input name={`${param.id}-valuesTo`} id={`${param.id}-valuesTo`} value={param.valuesTo} onChange={handleParams} maxLength={8}
                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                            placeholder={"value"} required/>
                     <p className="mt-1 ml-1 text-sm font-bold text-red-800">*</p>
                 </div>
                 <div className={"flex flex-row my-2"}>
                     <label className={"text-center font-bold text-xl mx-2 w-full whitespace-nowrap"}>With precision of</label>
-                    <input name={`${param.id}-precision`} id={`${param.id}-precision`} value={param.precision} onChange={handleParams}
+                    <input name={`${param.id}-precision`} id={`${param.id}-precision`} value={param.precision} onChange={handleParams} maxLength={1}
                            className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                            placeholder={"2"}/>
                 </div>
                 <label htmlFor={`${param.id}-type`}
                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Measured in</label>
-                <input name={`${param.id}-type`} id={`${param.id}-type`} value={param.type} onChange={handleParams}
+                <input name={`${param.id}-type`} id={`${param.id}-type`} value={param.type} onChange={handleParams} maxLength={30}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="Units"/>
         </div>
@@ -103,7 +103,7 @@ const CreateDevicePage = () => {
         <div className={"w-full rounded-lg shadow border md:mt-0 sm:max-w-md bg-gray-700 border-gray-700 p-2"}>
             <label htmlFor="typeName"
                    className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device Type</label>
-            <input name="typeName" id="typeName" onChange={handleNewType}
+            <input name="typeName" id="typeName" onChange={handleNewType} maxLength={40}
                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    placeholder="New Type" value={newType} required/>
             <div className={"flex flex-row my-2 w-full justify-between"}>
@@ -266,7 +266,7 @@ const CreateDevicePage = () => {
                                 <label htmlFor="alias"
                                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device
                                     Alias</label>
-                                <input type="alias" name="alias" id="alias"
+                                <input type="alias" name="alias" id="alias" maxLength={40}
                                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        placeholder="My Little Device" onChange={handleChange} required/>
                                 <p className="mt-1 text-sm italic w-full text-end text-red-800">*required</p>
@@ -287,7 +287,7 @@ const CreateDevicePage = () => {
                             <div>
                                 <label htmlFor="description"
                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                <input type="description" name="description" id="description" placeholder=""
+                                <input type="description" name="description" id="description" maxLength={120}
                                        className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900"
                                        onChange={handleChange}/>
                             </div>

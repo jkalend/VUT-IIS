@@ -318,7 +318,7 @@ const SystemPage = () => {
                         <div>
                             <div className={"flex flex-col gap-2"}>
                                 <form onSubmit={addShare} className={"flex flex-row gap-2"}>
-                                    <input name={"username"} id={"usernameADD"} type={"text"} placeholder={"Username"}
+                                    <input name={"username"} id={"usernameADD"} type={"text"} maxLength={40} placeholder={"Username"}
                                            className={"text-white bg-gray-700 rounded-2xl p-2"}/>
                                     <button type="submit" className={"p-2 rounded-2xl bg-green-950"}>
                                         Add

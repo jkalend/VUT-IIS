@@ -83,7 +83,7 @@ export default function Register() {
                         <form className="space-y-4 md:space-y-6" onSubmit={sendForm}>
                             <div>
                                 <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Your username</label>
-                                <input type="username" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="username without spaces" onChange={handleUsername} required/>
+                                <input type="username" name="username" id="username" maxLength={40} className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="username without spaces" onChange={handleUsername} required/>
                                 {usernameError ? (
                                     <h1 className={"text-base text-red-700 flex flex-col text-center w-full"}>{usernameError}</h1>
                                 ) : (
@@ -92,7 +92,7 @@ export default function Register() {
                             </div>
                             <div>
                                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                                <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900" onChange={handlePassword} required/>
+                                <input type="password" name="password" id="password" maxLength={40} placeholder="••••••••" className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900" onChange={handlePassword} required/>
                                 {passwordError ? (
                                     <h1 className={"text-base text-red-700 flex flex-col text-center w-full"}>{passwordError}</h1>
                                 ) : (

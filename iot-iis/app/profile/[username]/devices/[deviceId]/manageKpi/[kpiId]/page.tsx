@@ -152,7 +152,7 @@ const EditKpiPage = () => {
                                 </select>
                             </div>
                             <div className="mt-4">
-                                <input type="threshold" name="threshold" id="threshold" placeholder={kpi.threshold} value={formValues.threshold}
+                                <input type="threshold" name="threshold" id="threshold" maxLength={8} placeholder={kpi.threshold} value={formValues.threshold}
                                        className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                                        onChange={handleChange}/>
                             </div>

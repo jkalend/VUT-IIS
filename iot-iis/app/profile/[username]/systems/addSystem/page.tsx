@@ -56,7 +56,7 @@ const CreateSystemPage = () => {
                                 <label htmlFor="name"
                                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">System
                                     name</label>
-                                <input type="name" name="name" id="name"
+                                <input type="name" name="name" id="name" maxLength={40}
                                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        onChange={handleChange} required/>
                                 <p className="mt-1 w-full text-end text-sm italic text-red-800">*required</p>
@@ -65,7 +65,7 @@ const CreateSystemPage = () => {
                                 <label htmlFor="description"
                                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">System
                                     description</label>
-                                <input type="description" name="description" id="description"
+                                <input type="description" name="description" id="description" maxLength={120}
                                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        onChange={handleChange}/>
                             </div>

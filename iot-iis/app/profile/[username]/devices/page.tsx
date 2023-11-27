@@ -91,11 +91,11 @@ const DevicesPage = () => {
                                     <div className={"font-bold text-xl max-w-screen-md truncate"}>
                                         {device.alias}
                                     </div>
-                                    <div className={"font-bold text-gray-500 truncate max-w-full"}>
+                                    <div className={"font-bold text-gray-500 max-w-[40vmin] truncate"}>
                                         {device.deviceType.name}
                                     </div>
                                 </div>
-                                <h2 className={"text-gray-500"}>
+                                <h2 className={"text-gray-500 max-w-screen-md"}>
                                     {device.description}
                                 </h2>
                             </div>

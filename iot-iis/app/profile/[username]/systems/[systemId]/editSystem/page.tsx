@@ -96,14 +96,14 @@ const SystemEditPage = () => {
                                 <label htmlFor="sysName"
                                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device
                                     Alias</label>
-                                <input name="sysName" id="sysName"
+                                <input name="sysName" id="sysName" maxLength={40}
                                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        placeholder={system.name} onChange={handleChange}/>
                             </div>
                             <div>
                                 <label htmlFor="description"
                                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                <input name="description" id="description" placeholder={system.description}
+                                <input name="description" id="description" maxLength={120} placeholder={system.description}
                                        className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900"
                                        onChange={handleChange}/>
                             </div>
