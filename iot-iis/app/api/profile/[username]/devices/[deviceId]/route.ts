@@ -31,7 +31,35 @@ function validate_kpi (recentValue: Number, threshold: Number, relation: String,
 // GET - get all device with deviceId
 export const GET = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
-    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+    let has_access = false;
+	try {
+		//
+        const system_id = await prisma.device.findUnique({
+			where: {
+				deviceId: Number(params.deviceId),
+			},
+			include: {
+				systemId: true
+			}
+		});
+        if (!system_id) throw new Error ("device does not belong to a system")
+
+		const system = await prisma.system.findUnique({
+			where: {
+				systemId: Number(system_id),
+			},
+			include: {
+				allowed_users: true
+			}
+		});
+		const users = system.allowed_users;
+		if (users.filter((user) => user.username == session.user?.username).length > 0)
+			has_access = true;
+
+	} catch (err) {
+		// do nothing
+	}
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1) || has_access)) {
         try {
             let kpi_status = true;
             const device = await prisma.device.findUnique({
