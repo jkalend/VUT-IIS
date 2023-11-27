@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import {useSession} from 'next-auth/react'

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import prisma from '@/app/db'
 import {NextRequest, NextResponse} from "next/server";
 import { authOptions } from "@/app/api/auth/\[...nextauth\]/route"
@@ -85,6 +86,17 @@ export const PUT = async (request: NextRequest, { params }) => {
                 }
             })
 
+            const devices = await prisma.device.findMany({
+                where: {
+                    username: params.username,
+                }
+            })
+
+            const aliasExists = devices.some(device => device.alias === alias);
+
+            if (aliasExists) {
+                return NextResponse.json("Alias already exists", {status: 400});
+            }
             const updatedDevice = await prisma.device.update({
                 where: {
                     deviceId: Number(params.deviceId)
@@ -92,10 +104,10 @@ export const PUT = async (request: NextRequest, { params }) => {
                 data: {
                     alias: alias !== "" ? alias : (device && device.alias),
                     typeId: Number(type),
-                    // deviceType: { connect: { name: deviceTypeName } },
                     description: description !== "" ? description : (device && device.description),
                 }
-            })
+            });
+
             return NextResponse.json(updatedDevice, {status: 200});
         }
         catch (err) {
@@ -132,14 +144,14 @@ export const DELETE = async (request: NextRequest, { params }) => {
 export const POST = async (request: NextRequest, { params }) => {
     const session = await getServerSession(authOptions)
     if (session && session.user?.username == params.username) {
-        const { relation, threshold, result } = await request.json();
+        const { relation, threshold, result, parameterId } = await request.json();
         try {
             const value = await prisma.value.findFirst({
                 where: {
-                    deviceId: params.deviceId,
+                    deviceId: Number(params.deviceId),
                     parameter: {
-                        name: parameterName
-                    }
+                        parameterId: Number(parameterId)
+                    },
                 },
                 select: {
                     valueId: true
@@ -149,12 +161,13 @@ export const POST = async (request: NextRequest, { params }) => {
                 data: {
                     valueId: value.valueId,
                     relation: relation,
-                    threshold: threshold,
+                    threshold: Number(threshold),
                     result: result,
                 },
             });
             return NextResponse.json(kpi, { status: 200 });
         } catch (err) {
+            console.log(err);
             return NextResponse.json("Could not add KPI to system", { status: 500 });
         }
     }

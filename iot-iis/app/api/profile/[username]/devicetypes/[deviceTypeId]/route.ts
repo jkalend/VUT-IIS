@@ -1,3 +1,4 @@
+// @ts-nocheck
 import prisma from '@/app/db'
 import {NextRequest, NextResponse} from "next/server"
 import { authOptions } from "@/app/api/auth/\[...nextauth\]/route"
@@ -12,6 +13,7 @@ export const POST = async (request: NextRequest, {params}) => {
         try {
             // create new parameter for device type with params.deviceTypeName
 
+            // @ts-ignore
             const parameter = await prisma.parameter.create({
                 data: {
                     typeId: params.deviceTypeId,
@@ -56,6 +58,28 @@ export const GET = async (request: NextRequest, {params}) => {
         } catch (error) {
             console.log(error)
             return NextResponse.json("Could not fetch parameters for device type", {status: 500});
+        }
+    }
+    else {
+        return NextResponse.json("Unauthorized", {status: 400});
+    }
+}
+
+// DELETE - delete device type with given deviceTypeId
+export const DELETE = async (request: NextRequest, { params }) => {
+    const session = await getServerSession(authOptions)
+    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+        try {
+            const deletedType = await prisma.deviceType.delete({
+                where: {
+                    typeId: Number(params.deviceTypeId)
+                }
+            })
+            return NextResponse.json(JSON.stringify(`Deleted device type ${deletedType.typeId}`), {status: 200});
+        }
+        catch (err) {
+            console.log(err)
+            return NextResponse.json(JSON.stringify("Could not fetch device type"), {status: 500})
         }
     }
     else {

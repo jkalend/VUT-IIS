@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {redirect, useParams, useRouter} from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -60,38 +61,40 @@ const CreateDevicePage = () => {
 
     const addParam = (param: Param) => {
         return (
-        <div id={"`param-${param.id}`"} key={param.id} onChange={handleParams} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
-                <label htmlFor={`${param.id}-name`}
-                       className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameter name</label>
+        <div id={`param-${param.id}`} key={param.id} onChange={handleParams} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}>
+                <div className={"w-full justify-between flex flex-row"}>
+                    <label htmlFor={`${param.id}-name`}
+                           className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameter name</label>
+                    <button type={"button"} className={"items-center justify-center text-center h-5 w-5 bg-gray-500 text-white rounded-lg"} onClick={() => {
+                        setTypeParams([...typeParams].filter((p) => p.id !== param.id))
+                    }}>X</button>
+                </div>
                 <input name={`${param.id}-name`} id={`${param.id}-name`} value={param.name} onChange={handleParams}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="New Param" required/>
-                <p className="mt-1 text-sm italic text-red-800">*required</p>
+                       placeholder="New Param"/>
                 <div className={"flex flex-row my-2"}>
                     <h1 className={"text-center font-bold text-2xl mx-2"}>From</h1>
                     <input name={`${param.id}-valuesFrom`} id={`${param.id}-valuesFrom`} value={param.valuesFrom} onChange={handleParams}
                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                            placeholder={"value"} required/>
-                    <p className="mt-1 text-sm italic text-red-800">*required</p>
+                    <p className="mt-1 ml-1 text-sm font-bold text-red-800">*</p>
                     <h1 className={"text-center font-bold text-2xl mx-2"}>to</h1>
                     <input name={`${param.id}-valuesTo`} id={`${param.id}-valuesTo`} value={param.valuesTo} onChange={handleParams}
                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                            placeholder={"value"} required/>
-                    <p className="mt-1 text-sm italic text-red-800">*required</p>
+                    <p className="mt-1 ml-1 text-sm font-bold text-red-800">*</p>
                 </div>
                 <div className={"flex flex-row my-2"}>
                     <label className={"text-center font-bold text-xl mx-2 w-full whitespace-nowrap"}>With precision of</label>
                     <input name={`${param.id}-precision`} id={`${param.id}-precision`} value={param.precision} onChange={handleParams}
                            className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                           placeholder={"0.00"} required/>
-                    <p className="mt-1 text-sm italic text-red-800">*required</p>
+                           placeholder={"0.00"}/>
                 </div>
                 <label htmlFor={`${param.id}-type`}
                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Measured in</label>
                 <input name={`${param.id}-type`} id={`${param.id}-type`} value={param.type} onChange={handleParams}
                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="Units" required/>
-                <p className="mt-1 text-sm italic text-red-800">*required</p>
+                       placeholder="Units"/>
         </div>
     )
     }
@@ -103,7 +106,6 @@ const CreateDevicePage = () => {
             <input name="typeName" id="typeName" onChange={handleNewType}
                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    placeholder="New Type" value={newType} required/>
-            <p className="mt-1 text-sm italic text-red-800">*required</p>
             <div className={"flex flex-row my-2 w-full justify-between"}>
             <h1 className="text-center mt-1 block mb-2 text-sm font-medium text-gray-800 dark:text-white">Parameters</h1>
             <button type={"button"} className={"bg-gray-500 text-white rounded-lg p-1.5 ml-2"} onClick={() => {setTypeParams([...typeParams, {
@@ -172,7 +174,6 @@ const CreateDevicePage = () => {
                 deviceTypeParams = devtype.parameters.map (function (param) {
                     return param.parameterId
                 })
-                console.log("devtype", devtype)
             }
 
             const res = await fetch(`/api/profile/${params.username}/devices`, {
@@ -190,10 +191,6 @@ const CreateDevicePage = () => {
             }
             const res_json = await res.json()
             const devId = res_json.deviceId
-
-            console.log ("res", res_json)
-            console.log ("devicetypeparams",deviceTypeParams)
-            console.log ("device Id",devId)
             // create values
             for (let i = 0; i < deviceTypeParams.length; i++) {
                 const res = await fetch(`/api/profile/${params.username}/values`, {
@@ -205,9 +202,9 @@ const CreateDevicePage = () => {
                     }),
                 });
                 if (!res.ok) {
-                setError("Error creating a new value");
-                return;
-            }
+                    setError("Error creating a new value");
+                    return;
+                }
             }
             router.push(`/profile/${params.username}/devices/`);
         }
@@ -268,7 +265,7 @@ const CreateDevicePage = () => {
                                 <input type="alias" name="alias" id="alias"
                                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                        placeholder="My Little Device" onChange={handleChange} required/>
-                                <p className="mt-1 text-sm italic text-red-800">*required</p>
+                                <p className="mt-1 text-sm italic w-full text-end text-red-800">*required</p>
                             </div>
                             <div>
                                 <select name={"type"} id={"type"} onChange={handleChange} onClick={handleChange} className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"} required>
@@ -280,7 +277,6 @@ const CreateDevicePage = () => {
                                         <option value={"new"} className={"p-4"}>New type</option>
                                     </>}
                                 </select>
-                                <p className="-mt-1 text-sm italic text-red-800">*required</p>
                                 {selectedNew ? addType : <></>}
                             </div>
                             <div>

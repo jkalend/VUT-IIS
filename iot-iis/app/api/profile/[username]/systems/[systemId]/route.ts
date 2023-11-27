@@ -1,3 +1,4 @@
+// @ts-nocheck
 import prisma from "@/app/db";
 import {NextRequest, NextResponse} from "next/server";
 import { authOptions } from "@/app/api/auth/\[...nextauth\]/route"
@@ -14,6 +15,18 @@ export const PUT = async (request: NextRequest, { params }) => {
 					systemId: Number(params.systemId),
 				},
 			});
+
+            const systems = await prisma.system.findMany({
+                where: {
+                    username: params.username,
+                }
+            })
+
+            const nameExists = systems.some(system => system.name === sysName);
+
+            if (nameExists) {
+                return NextResponse.json("Name already exists", {status: 400});
+            }
 
 			const updatedSystem = await prisma.system.update({
 				where: {

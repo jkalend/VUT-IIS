@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {redirect, useRouter} from "next/navigation";
 import {useSession} from "next-auth/react";
@@ -8,10 +9,6 @@ function ProtectedPage() {
     const router = useRouter();
     const {data: session, status} = useSession()
     const [users, setUsers] = useState([]);
-
-    if (session) {
-        return redirect("/profile/" + session.user?.username)
-    }
 
     const textStyle = {
         transition: 'color 0.3s ease, font-size 0.3s ease, line-height 0.3s ease, font-weight 0.3 ease', // Adjust the transition duration as needed
@@ -31,6 +28,10 @@ function ProtectedPage() {
             setUsers(r);
         });
     }, [])
+
+    if (session) {
+        return redirect("/profile/" + session.user?.username)
+    }
 
 
     if (status === "loading") {

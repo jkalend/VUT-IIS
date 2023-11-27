@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";

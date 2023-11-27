@@ -1,3 +1,4 @@
+// @ts-nocheck
 import prisma from '@/app/db'
 import {NextRequest, NextResponse} from "next/server"
 

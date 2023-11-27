@@ -1,9 +1,9 @@
+// @ts-nocheck
 import NextAuth from "next-auth"
 import type { AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from 'bcrypt'
 import prisma from '@/app/db'
-import { useRouter } from "next/router"
 
 export const authOptions: AuthOptions ={
   providers: [
@@ -17,7 +17,9 @@ export const authOptions: AuthOptions ={
         },
         password: { label: 'Password', type: 'password' }
       },
+      // @ts-ignore
       async authorize(credentials) {
+        // @ts-ignore
         const {username, password} = credentials
 
         try {
@@ -46,7 +48,7 @@ export const authOptions: AuthOptions ={
   },
   callbacks: {
     async jwt({ token, user }) {
-      
+
       if (user) {
         token.is_admin = user.admin_flag
         token.username = user.username

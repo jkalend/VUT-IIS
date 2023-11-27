@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -19,6 +20,7 @@ export default function Sidebar() {
                             {session && <li className="mb-4"><Link href={`/profile/${session?.user?.username}/systems`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Systems</Link></li>}
                             {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/devices`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>My Devices</Link></li>}
                             {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/systems/sharedSystems`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Shared Systems</Link></li>}
+                            {session && <li className="mb-4"><Link href={`/profile/${session.user?.username}/deviceTypes`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Device Types</Link></li>}
                             {session && session.is_admin == 1 && <li className="mb-4"><Link href={`/profile/${session.user?.username}/manage`} className="text-lg hover:text-amber-500 hover:text-2xl" style={textStyle}>Admin</Link></li>}
                         </ul>
                     </nav>

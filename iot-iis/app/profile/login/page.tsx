@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
@@ -29,7 +30,7 @@ export default function Login() {
                 //router.push("/")
             }
         } catch (err) {
-            console.log(err);
+            //console.log(err);
         }
     }
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import {signIn, useSession} from 'next-auth/react'
@@ -26,9 +27,11 @@ const SystemPage = () => {
     }
 
     useEffect(() => {
-        fetchData().then(r => {
-            setSystems(r);
-        });
+        if (status === "authenticated") {
+            fetchData().then(r => {
+                setSystems(r);
+            });
+        }
     }, [status])
 
     if (status === "loading")

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* list of all users in systems - with buttons for delete user, edit user, manage devices, manage systems */
 "use client";
 import {useRouter, useParams, redirect} from "next/navigation";
@@ -38,7 +39,6 @@ const ManagePage = () => {
         }
     }, [status])
 
-    console.log(session?.user?.is_admin);
 
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>

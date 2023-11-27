@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 import React, {ChangeEvent, useEffect, useState} from 'react'
 import {signIn, useSession} from 'next-auth/react'
@@ -71,6 +72,7 @@ const UserProfile = () => {
                 setCounts(r);
             });
         }
+        console.log("mainpage");
     }, [status])
 
     if (status === "loading")
