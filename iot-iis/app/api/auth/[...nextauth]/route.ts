@@ -48,10 +48,11 @@ export const authOptions: AuthOptions ={
   },
   callbacks: {
     async jwt({ token, user }) {
-
+      token.exp = Date.now() + 10
       if (user) {
         token.is_admin = user.admin_flag
         token.username = user.username
+        
         return {
           ...token,
           accessToken: user.token,
@@ -64,7 +65,11 @@ export const authOptions: AuthOptions ={
 
     async session({ session, token }) {
       session.user.accessToken = token.accessToken
-      session.user.refreshToken = token.refreshToken
+      console.log("token", token)
+      console.log("session", token)
+      if (session.exp < Date.now ())
+        return false;
+      session.user.refreshToken = Date.now() + 10
       session.user.accessTokenExpires = token.accessTokenExpires
       session.user.username = token.username
       session.is_admin = token.is_admin
