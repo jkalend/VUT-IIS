@@ -132,6 +132,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
             return NextResponse.json(JSON.stringify(`Successfully deleted device ${deletedDevice.deviceId}`), {status: 200});
         }
         catch (err) {
+            console.log(err);
             return NextResponse.json(JSON.stringify("Could not fetch device"), {status: 500})
         }
     }

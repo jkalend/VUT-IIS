@@ -14,7 +14,7 @@ export const POST = async (request: NextRequest, {params}) => {
             console.log ("deviceId", parameterId)
             const value = await prisma.value.create({
                 data: {
-                    parameterId:parameterId,
+                    parameterId: parameterId,
                     deviceId: deviceId
                 }
             });

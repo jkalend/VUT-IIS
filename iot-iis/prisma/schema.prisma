@@ -28,11 +28,28 @@ model Value {
   deviceId    Int
   parameterId Int
   kpi         Kpi?
-  device      Device    @relation(fields: [deviceId], references: [deviceId])
-  parameter   Parameter @relation(fields: [parameterId], references: [parameterId])
+  device      Device    @relation(fields: [deviceId], references: [deviceId], onDelete: Cascade, onUpdate: Cascade)
+  parameter   Parameter @relation(fields: [parameterId], references: [parameterId], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([parameterId])
   @@index([deviceId])
+}
+
+model Device {
+  alias       String
+  description String?
+  deviceId    Int        @id @default(autoincrement())
+  systemId    Int?
+  username    String     @default("cultsauce")
+  typeId      Int        @default(1)
+  values      Value[]
+  deviceType  DeviceType @relation(fields: [typeId], references: [typeId], onDelete: Restrict, onUpdate: Cascade)
+  user        User       @relation("UserDevice", fields: [username], references: [username], onDelete: Cascade, onUpdate: Cascade)
+  system      System?    @relation(fields: [systemId], references: [systemId], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([typeId])
+  @@index([username])
+  @@index([systemId])
 }
 
 model DeviceType {
@@ -46,30 +63,13 @@ model DeviceType {
   @@index([username])
 }
 
-model Device {
-  alias       String
-  description String?
-  deviceId    Int        @id @default(autoincrement())
-  systemId    Int?
-  username    String     @default("cultsauce")
-  typeId      Int        @default(1)
-  values      Value[]
-  deviceType  DeviceType @relation(fields: [typeId], references: [typeId])
-  user        User       @relation("UserDevice", fields: [username], references: [username], onDelete: Cascade, onUpdate: Cascade)
-  system      System?    @relation(fields: [systemId], references: [systemId])
-
-  @@index([typeId])
-  @@index([username])
-  @@index([systemId])
-}
-
 model Kpi {
   kpiId     Int    @id @default(autoincrement())
   relation  String
   threshold Float
   result    String
   valueId   Int    @unique
-  value     Value  @relation(fields: [valueId], references: [valueId])
+  value     Value  @relation(fields: [valueId], references: [valueId], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model User {
@@ -88,7 +88,7 @@ model System {
   description   String?
   username      String   @default("cultsauce")
   devices       Device[]
-  user          User     @relation("created system", fields: [username], references: [username])
+  user          User     @relation("created system", fields: [username], references: [username], onDelete: Cascade, onUpdate: Cascade)
   allowed_users User[]   @relation("SystemUser")
 
   @@index([username])

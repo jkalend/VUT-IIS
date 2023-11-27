@@ -49,7 +49,7 @@ const DeviceDetailsPage = () => {
     const deleteSystem = async (e : FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
-            const res = await fetch(`/api/profile/${params.username}/system/${params.systemId}`, {
+            const res = await fetch(`/api/profile/${params.username}/systems/${params.systemId}`, {
                 method: "DELETE",
                 headers: {"Content-Type": "application/json"},
             });

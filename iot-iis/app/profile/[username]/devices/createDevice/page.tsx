@@ -276,6 +276,7 @@ const CreateDevicePage = () => {
                                         <option value={"new"} className={"p-4"}>New type</option>
                                     </>}
                                 </select>
+                                <p className="mt-1 text-sm italic w-full text-end text-red-800">*required</p>
                                 {selectedNew ? addType : <></>}
                             </div>
                             <div>

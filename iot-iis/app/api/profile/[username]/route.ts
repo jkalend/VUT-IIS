@@ -92,6 +92,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 
 			return NextResponse.json("Account deleted successfully", { status: 200 });
 		} catch (err) {
+            console.log(err)
 			return NextResponse.json("Could not delete user", { status: 500 });
 		}
 	}
