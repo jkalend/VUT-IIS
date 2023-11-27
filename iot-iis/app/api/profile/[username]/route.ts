@@ -31,19 +31,20 @@ export const PUT = async (request: NextRequest, { params }) => {
     if (session && (session.user?.username == params.username  || (session.is_admin == 1))) {
 		const { new_pwd, old_pwd } = await request.json();
 		try {
-            // fetch password of user with params.username
-			let user = await prisma.user.findUnique({
-                where: {
-                    username: params.username
-                },
-                select: {
-                    password: true
-                }
-            })
-            let valid = await bcrypt.compare (old_pwd, user.password)
-            if (!valid)
-                return NextResponse.json("Wrong password", {status: 400});
-
+            if (session.is_admin != 1) {
+                // fetch password of user with params.username
+                let user = await prisma.user.findUnique({
+                    where: {
+                        username: params.username
+                    },
+                    select: {
+                        password: true
+                    }
+                })
+                let valid = await bcrypt.compare(old_pwd, user.password)
+                if (!valid)
+                    return NextResponse.json("Wrong password", {status: 400});
+            }
             let new_pwd_hash = await bcrypt.hash (new_pwd, 10)
             //set password of user with params.username to new_pwd_hash
             const updatedUser = await prisma.user.update({
@@ -57,6 +58,7 @@ export const PUT = async (request: NextRequest, { params }) => {
 
 			return NextResponse.json("Password changed successfully", { status: 200 });
 		} catch (err) {
+            console.log(err)
 			return NextResponse.json("Could not change password", { status: 500 });
 		}
 	}

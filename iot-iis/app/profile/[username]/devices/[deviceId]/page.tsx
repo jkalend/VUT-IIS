@@ -50,7 +50,6 @@ const DeviceDetailsPage = () => {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     alias: formData.get("alias"),
-                    type: formData.get("type"),
                     description: formData.get("description"),
                 }),
             });
@@ -147,21 +146,21 @@ const DeviceDetailsPage = () => {
                                 <label htmlFor="alias" className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device Alias</label>
                                 <input type="alias" name="alias" id="alias" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={device.alias} onChange={handleChange}/>
                             </div>
-                            <div>
-                                <label htmlFor={"type"} className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device type</label>
-                                <select name={"type"} id={"type"} onChange={handleChange} onClick={handleChange}
-                                        className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}
-                                        defaultValue={error.type ? "err" : device.deviceType.typeId}
-                                >
-                                    {error.type ? <option className={"hidden"} value={"err"}>Error loading device types</option> : <>
-                                        <option className={"hidden"} value={""}>Select a type</option>
-                                        {deviceTypes?.map((deviceType) => (
-                                            <option key={deviceType.name} value={deviceType.typeId}>{deviceType.name}</option>
-                                        ))}
-                                        <option value={"new"} className={"p-4"}>New type</option>
-                                    </>}
-                                </select>
-                            </div>
+                            {/*<div>*/}
+                            {/*    <label htmlFor={"type"} className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Device type</label>*/}
+                            {/*    <select name={"type"} id={"type"} onChange={handleChange} onClick={handleChange}*/}
+                            {/*            className={"mb-2 text-left border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"}*/}
+                            {/*            defaultValue={error.type ? "err" : device.deviceType.typeId}*/}
+                            {/*    >*/}
+                            {/*        {error.type ? <option className={"hidden"} value={"err"}>Error loading device types</option> : <>*/}
+                            {/*            <option className={"hidden"} value={""}>Select a type</option>*/}
+                            {/*            {deviceTypes?.map((deviceType) => (*/}
+                            {/*                <option key={deviceType.name} value={deviceType.typeId}>{deviceType.name}</option>*/}
+                            {/*            ))}*/}
+                            {/*            <option value={"new"} className={"p-4"}>New type</option>*/}
+                            {/*        </>}*/}
+                            {/*    </select>*/}
+                            {/*</div>*/}
                             <div>
                                 <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
                                 <input type="description" name="description" id="description" placeholder={device.description} className="bg-gray-50 border border-orange-900 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-amber-400 dark:focus:border-orange-900" onChange={handleChange}/>

@@ -26,6 +26,7 @@ export const GET = async (request: NextRequest, { params }) => {
 
             return NextResponse.json(kpi, { status: 200 });
         } catch (err) {
+            console.log(err);
             return NextResponse.json("Could not fetch kpi", { status: 500 });
         }
     }
@@ -48,6 +49,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 
             return NextResponse.json(deletedKpi, { status: 200 });
         } catch (err) {
+            console.log(err);
             return NextResponse.json("Could not delete kpi from device", { status: 500 });
         }
     }

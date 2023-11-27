@@ -25,6 +25,7 @@ export const POST = async (request: NextRequest) => {
 		});
 		return NextResponse.json(user, { status: 200 });
 	} catch (err) {
+		console.log(err);
 		return NextResponse.json("Could not create new user", { status: 500 });
 	}
 };

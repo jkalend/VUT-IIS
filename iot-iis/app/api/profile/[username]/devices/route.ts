@@ -27,12 +27,17 @@ export const GET = async (request: NextRequest, { params }) => {
                                         select: {
 											name: true,
                                             unit: true,
+											precision: true,
                                         }
                                     }
                                 }
                             },
 							typeId: true,
-							deviceType: true,
+							deviceType: {
+								select: {
+									name: true
+								}
+							},
 							systemId: true,
 						},
 					}
@@ -82,6 +87,7 @@ export const POST = async (request: NextRequest, { params }) => {
 			});
 			return NextResponse.json(device, { status: 200 });
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json(err, { status: 500 });
 		}
 	}

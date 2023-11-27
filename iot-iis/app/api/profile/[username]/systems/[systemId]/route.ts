@@ -40,6 +40,7 @@ export const PUT = async (request: NextRequest, { params }) => {
 			});
 			return NextResponse.json(updatedSystem, { status: 200 });
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json("Could not update system info", { status: 500 });
 		}
 	}
@@ -63,6 +64,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 				{ status: 200 }
 			);
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json("Could not delete system", { status: 500 });
 		}
 	}
@@ -89,6 +91,7 @@ export const GET = async (request: NextRequest, { params }) => {
 			has_access = true;
 
 	} catch (err) {
+		console.log(err);
 		// do nothing
 	}
 	if (session && ((session.user?.username == params.username) || (session.is_admin == 1) || (has_access))) {
@@ -100,6 +103,7 @@ export const GET = async (request: NextRequest, { params }) => {
 			});
 			return NextResponse.json(system, { status: 200 });
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json("Could not fetch system info", { status: 500 });
 		}
 	}

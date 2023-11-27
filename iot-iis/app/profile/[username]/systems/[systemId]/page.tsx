@@ -137,6 +137,7 @@ const SystemPage = () => {
             setError({...error, addUser: true});
             return;
         }
+        setUsers([])
         setRefreshed(false)
     }
 
@@ -155,11 +156,11 @@ const SystemPage = () => {
             setError({...error, removeUser: true});
             return;
         }
+        setUsers([])
         setRefreshed(false)
     }
 
     useEffect(() => {
-        const timer = setTimeout(() => {
             if (status === "authenticated" && !refreshed) {
                 try {
                     getSystem().then(r => {
@@ -179,7 +180,6 @@ const SystemPage = () => {
                             // setUsers([{username: "test"}, {username: "test2"}])
                         });
                     }
-                    clearTimeout(timer)
                 } catch (e) {
                     router.push("/");
                 }
@@ -194,9 +194,6 @@ const SystemPage = () => {
             } else if (status === "unauthenticated") {
                 router.push("/profile/login");
             }
-        }, 1000);
-
-        return () => clearTimeout(timer);
     }, [status, devices, users]);
 
     if (status === "loading")
