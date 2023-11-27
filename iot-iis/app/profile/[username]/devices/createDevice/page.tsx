@@ -163,6 +163,10 @@ const CreateDevicePage = () => {
                     });
                     if (!res.ok) {
                         setError("Error creating a new parameter:" + typeParams[i].name);
+                        const res = await fetch(`/api/profile/${params.username}/devicetypes/${deviceTypeId}`, {
+                            method: "DELETE",
+                            headers: {"Content-Type": "application/json"},
+                        });
                         return;
                     }
                     const res_json = await res.json()
