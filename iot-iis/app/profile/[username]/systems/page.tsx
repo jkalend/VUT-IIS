@@ -39,7 +39,7 @@ const SystemPage = () => {
 
     if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
         return (
-            <div className={"flex flex-col w-full p-2"}>
+            <div className={"flex flex-col w-full p-2 overflow-y-auto overflow-x-hidden mb-16"}>
                 <div className={"flex flex-row p-5 justify-between"}>
                     <h1 className={"font-bold text-2xl"}>
                         Systems

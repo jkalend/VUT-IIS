@@ -72,7 +72,7 @@ const UserProfile = () => {
                 setCounts(r);
             });
         }
-        console.log("mainpage");
+        // console.log("mainpage");
     }, [status])
 
     if (status === "loading")

@@ -207,7 +207,7 @@ const SystemPage = () => {
         )
 
     return (
-        <div className={"flex flex-col w-full p-2"}>
+        <div className={"flex flex-col w-full p-2 mb-16"}>
             <div className={"flex flex-col p-5 justify-between"}>
                 <div className={"flex flex-row gap-2 w-full justify-between"}>
                     <div className={"flex flex-row gap-2"}>
@@ -262,7 +262,7 @@ const SystemPage = () => {
                 </div>
                 )}
             </div>
-            <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-auto max-h-[50%]"}>
+            <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 overflow-y-auto overflow-x-hidden max-h-[50%]"}>
                 {session?.user?.username == params.username ? (
                     error.devices ? <div className={"text-red-500"}>Error loading devices</div> :
                         devices.map((device: any) => (
@@ -330,7 +330,7 @@ const SystemPage = () => {
                     }
                 </div>
             </div>
-            <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 max-h-[50%] mb-16"}>
+            <div className={"flex flex-col rounded-2xl bg-gray-900 p-2 gap-2 max-h-[50%] overflow-y-auto overflow-x-hidden mb-16"}>
                 {error.users ? <div className={"text-red-500"}>Error loading users</div> :
                     users && users.map((user: any) => (
                         <div key={user.username} className={"flex flex-row items-center justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
