@@ -34,7 +34,7 @@ export const POST = async (request: NextRequest) => {
         const device = await prisma.device.findFirst({
             where: {
                 username: data.payload.username,
-                deviceName: data.payload.deviceName
+                alias: data.payload.deviceName
             },
             select: {
                 deviceId: true,
