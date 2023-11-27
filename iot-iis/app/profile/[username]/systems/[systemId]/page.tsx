@@ -27,7 +27,7 @@ const SystemPage = () => {
     });
 
     const fetchDevices = async () => {
-        if (!session || session.user?.username != params.username) return;
+        if (!session) return;
         // not shared
         const res = await fetch(`/api/profile/${params.username}/devices`, {
             method: "GET",
@@ -63,6 +63,7 @@ const SystemPage = () => {
 
     const removeDevice = async (e : FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if (!session) return;
         const formData = new FormData(e.currentTarget)
         const res = await fetch(`/api/profile/${params.username}/systems/${params.systemId}/devices`, {
             method: "DELETE",
@@ -164,7 +165,7 @@ const SystemPage = () => {
                 });
 
                 //not for shared
-                if (session?.user?.username == params.username) {
+                if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
                     fetchDevices().then(r => {
                         setAllDevices(r);
                     });
@@ -174,7 +175,7 @@ const SystemPage = () => {
                     });
                 }
             } catch (e) {
-                router.push("/profile/login");
+                router.push("/");
             }
             for (const [key, value] of Object.entries(error)) {
                 if (key === ("deviceChoice" || "system" || "users" || "devices")) continue;
@@ -270,7 +271,7 @@ const SystemPage = () => {
                                 </Link>
                                 <form className={"flex flex-col w-[10%]"} onSubmit={removeDevice}>
                                     <input name={"deviceId"} value={device.deviceId} hidden={true} onChange={() => {}}/>
-                                    <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                                    <button type={"submit"} className={"min-w-fit z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
                                         Remove
                                     </button>
                                 </form>
@@ -334,7 +335,7 @@ const SystemPage = () => {
                             </Link>
                             <form className={"flex flex-col w-[10%]"} onSubmit={removeUser}>
                                 <input name={"username"} value={user.username} hidden={true} onChange={() => {}}/>
-                                <button type={"submit"} className={"z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
+                                <button type={"submit"} className={"min-w-fit z-10 p-2 text-center font-bold text-xl rounded-xl bg-red-800"}>
                                     Remove
                                 </button>
                             </form>

@@ -4,7 +4,7 @@ import {useRouter, useParams, redirect} from "next/navigation";
 import { useSession } from "next-auth/react";
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
 
-const DeviceDetailsPage = () => {
+const SystemEditPage = () => {
     const params = useParams();
     const router = useRouter();
     const { data: session, status } = useSession()
@@ -49,7 +49,7 @@ const DeviceDetailsPage = () => {
     const deleteSystem = async (e : FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
-            const res = await fetch(`/api/profile/${params.username}/system/${params.systemId}`, {
+            const res = await fetch(`/api/profile/${params.username}/systems/${params.systemId}`, {
                 method: "DELETE",
                 headers: {"Content-Type": "application/json"},
             });
@@ -120,8 +120,8 @@ const DeviceDetailsPage = () => {
             </div>
         );
     } else {
-        redirect("/profile/login")
+        return redirect("/profile/login")
     }
 }
 
-export default DeviceDetailsPage;
+export default SystemEditPage;

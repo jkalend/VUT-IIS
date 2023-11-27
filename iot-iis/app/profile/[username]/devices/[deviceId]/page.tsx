@@ -27,22 +27,22 @@ const DeviceDetailsPage = () => {
     });
 
     const getDevice = async () => {
-        if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
-            const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
-                method: "Get",
-                headers: {"Content-Type": "application/json"},
-            });
-            if (!res.ok) {
-                setError({...error, device: true});
-                return;
-            }
-            const data = await res.json();
-            return data;
+        if (!session) return;
+        const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
+            method: "Get",
+            headers: {"Content-Type": "application/json"},
+        });
+        if (!res.ok) {
+            setError({...error, device: true});
+            return;
         }
+        const data = await res.json();
+        return data;
     }
 
     const editDevice = async (e : any) => {
         e.preventDefault()
+        if (!session) return;
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
             const formData = new FormData(e.currentTarget)
             const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
@@ -65,6 +65,7 @@ const DeviceDetailsPage = () => {
 
     const deleteDevice = async (e: any) => {
         e.preventDefault()
+        if (!session) return;
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
             const res = await fetch(`/api/profile/${params.username}/devices/${params.deviceId}`, {
                 method: "DELETE",
@@ -79,6 +80,7 @@ const DeviceDetailsPage = () => {
     }
 
     const getDeviceTypes = async () => {
+        if (!session) return;
         if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
             const res = await fetch(`/api/profile/${params.username}/devicetypes`, {
                 method: "GET",
@@ -95,14 +97,20 @@ const DeviceDetailsPage = () => {
 
     useEffect(() => {
         if (status === "authenticated") {
-            getDevice().then(r => {
-                setDevice(r.device);
-                setKpi(r.kpi_status)
-                setDeviceTypeName(r.device.deviceType.name)
-            });
-            getDeviceTypes().then(r => {
-                setDeviceTypes(r);
-            });
+            try {
+                getDevice().then(r => {
+                    setDevice(r.device);
+                    setKpi(r.kpi_status)
+                    setDeviceTypeName(r.device.deviceType.name)
+                });
+                if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
+                    getDeviceTypes().then(r => {
+                        setDeviceTypes(r);
+                    });
+                }
+            } catch (e) {
+                router.push("/");
+            }
         } else if (status === "unauthenticated") {
             router.push("/profile/login");
         }
@@ -121,7 +129,6 @@ const DeviceDetailsPage = () => {
     if (status === "loading")
         return <div className={"flex h-screen w-screen justify-center items-center"}>Loading...</div>
 
-    if (session && ((session.user?.username == params.username) || (session.is_admin == 1))) {
     return (
         <div className="flex flex-col items-center justify-center h-screen w-screen mx-auto md:h-screen lg:py-0 mr-64">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -183,8 +190,10 @@ const DeviceDetailsPage = () => {
                                 </span>
                             </div>
                             {error.edit && <div className={"w-full text-center text-red-500"}>Error editing a device</div>}
+                            {(session && ((session.user?.username == params.username) || (session.is_admin == 1))) && <>
                             <button onClick={handleEdit} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Edit</button>
                             <button onClick={deleteDevice} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Delete</button>
+                            </>}
                             <div className={"flex flex-row gap-2"}>
                                 <Link href={`/profile/${params.username}/devices/${params.deviceId}/manageKpi`} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Manage KPIs</Link>
                             </div>
@@ -194,9 +203,6 @@ const DeviceDetailsPage = () => {
             </div>
         </div>
     );
-    } else {
-        return redirect("/profile/login")
-    }
 }
 
 export default DeviceDetailsPage;

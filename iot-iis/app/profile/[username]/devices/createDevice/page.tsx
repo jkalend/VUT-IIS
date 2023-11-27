@@ -296,7 +296,7 @@ const CreateDevicePage = () => {
             </div>
         );
     } else {
-        redirect("/profile/login")
+        return redirect("/profile/login")
     }
 }
 
