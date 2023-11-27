@@ -60,7 +60,7 @@ const UserProfile = () => {
     }
 
     useEffect(() => {
-        if (status === "authenticated" && session?.user?.username === params.username) {
+        if (status === "authenticated" && (session?.user?.username === params.username || session?.is_admin == 1)) {
             fetchData().then(r => {
                 setDevices(r);
             });
@@ -91,7 +91,7 @@ const UserProfile = () => {
                         {devicesError ? <div className={"text-red-500"}>Error loading devices</div> :
                             devices.map((device: any) => (
                             <Link key={device.deviceId}
-                                  href={`/profile/${session?.user?.username}/devices/${device.deviceId}`}
+                                  href={`/profile/${params.username}/devices/${device.deviceId}`}
                                   className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
                                     <div className={"font-bold text-xl"}>
@@ -120,7 +120,7 @@ const UserProfile = () => {
                         {systemsError ? <div className={"text-red-500"}>Error loading systems</div> :
                             systems.map((system: any) => (
                             <Link key={system.systemId}
-                                  href={`/profile/${session?.user?.username}/systems/${system.systemId}`}
+                                  href={`/profile/${params.username}/systems/${system.systemId}`}
                                   className={"flex flex-row justify-between p-5 rounded-2xl bg-gray-700 py-3"}>
                                 <div className={"flex flex-col"}>
                                     <div className={"font-bold text-xl"}>
