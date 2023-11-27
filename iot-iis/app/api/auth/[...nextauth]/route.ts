@@ -65,11 +65,7 @@ export const authOptions: AuthOptions ={
 
     async session({ session, token }) {
       session.user.accessToken = token.accessToken
-      console.log("token", token)
-      console.log("session", token)
-      if (session.exp < Date.now ())
-        return false;
-      session.user.refreshToken = Date.now() + 10
+      session.user.refreshToken = token.refreshToken
       session.user.accessTokenExpires = token.accessTokenExpires
       session.user.username = token.username
       session.is_admin = token.is_admin

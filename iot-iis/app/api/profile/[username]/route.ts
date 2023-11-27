@@ -28,7 +28,7 @@ export const GET = async (request: NextRequest, {params}) => {
 // PUT change password
 export const PUT = async (request: NextRequest, { params }) => {
 	const session = await getServerSession(authOptions)
-    if (session && session.user?.username == params.username) {
+    if (session && (session.user?.username == params.username  || (session.is_admin == 1))) {
 		const { new_pwd, old_pwd } = await request.json();
 		try {
             // fetch password of user with params.username
@@ -40,7 +40,6 @@ export const PUT = async (request: NextRequest, { params }) => {
                     password: true
                 }
             })
-
             let valid = await bcrypt.compare (old_pwd, user.password)
             if (!valid)
                 return NextResponse.json("Wrong password", {status: 400});
