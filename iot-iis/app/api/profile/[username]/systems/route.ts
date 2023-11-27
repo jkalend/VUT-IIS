@@ -60,6 +60,7 @@ export const POST = async (request: NextRequest, { params }) => {
 			});
 			return NextResponse.json(system, { status: 200 });
 		} catch (err) {
+			console.log(err);
 			return NextResponse.json("Could not create new system", { status: 500 });
 		}
 	}

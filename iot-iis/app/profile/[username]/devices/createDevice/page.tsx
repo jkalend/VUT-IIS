@@ -88,7 +88,7 @@ const CreateDevicePage = () => {
                     <label className={"text-center font-bold text-xl mx-2 w-full whitespace-nowrap"}>With precision of</label>
                     <input name={`${param.id}-precision`} id={`${param.id}-precision`} value={param.precision} onChange={handleParams}
                            className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 bg-gray-700 border-gray-600 dark:placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
-                           placeholder={"0.00"}/>
+                           placeholder={"2"}/>
                 </div>
                 <label htmlFor={`${param.id}-type`}
                        className="block mb-2 text-sm font-medium text-gray-800 dark:text-white">Measured in</label>

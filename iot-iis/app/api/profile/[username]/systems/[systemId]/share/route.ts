@@ -44,10 +44,11 @@ export const POST = async (request: NextRequest, { params }) => {
 			})
 
 			return NextResponse.json(
-				"Successully added acces of user to system",
+				"Successfully added access of user to system",
 				{ status: 200 }
 			);
 		} catch (err) {
+			console.log(err)
 			return NextResponse.json("Could not add access to system", { status: 500 });
 		}
 	}
@@ -95,6 +96,7 @@ export const DELETE = async (request: NextRequest, { params }) => {
 				{ status: 200 }
 			);
 		} catch (err) {
+			console.log(err)
 			return NextResponse.json("Could not delete access of user to system", { status: 500 });
 		}
 	}
@@ -125,6 +127,7 @@ export const GET = async (request: NextRequest, { params }) => {
 				{ status: 200 }
 			);
 		} catch (err) {
+			console.log(err)
 			return NextResponse.json("Could not fetch users with access to view system", { status: 500 });
 		}
 	}

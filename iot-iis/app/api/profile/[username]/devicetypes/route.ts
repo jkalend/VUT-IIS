@@ -31,6 +31,7 @@ export const POST = async (request: NextRequest, {params}) => {
             });
             return NextResponse.json(device_type, {status: 200});
         } catch (error) {
+            console.log(error);
             return NextResponse.json("Could not create new device type", {status: 500});
         }
     }
@@ -62,6 +63,7 @@ export const GET = async (request: NextRequest, {params}) => {
             });
             return NextResponse.json(device_types, {status: 200});
         } catch (error) {
+            console.log(error);
             return NextResponse.json("Could not fetch device types from db", {status: 500});
         }
     }
